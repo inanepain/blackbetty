@@ -1,0 +1,52 @@
+/*
+# develop (0.0.2)
+
+> [ Base URL: develop/ ]
+
+A simple HTTP Request & Response Service
+
+**Run locally:** use wamp
+
+[the developer - Website](https://github.org/inanepain)
+[Send email to the developer](philip@develop)
+*/
+
+@host=http://develop
+@resource=api/user
+
+@id=2
+
+###
+# @name session
+GET {{host}}/{{resource}}/{{id}}
+
+?? status == 200
+
+>>! ./one.json
+
+###
+# @ref session
+GET {{host}}/{{resource}}
+
+>>! ./one.json
+
+###
+# @ref session
+POST {{host}}/{{resource}}
+{
+  "id": 3,
+  "name": "Inane",
+  "email": "inane@users.com"
+}
+
+###
+# @ref session
+PUT {{host}}/{{resource}}/{{session.id}}
+{
+  "id": 3,
+  "name": "Bob"
+}
+
+###
+# @ref session
+DELETE {{host}}/{{resource}}/{{session.id}}

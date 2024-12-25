@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vscode: vscode-fold=1 -->
+<project name="Inane" default="inane" phingVersion="2.16.3" description="Build: Inane: CSS and JS files for production" basedir=".">
+
+	<!-- Properties -->
+    <property file="${phing.dir.inane}/build.inane.properties"/>
+
+	<!-- ============================================  -->
+	<!-- (FILESETS) Source: Javascript                 -->
+	<!-- ============================================  -->
+	<fileset dir="${phing.dir.inane}" id="inane-fileset-src-js-inane">
+		<include name="**/*.js"/>
+        <exclude name="**/*${min.js.suffix}.js"/>
+        <exclude name="**/*.dist.js"/>
+    </fileset>
+    
+    <!-- ICROOT -->
+    <fileset dir="${phing.dir.inane}" id="inane-fileset-src-js-inane-ic">
+		<include name="icroot/**/*.js"/>
+        <exclude name="icroot/**/*${min.js.suffix}.js"/>
+    </fileset>
+
+    <!-- ============================================  -->
+	<!-- (DEFAULT) Target: inane                       -->
+    <!-- ============================================  -->
+    <target name="inane" description="Minify: Inane: JS" depends="inane-popupinfo">
+		<echo msg="Minifying: ${inane.str.title}: JS" />
+		<jsMin targetDir="${phing.dir.inane}" suffix="${min.js.suffix}" failOnError="false">
+			<fileset refid="inane-fileset-src-js-inane"/>
+		</jsMin>
+    </target>
+    
+    <!-- BUILD -->
+	<target name="inane-build" description="Inane: Tasks: Clean, Minify, Documentation">
+		<echo msg="Running Inane: Tasks: Clean, Minify, Documentation" />
+		<phingcall target="inane-doc-clean" />
+		<phingcall target="inane" />
+		<phingcall target="inane-doc" />
+	</target>
+    
+    <!-- ============================================  -->
+	<!-- Inane Documentation Tasks                     -->
+	<!-- ============================================  -->
+	<target name="inane-doc" description="Documentation: Inane: JS">
+		<echo msg="Documentation: Building: ${inane.str.title}:: JS" />
+		<mkdir dir="../${dir.doc}/" />
+		<mkdir dir="../${dir.doc}/inane/js" />
+		<exec command="${cmd.jsdoc} -c ${phing.dir.inane}/inane.jsdoc.json -d ${dir.doc}/inane/js/" dir="../" />
+    </target>
+
+    <target name="inane-doc-clean" description="Documentation: Cleaning: Inane">
+		<echo msg="Documentation: Cleaning: ${inane.str.title}" />
+		<delete includeemptydirs="true">
+			<fileset dir="../${dir.doc}/inane/" />
+		</delete>
+	</target>
+    
+    <!-- ============================================  -->
+	<!-- Inane Tasks                                   -->
+    <!-- ============================================  -->
+
+    <!-- ALIAS -->
+    <target name="js-inane" depends="inane" description="Alias: Minify: Inane: JS" />
+
+    <!-- Inane: Inane -->
+    <target name="inane-i" description="Minify: Inane: I">
+		<echo msg="Minifying: ${inane.str.title}: I" />
+		<jsMin targetDir="${phing.dir.inane}" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}">
+				<include name="inane.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: config -->
+    <target name="inane-cfg" description="Minify: Inane: config">
+		<echo msg="Minifying: ${inane.str.title}: config" />
+		<jsMin targetDir="${phing.dir.inane}" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}">
+				<include name="config.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: ICRoot -->
+    <target name="inane-ic" description="Minify: Inane: ICRoot">
+		<echo msg="Minifying: ${inane.str.title}: ICRoot" />
+		<jsMin targetDir="${phing.dir.inane}" suffix="${min.js.suffix}" failOnError="false">
+			<fileset refid="inane-fileset-src-js-inane-ic"/>
+		</jsMin>
+    </target>
+
+    <!-- Inane: ICRoot: iTemplate -->
+    <target name="inane-itemplate" description="Minify: Inane: ICRoot: iTemplate">
+		<echo msg="Minifying: Inane: ICRoot: iTemplate" />
+		<jsMin targetDir="${phing.dir.inane}/icroot" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/icroot">
+				<include name="iTemplate.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+    <!-- ALIAS -->
+    <target name="inane-ic-itemplate" depends="inane-itemplate" description="Alias: Minify: Inane: ICRoot: iTemplate" />
+
+    <!-- Inane: ICRoot: iOptions -->
+    <target name="inane-ioptions" description="Minify: Inane: ICRoot: iOptions">
+		<echo msg="Minifying: Inane: ICRoot: iOptions" />
+		<jsMin targetDir="${phing.dir.inane}/icroot" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/icroot">
+				<include name="iOptions.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+    <!-- ALIAS -->
+    <target name="inane-ic-ioptions" depends="inane-ioptions" description="Alias: Minify: Inane: ICRoot: iOptions" />
+
+    <!-- Inane: ICRoot: iHelper -->
+    <target name="inane-ihelper" description="Minify: Inane: ICRoot: iHelper">
+		<echo msg="Minifying: Inane: ICRoot: iHelper" />
+		<jsMin targetDir="${phing.dir.inane}/icroot" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/icroot">
+				<include name="iHelper.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+    <!-- ALIAS -->
+    <target name="inane-ic-ihelper" depends="inane-ihelper" description="Alias: Minify: Inane: ICRoot: iHelper" />
+
+    <!-- Inane: ICRoot: iShortcut -->
+    <target name="inane-ishortcut" description="Minify: Inane: ICRoot: iShortcut">
+		<echo msg="Minifying: Inane: ICRoot: iShortcut" />
+		<jsMin targetDir="${phing.dir.inane}/icroot" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/icroot">
+				<include name="iShortcut.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+    <!-- ALIAS -->
+    <target name="inane-ic-ishortcut" depends="inane-ishortcut" description="Alias: Minify: Inane: ICRoot: iShortcut" />
+
+    <!-- Inane: Db -->
+    <target name="inane-db" description="Minify: Inane: Db">
+		<echo msg="Minifying: Inane: Db" />
+		<jsMin targetDir="${phing.dir.inane}/db" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/db">
+				<include name="*.js"/>
+				<exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: Dumper -->
+    <target name="inane-dumper" description="Minify: Inane: Dumper">
+		<echo msg="Minifying: Inane: Dumper" />
+		<jsMin targetDir="${phing.dir.inane}" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}">
+				<include name="dumperjs.js"/>
+				<include name="dumper.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: Extend -->
+    <target name="inane-extend" description="Minify: Inane: Extend">
+		<echo msg="Minifying: Inane: Extend" />
+		<jsMin targetDir="${phing.dir.inane}/extend" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/extend">
+				<include name="*.js"/>
+                <exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: Image-Drop -->
+    <target name="inane-imagedrop" description="Minify: Inane: Image-Drop">
+		<echo msg="Minifying: Inane: Image-Drop" />
+		<jsMin targetDir="${phing.dir.inane}/control/image-drop" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/control/image-drop">
+				<include name="*.js"/>
+				<exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: JSLoader -->
+    <target name="inane-jsloader" description="Minify: Inane: JSLoader">
+		<echo msg="Minifying: Inane: JSLoader" />
+		<jsMin targetDir="${phing.dir.inane}/jsloader" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/jsloader">
+				<include name="*.js"/>
+                <exclude name="*${min.js.suffix}.js"/>
+                <exclude name="*.dist.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: PopUpInfo -->
+    <target name="inane-popupinfo" description="Minify: Inane: PopUpInfo">
+		<echo msg="Minifying: Inane: PopUpInfo" />
+		<jsMin targetDir="${phing.dir.inane}/control/popupinfo" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/control/popupinfo">
+				<include name="*.js"/>
+				<exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+		<sass flags="--no-source-map" compressed="true" file="${phing.dir.inane}/control/popupinfo/popupinfo.scss" />
+    </target>
+
+    <!-- Inane: Quickheader -->
+    <target name="inane-quickheader" description="Minify: Inane: Quickheader">
+		<echo msg="Minifying: Inane: Quickheader" />
+		<jsMin targetDir="${phing.dir.inane}/control/quickheader" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/control/quickheader">
+				<include name="*.js"/>
+				<exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+
+    <!-- Inane: ToggleSwitch -->
+    <target name="inane-toggleswitch" description="Minify: Inane: ToggleSwitch">
+		<echo msg="Minifying: Inane: ToggleSwitch" />
+		<jsMin targetDir="${phing.dir.inane}/control/toggleswitch" suffix="${min.js.suffix}" failOnError="false">
+			<fileset dir="${phing.dir.inane}/control/toggleswitch">
+				<include name="*.js"/>
+				<exclude name="*${min.js.suffix}.js"/>
+			</fileset>
+		</jsMin>
+    </target>
+</project>

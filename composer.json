@@ -1,0 +1,47 @@
+{
+    "name": "philip/develop",
+    "description": "Experimenting with code before implementing it in a project",
+    "homepage": "http://develop/",
+    "type": "project",
+    "license": "UNLICENSE",
+    "autoload": {
+        "psr-4": {
+            "Dev\\": "src/",
+            "Inane\\Auth\\": "lib/inanepain/view/src/",
+            "Inane\\Cache\\": "lib/inanepain/cache/src/",
+            "Inane\\Cli\\": "lib/inanepain/cli/src/",
+            "Inane\\Config\\": "lib/inanepain/config/src/",
+            "Inane\\Crypt\\": "lib/inanepain/crypt/src/",
+            "Inane\\Datetime\\": "lib/inanepain/datetime/src/",
+            "Inane\\Db\\": "lib/inanepain/db/src/",
+            "Inane\\Dumper\\": "lib/inanepain/dumper/src/",
+            "Inane\\Event\\": "lib/inanepain/event/src/",
+            "Inane\\File\\": "lib/inanepain/file/src/",
+            "Inane\\Http\\": "lib/inanepain/http/src/",
+            "Inane\\Redis\\": "lib/inanepain/redis/src/",
+            "Inane\\Routing\\": "lib/inanepain/routing/src/",
+            "Inane\\Stdlib\\": "lib/inanepain/stdlib/src/",
+            "Inane\\View\\": "lib/inanepain/view/src/"
+        },
+        "files": [
+            "lib/inanepain/dumper/src/bootstrap.php",
+            "lib/inanepain/stdlib/src/bootstrap.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Philip Raab",
+            "email": "philip@kycdd.co.za"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "psr/cache": ">= 3",
+        "psr/simple-cache": ">= 3",
+        "psr/container": "*",
+        "psr/http-message": "*",
+        "psr/http-client": "*",
+        "psr/event-dispatcher": "^1.0",
+        "ext-simplexml": "*"
+    }
+}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Develop</title>
+
+    <script type="module" src="/js/main.mjs"></script>
+
+    <script src="/js/inane/extend/object.js"></script>
+    <script type="module" src="/js/inane/control/quickheader/quickheader.js"></script>
+    <script type="module" src="/js/inane/control/toggleswitch/toggleswitch.js"></script>
+</head>
+
+<body>
+    <quick-header underline linecolour="blue" colour="purple">Develop</quick-header>
+    <toggle-switch>Active</toggle-switch>
+    <?= $this->content ?>
+</body>
+
+</html>
