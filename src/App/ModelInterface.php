@@ -7,7 +7,7 @@
  *
  * PHP version 8.3
  *
- * @author  Philip Michael Raab<philip@cathedral.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
  *
  * @license UNLICENSE
@@ -21,11 +21,5 @@ declare(strict_types=1);
 
 namespace Dev\App;
 
-/**
- * AbstractRestController
- *
- * @package Develop\Tinker
- */
-abstract class AbstractRestController extends AbstractController {
-
+interface ModelInterface {
 }
