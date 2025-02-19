@@ -7,7 +7,7 @@
  *
  * PHP version 8.4
  *
- * @author Philip Michael Raab<philip@cathedral.co.za>
+ * @author  Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
  *
  * @license UNLICENSE
@@ -19,7 +19,9 @@
 
 declare(strict_types=1);
 
-namespace Dev\App;
-
-interface ModelInterface {
-}
+return [
+	'developer'   => [
+		'name'   => 'Philip Michael Raab',
+		'email' => 'peep@cathedral.co.za',
+	],
+];

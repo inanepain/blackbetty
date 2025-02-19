@@ -19,16 +19,23 @@
 
 declare(strict_types=1);
 
-return [
-	'view'   => [
-		'path'   => 'View',
-		'layout' => 'layout/layout',
-	],
-	'router' => [
-		'controllers' => [
-			\Dev\Web\MainController::class,
-			\Dev\Parse\ParseController::class,
-			\Dev\Rest\UserController::class,
-		],
-	],
-];
+namespace Dev\Db;
+
+class DatabaseConnector {
+
+	private \PDO|null $dbConnection = NULL;
+
+	public function __construct() {
+		try {
+			$this->dbConnection = new \PDO('sqlite:data/develop.db');
+		}
+		catch (\PDOException $e) {
+			exit($e->getMessage());
+		}
+	}
+
+	public function getConnection(): \PDO {
+		return $this->dbConnection;
+	}
+
+}

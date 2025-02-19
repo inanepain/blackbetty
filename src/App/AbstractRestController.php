@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author  Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker

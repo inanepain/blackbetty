@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
@@ -65,6 +65,9 @@ class View {
 		$rendered = $renderer->render(property_exists($model, 'template') ? $model->template : '', $model->variables, $model);
 
 		if (!$model->terminate) {
+			/**
+			 * @var \Dev\App\ViewModel $model
+			 */
 			$o = $model->getOptions();
 			$o->content = $rendered;
 			$rendered = $renderer->render($o->layout, [], $o);

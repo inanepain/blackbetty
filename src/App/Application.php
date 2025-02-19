@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
@@ -28,33 +28,84 @@ use Inane\Routing\Exception\InvalidRouteException;
 use Inane\Routing\RouteMatch;
 use Inane\Routing\Router;
 use Inane\Stdlib\Options;
-use Inane\View\Renderer\RendererInterface;
 
+use const GLOB_BRACE;
+use const GLOB_NOSORT;
+
+use function glob;
 use function is_array;
 use function is_null;
 
+/**
+ * The application class
+ *
+ * This class is the main entry point of the application. It is responsible for setting up the application, routing the request to the controller, rendering the view and sending the response to the client.
+ *
+ * @version 0.1.0
+ */
 final class Application {
 
 	/**
+	 * The instance of the application
+	 *
 	 * @var \Dev\App\Application The instance of the application
 	 */
 	private static Application $instance;
 
 	/**
+	 * The application configuration
+	 *
 	 * @var \Inane\Stdlib\Options The application configuration
 	 */
 	protected(set) Options $config;
 
+	/**
+	 * The router object
+	 *
+	 * @var \Inane\Routing\Router The router object
+	 */
 	protected Router $router;
+
+	/**
+	 * The matched route
+	 *
+	 * @var \Inane\Routing\RouteMatch The matched route
+	 */
 	protected(set) ?RouteMatch $routeMatch;
 
+	/**
+	 * @var \Dev\App\View The view object
+	 */
 	protected View $view;
-	protected(set) Request $request;
-	protected(set) Response $response;
+
+	/**
+	 * @var \Inane\Http\Request The request object read from View
+	 */
+	protected(set) Request $request {
+		get => $this->view->request;
+		set {}
+	}
+
+	/**
+	 * @var \Inane\Http\Response The response object read from View
+	 */
+	protected(set) Response $response {
+		get => $this->view->response;
+		set {}
+	}
+
+	/**
+	 * @var \Inane\Http\Client The HTTP client object
+	 */
 	protected HttpClient $httpClient;
 
-	protected RendererInterface $renderer;
-
+	/**
+	 * The constructor
+	 *
+	 * The constructor is private to prevent creating multiple instances of the application.
+	 *
+	 * @return void
+	 */
 	private function __construct() {
 		$this->bootstrap();
 	}
@@ -67,16 +118,29 @@ final class Application {
 	 * @return void
 	 */
 	protected function bootstrap(): void {
-		$this->config = new Options(include 'config/app.config.php', false);
+		$this->configure();
 
 		$this->router = new Router();
 		$this->router->addRoutes($this->config->router->controllers);
 
 		$this->view = new View($this->config->view->path);
-		$this->request = $this->view->request;
-		$this->response = $this->view->response;
-
 		$this->httpClient = new HttpClient();
+	}
+
+	/**
+	 * Configures the application
+	 *
+	 * Reads the configuration files and merges them into the configuration object.
+	 *
+	 * @return void
+	 */
+	protected function configure(): void {
+		$this->config = new Options(include 'config/app.config.php');
+
+		$files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
+		foreach ($files as $file) $this->config->merge(include $file);
+
+		$this->config->lock();
 	}
 
 	/**
@@ -100,7 +164,7 @@ final class Application {
 	 * @throws \ReflectionException
 	 */
 	protected function routing(): void {
-		$this->routeMatch = $this->router->match($this->view->request);
+		$this->routeMatch = $this->router->match($this->request);
 
 		if (is_null($this->routeMatch))
 			throw new InvalidRouteException('Request Error: Unmatched `file` or `route`!', AppError::InvalidRoute->value);
@@ -132,8 +196,8 @@ final class Application {
 	 *
 	 * @return never
 	 */
-	protected function responding(): never {
-		$this->httpClient->send($this->view->response);
+	protected function responding(): void {
+		$this->httpClient->send($this->response);
 	}
 
 	/**
