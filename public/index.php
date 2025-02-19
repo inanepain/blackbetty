@@ -19,8 +19,7 @@
 
 declare(strict_types=1);
 
-use Inane\Stdlib\ArrayObject;
-use Inane\Stdlib\Options;
+use Inane\Dumper\Dumper;
 
 chdir(dirname(__DIR__));
 
@@ -30,6 +29,8 @@ require 'vendor/autoload.php';
 // BUG: bug
 // HACK: hack
 // FIXME: boo
+
+Dumper::setExceptionHandler();
 
 if (\Inane\Cli\Cli::isCli()) {
 	$pc = new Dev\Task\PinCode();

@@ -74,9 +74,9 @@ final class Application {
 	protected(set) ?RouteMatch $routeMatch;
 
 	/**
-	 * @var \Dev\App\View The view object
+	 * @var \Dev\App\ViewManager The view object
 	 */
-	protected View $view;
+	protected ViewManager $view;
 
 	/**
 	 * @var \Inane\Http\Request The request object read from View
@@ -123,7 +123,7 @@ final class Application {
 		$this->router = new Router();
 		$this->router->addRoutes($this->config->router->controllers);
 
-		$this->view = new View($this->config->view->path);
+		$this->view = new ViewManager($this->config->view->path);
 		$this->httpClient = new HttpClient();
 	}
 

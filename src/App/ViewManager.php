@@ -27,11 +27,11 @@ use Inane\Http\Response;
 use function property_exists;
 
 /**
- * View
+ * ViewManager
  *
  * @version 0.1.0
  */
-class View {
+class ViewManager {
 	/**
 	 * @var \Inane\Http\Request
 	 */
