@@ -38,6 +38,7 @@ use function array_values;
 use function count;
 use function intval;
 use function is_numeric;
+use function array_key_exists;
 
 /**
  * UserController
@@ -51,6 +52,7 @@ class UserController extends AbstractRestController {
 		'id' => 0,
 		'name' => '',
 		'email' => '',
+		'group' => '',
 	];
 
 	private(set) array $users = [
@@ -101,7 +103,22 @@ class UserController extends AbstractRestController {
 	 */
 	protected function find(int $id): ?array {
 		return array_find($this->users, fn($u) => $u['id'] == $id);
+	}
 
+	/**
+	 * Fetch user by id
+	 *
+	 * status
+	 * 200 - user found
+	 * 404 - user not found
+	 * 400 - invalid id (string or negative)
+	 *
+	 * @param   int  $id    user id
+	 *
+	 * @return array    matching user
+	 */
+	protected function filter(array $data, string $field, int|string $search): ?array {
+		return array_values(array_filter($data, fn($u) => levenshtein(\strval($u[$field]), $search) <= 3));
 	}
 
 	/**
@@ -123,6 +140,14 @@ class UserController extends AbstractRestController {
 	 */
 	#[Route(path: '/api/user', name: 'user-list', methods: [HttpMethod::Get])]
 	public function list(): array|ModelInterface {
+		if (array_key_exists('query-string', $this->routeMatch->params)) {
+			$query = $this->routeMatch->params['query-string'];
+			$users = $this->users;
+			foreach ($query as $k => $v)
+				$users = $this->filter($users, $k, $v);
+
+			return new JsonModel($users);
+		}
 		return new JsonModel($this->users);
 	}
 
@@ -207,7 +232,7 @@ class UserController extends AbstractRestController {
 				'status' => 404,
 			]);
 		}
-		foreach($this->users as $index => $user) {
+		foreach ($this->users as $index => $user) {
 			if ($user['id'] == $args['id']) {
 				foreach ($this->request->getPost()->toArray() as $k => $v)
 					if ($k != 'id') $user[$k] = $v;

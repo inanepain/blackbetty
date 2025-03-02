@@ -8,6 +8,6 @@
     if (window.Dumper == undefined) {
         // import module for side effects, global Dumper created
         const response = await import(`/js/inane/dumper.js`);
-        window.Dumper = response.default;
+        window.Dumper = response.Dumper;
     }
 })();

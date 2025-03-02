@@ -1,4 +1,4 @@
-import Dumper from './inane/dumper.js';
+import {Dumper} from './inane/dumper.js';
 
 const dumper = Dumper.get('Develop');
 

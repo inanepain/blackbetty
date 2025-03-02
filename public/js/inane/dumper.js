@@ -1035,4 +1035,4 @@ const defaults = {
     }
 };
 
-export { Dumper as default, LogLevel };
+export { Dumper, LogLevel };

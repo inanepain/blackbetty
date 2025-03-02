@@ -31,6 +31,7 @@ use Inane\Stdlib\Options;
 
 use const GLOB_BRACE;
 use const GLOB_NOSORT;
+use const true;
 
 use function glob;
 use function is_array;
@@ -120,7 +121,7 @@ final class Application {
 	protected function bootstrap(): void {
 		$this->configure();
 
-		$this->router = new Router();
+		$this->router = new Router(splitQuerystring: true);
 		$this->router->addRoutes($this->config->router->controllers);
 
 		$this->view = new ViewManager($this->config->view->path);

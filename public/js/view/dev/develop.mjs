@@ -1,3 +1,13 @@
+import { Users } from "./user.mjs";
+
+const users = new Users();
+users.fetch();
+window.users = users;
+// users.fetch().then(() => {
+//     dumper.debug(users);
+// });
+
+
 const Basics = Marionette.Behavior.extend({
     channelName: 'develop',
     initialize(options) {
