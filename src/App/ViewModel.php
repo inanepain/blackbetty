@@ -45,6 +45,26 @@ class ViewModel extends AbstractModel {
 	 */
 	protected(set) string $renderer = PhpRenderer::class;
 
+	protected static array $scripts = [];
+
+	public function appendScript(string $script, bool $module = false): self {
+		$type = $module ? 'module' : 'text/javascript';
+		$this::$scripts[] = "<script src=\"$script\" type=\"$type\"></script>";
+
+		return $this;
+	}
+
+	public function prependScript(string $script, bool $module = false): self {
+		$type = $module ? 'module' : 'text/javascript';
+		$this::$scripts = array_merge(["<script src=\"$script\" type=\"$type\"></script>"], $this::$scripts);
+
+		return $this;
+	}
+
+	public function getScripts(): string {
+		return \implode("\n", \array_reverse($this::$scripts));
+	}
+
 	/**
 	 * Get options
 	 *

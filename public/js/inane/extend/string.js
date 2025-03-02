@@ -1,16 +1,22 @@
 /**
- * String Enhancements
- * 
+ * Extend String
+ *
  * @author Philip Michael Raab<peep@inane.co.za>
- * @version 1.6.1
- * 
+ * @version 1.7.1
+ *
  * Changes
+ * 1.7.1 @2022 Feb 06
+ *  - Upd: toTitleCase -> replaced `substr` with `substring`
+ *
+ * 1.7.0 @2021 Apr 11
+ *  - Upd: log -> added label param to customise output a little
+ *
  * 1.6.1 @2021 Mar 09
  *  - Fix: toTitleCase -> added isName option to switch how the apostrophe is handled
- * 
+ *
  * 1.6.0 @2020 Apr 20
  *  - New: parseJSON -> returns object from a valid json string else null
- * 
+ *
  * 1.5.1 @2020 Apr 18
  *  - upd: replaceAll function updated to increase speed
  *  - fix: log works again
@@ -20,12 +26,12 @@
 if (!String.prototype.toTitleCase) {
     /**
      * Capitalises first letter of each word
-     * 
+     *
      * @param {boolean} lowerAsWell true: first lowers string
-     *  note: if lowerAsWell is false it will perserve upper case letters
+     *  note: if lowerAsWell is false it will preserve upper case letters
      * @param {boolean} isName sets how apostrophes are handled.<br/>
      *  false - letter after ' is lower case as in: It's, They've
-     *  true - letter after ' is UPPER case as in: James O'Mally, 
+     *  true - letter after ' is UPPER case as in: James O'Mally,
      *
      * @return string
      */
@@ -33,7 +39,7 @@ if (!String.prototype.toTitleCase) {
         let string = lowerAsWell === true ? this.toLowerCase() : this;
 
         if (isName) return string.replace(/\b[a-z]/g, txt => {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
         });
         else return string.replace(/(?:^|\s)\w/g, function (match) {
             return match.toUpperCase();
@@ -59,8 +65,8 @@ if (!String.prototype.replaceAll) {
 if (!String.prototype.trimChars) {
     /**
      * Trims chars from front and back of string
-     * 
-     * @param chars charactrs to trim of string's ends
+     *
+     * @param chars characters to trim of string's ends
      *
      * @return string
      */
@@ -72,8 +78,8 @@ if (!String.prototype.trimChars) {
 if (!String.prototype.trimCharsLeft) {
     /**
      * Trims chars from front of string
-     * 
-     * @param chars charactrs to trim of string's start
+     *
+     * @param chars characters to trim of string's start
      *
      * @return string
      */
@@ -85,8 +91,8 @@ if (!String.prototype.trimCharsLeft) {
 if (!String.prototype.trimCharsRight) {
     /**
      * Trims chars from back of string
-     * 
-     * @param chars charactrs to trim of string's ends
+     *
+     * @param chars characters to trim of string's ends
      *
      * @return string
      */
@@ -116,7 +122,7 @@ if (!String.prototype.camelCaseToHyphen) {
 if (!String.prototype.hyphenToCamelCase) {
     /**
      * convert a hyphenated string to camelCase
-     * 
+     *
      * @param  {String} str
      * @return {String}
      */
@@ -161,12 +167,17 @@ if (!String.prototype.parseJSON) {
 /***************************************************
  * LOG/DEBUG
  ***************************************************/
-if (!Date.prototype.log) {
+ if (!String.prototype.log) {
     /**
-     * Logs Debug output
+     * Logs the string to console but still returns unchanged string
+     *
+     * @param label false: no label, true: default label, string: custom label
+     * @returns {String}
      */
-    String.prototype.log = function () {
-        console.log(this.constructor.name + ' (' + this.length + '): ' + this.toString());
+    String.prototype.log = function (label = false) {
+        if (label?.constructor?.name == `String`) console.log(`${label}: ` + this.toString());
+        else if (label === true) console.log(`${this.constructor.name} (${this.length}): ` + this.toString());
+        else console.log(this.toString());
         return this.toString();
     };
 }

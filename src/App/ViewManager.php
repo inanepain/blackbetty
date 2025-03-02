@@ -70,7 +70,7 @@ class ViewManager {
 			 */
 			$o = $model->getOptions();
 			$o->content = $rendered;
-			$rendered = $renderer->render($o->layout, [], $o);
+			$rendered = $renderer->render($o->layout, $o->toArray(), $model);
 		}
 
 		foreach ($model->headers as $key => $value)

@@ -31,7 +31,7 @@ class UsersGateway {
 
 	public function findAll(): array {
 		$statement = "
-            SELECT 
+            SELECT
                 id, name, email
             FROM
                 users;
@@ -42,15 +42,14 @@ class UsersGateway {
 			$result    = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
 			return $result;
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}
 
 	public function find(int $id): array {
 		$statement = "
-            SELECT 
+            SELECT
                 id, name, email
             FROM
                 users
@@ -63,15 +62,14 @@ class UsersGateway {
 			$result = $statement->fetchAll(\PDO::FETCH_ASSOC);
 
 			return $result;
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}
 
 	public function insert(array $input): int {
 		$statement = "
-            INSERT INTO users 
+            INSERT INTO users
                 (name, email)
             VALUES
                 (:name, :email);
@@ -85,8 +83,7 @@ class UsersGateway {
 			]);
 
 			return $statement->rowCount();
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}
@@ -94,7 +91,7 @@ class UsersGateway {
 	public function update(int $id, array $input): int {
 		$statement = "
             UPDATE users
-            SET 
+            SET
                 name = :firstname,
                 email  = :lastname,
             WHERE id = :id;
@@ -109,8 +106,7 @@ class UsersGateway {
 			]);
 
 			return $statement->rowCount();
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}
@@ -126,8 +122,7 @@ class UsersGateway {
 			$statement->execute(['id' => $id]);
 
 			return $statement->rowCount();
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}

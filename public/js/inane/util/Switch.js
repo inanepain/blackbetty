@@ -1,7 +1,7 @@
 /**
  * Switch
  */
-import Dumper from '../dumper.min.js';
+import { Dumper } from '../dumper.js';
 
 Dumper.dump('MODULE', 'Switch', 'Load');
 
@@ -31,7 +31,7 @@ const SwitchData = {
 class Switch {
     /**
      * Creates an instance of Switch.
-     * 
+     *
      * @constructor
      * @param {boolean} defaultValue
      */

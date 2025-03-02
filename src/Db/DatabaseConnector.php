@@ -28,8 +28,7 @@ class DatabaseConnector {
 	public function __construct() {
 		try {
 			$this->dbConnection = new \PDO('sqlite:data/develop.db');
-		}
-		catch (\PDOException $e) {
+		} catch (\PDOException $e) {
 			exit($e->getMessage());
 		}
 	}

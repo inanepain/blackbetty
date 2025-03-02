@@ -29,6 +29,7 @@ return [
 			\Dev\Web\MainController::class,
 			\Dev\Parse\ParseController::class,
 			\Dev\Rest\UserController::class,
+			\Dev\Controller\DevController::class,
 		],
 	],
 ];

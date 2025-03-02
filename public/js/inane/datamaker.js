@@ -19,7 +19,7 @@ class DataMaker {
             sentence.push(Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, _.random(options.word.min, options.word.max)));
         }
 
-        // append puctation on end
+        // append punctuation on end
         const punct = '....!??';
         if (options.punctuate.mark)
             sentence[sentence.length - 1] += punct.charAt(Math.floor(Math.random() * punct.length));

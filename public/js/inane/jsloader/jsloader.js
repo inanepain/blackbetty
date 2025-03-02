@@ -109,7 +109,7 @@
 	 * @typedef {Object} LoaderModule
 	 * @property {string} script - The javascript file
 	 * @property {string} style - The stylesheet file
-	 * @property {string[]} require - array listing the id's of requiered modules
+	 * @property {string[]} require - array listing the id's of required modules
      * @memberof JSLoader
  	 */
 
@@ -395,7 +395,7 @@ Script verbosity attribute: 1`);
     };
 
 	/**
-	 * Adds script to history if no recored exists
+	 * Adds script to history if no recorded exists
 	 */
     let addHistory = function (script) {
         JSLoader.hasHistory(script) || history.push(script);
@@ -403,11 +403,11 @@ Script verbosity attribute: 1`);
     };
 
 	/**
-	 * dependancy
+	 * dependency
      * 
      * @memberof JSLoader
 	 */
-    JSLoader.checkDependants = _.once(function () {
+    JSLoader.checkDependents = _.once(function () {
         var keys = _(JSLoader.moduleList).allKeys();
         keys.forEach(function (module) {
             var requs = JSLoader.moduleList[module].require || [];
@@ -458,12 +458,12 @@ Script verbosity attribute: 1`);
     }
 
 	/**
-	 * Check module name for requierments
+	 * Check module name for requirements
 	 *
 	 * @param {string} modules
 	 */
     function parseModuleName(moduleName) {
-        logger('parsing => ' + moduleName + ': for requierments');
+        logger('parsing => ' + moduleName + ': for requirements');
         let moduleNameArray = moduleName.split('.');
         moduleNameArray.pop();
         JSLoader.moduleList[moduleName]['require'] = JSLoader.moduleList[moduleName].require || [];
@@ -586,7 +586,7 @@ Script verbosity attribute: 1`);
     /**
      * attachHandler
      * 
-	 * Send file to relavent function for attaching and that is a Promise 
+	 * Send file to relevant function for attaching and that is a Promise 
 	 *
 	 * @param {string} file	link of file to attach
      * @returns {Promise}
@@ -694,7 +694,7 @@ Script verbosity attribute: 1`);
         logger('loading => start');
         JSLoader.trigger('start');
 
-        JSLoader.checkDependants();
+        JSLoader.checkDependents();
         if (createQueue()) process(processQueue);
 
         $.holdReady(false);

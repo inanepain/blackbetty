@@ -1,8 +1,21 @@
-(function () {
+(function (options) {
+    /**
+     * @type {string} The custom tag's name
+     */
+    const tagName = 'quick-header';
+
     /**
      * Version
      */
-    const version = '0.3.1';
+    const version = '0.4.0';
+
+    /**
+     * HISTORY
+     *
+     * 0.4.0: 2021 Oct 13
+     *  - Added setter so you can now {quickheader}.text = 'New Header', with all properties.
+     *  - Added a global config object `_io`
+     */
 
     /**
      * @type {Object} defaults
@@ -33,10 +46,15 @@
     const numberUnit = (value, unit) => {
         value = value.toString();
         let sizeNumber = value.match(/[\.]?[\d,]+\.?\d?/)?.[0] || '';
-        let sizeUnit = value.replace(/\d+/g, '').replace('.','') || unit;
+        let sizeUnit = value.replace(/\d+/g, '').replace('.', '') || unit;
 
         return sizeNumber.concat(sizeUnit);
     }
+
+    /**
+     * see: inane's config.js
+     */
+    const GlobalConfig = window?._icroot?.config?.QuickHeader || {};
 
     /**
      * QuickHeader
@@ -59,7 +77,7 @@
      * PS: label wins over img if both set
      *
      * @extends {HTMLElement}
-     * @version 0.3.1
+     * @version 0.4.0
      */
     class QuickHeader extends HTMLElement {
         /**
@@ -131,6 +149,11 @@
             return this.getAttribute('text') || this.textContent || _defaults.text;
         }
 
+        set text(value) {
+            this.setAttribute('text', value);
+            return this;
+        }
+
         /**
          * text align
          *
@@ -144,6 +167,13 @@
             return align;
         }
 
+        set textAlign(value) {
+            if (!['left', 'right', 'initial'].includes(value)) value = _defaults.textAlign;
+            this.setAttribute('textalign', value);
+
+            return this;
+        }
+
         /**
          * size
          *
@@ -153,6 +183,11 @@
          */
         get size() {
             return numberUnit(this.getAttribute('size') || _defaults.size, 'px');
+        }
+
+        set size(value) {
+            this.setAttribute('size', numberUnit(value || _defaults.size, 'px'));
+            return this;
         }
 
         /**
@@ -169,6 +204,14 @@
             return weight;
         }
 
+        set weight(value) {
+            value = value || _defaults.weight;
+            if (!['bold', 'bolder', 'lighter', 'normal', '100', '200', '300', '400', '500', '600', '700', '800', '900'].includes(value)) value = _defaults.weight;
+            this.setAttribute('weight', value);
+
+            return this;
+        }
+
         /**
          * colour
          *
@@ -178,6 +221,12 @@
          */
         get colour() {
             return this.getAttribute('colour') || _defaults.colour;
+        }
+
+        set colour(value) {
+            this.setAttribute('colour', value || _defaults.colour);
+
+            return this;
         }
 
         /**
@@ -191,6 +240,13 @@
             return numberUnit(this.getAttribute('top') || _defaults.top, 'rem');
         }
 
+        set top(value) {
+            value = numberUnit(value || _defaults.top, 'rem');
+
+            this.setAttribute('top', value);
+            return this;
+        }
+
         /**
          * Padding Right
          *
@@ -200,6 +256,13 @@
          */
         get right() {
             return numberUnit(this.getAttribute('right') || _defaults.right, 'rem');
+        }
+
+        set right(value) {
+            value = numberUnit(value || _defaults.right, 'rem');
+
+            this.setAttribute('right', value);
+            return this;
         }
 
         /**
@@ -213,6 +276,13 @@
             return numberUnit(this.getAttribute('bottom') || _defaults.bottom, 'rem');
         }
 
+        set bottom(value) {
+            value = numberUnit(value || _defaults.bottom, 'rem');
+
+            this.setAttribute('bottom', value);
+            return this;
+        }
+
         /**
          * Padding Left
          *
@@ -222,6 +292,13 @@
          */
         get left() {
             return numberUnit(this.getAttribute('left') || _defaults.left, 'rem');
+        }
+
+        set left(value) {
+            value = numberUnit(value || _defaults.left, 'rem');
+
+            this.setAttribute('left', value);
+            return this;
         }
 
         /**
@@ -235,6 +312,13 @@
             return this.hasAttribute('underline') ? 'block' : 'none';
         }
 
+        set underline(value) {
+            if (Boolean(value) && !this.hasAttribute('underline')) this.setAttribute('underline', true);
+            else if (!Boolean(value) && this.hasAttribute('underline')) this.removeAttribute('underline');
+
+            return this;
+        }
+
         /**
          * Display inline-block
          *
@@ -244,6 +328,13 @@
          */
         get inline() {
             return this.hasAttribute('inline') ? 'inline-block' : 'block';
+        }
+
+        set inline(value) {
+            if (Boolean(value) && !this.hasAttribute('inline')) this.setAttribute('inline', true);
+            else if (!Boolean(value) && this.hasAttribute('inline')) this.removeAttribute('inline');
+
+            return this;
         }
 
         /**
@@ -257,6 +348,11 @@
             return this.getAttribute('linecolour') || _defaults.lineColour;
         }
 
+        set lineColour(value) {
+            this.setAttribute('linecolour', value || _defaults.lineColour);
+            return this;
+        }
+
         /**
          * line width
          *
@@ -266,6 +362,11 @@
          */
         get lineWidth() {
             return numberUnit(this.getAttribute('linewidth') || _defaults.lineWidth, '%');
+        }
+
+        set lineWidth(value) {
+            this.setAttribute('linewidth', numberUnit(value || _defaults.lineWidth, '%'));
+            return this;
         }
 
         /**
@@ -281,11 +382,18 @@
             return align;
         }
 
+        set lineAlign(value) {
+            if (!['left', 'right', 'initial'].includes(value)) value = _defaults.lineAlign;
+            this.setAttribute('linealign', value);
+            return this;
+        }
+
         /**
          * Custom element added to page
          */
         connectedCallback() {
-            // console.log('connectedCallback');
+            window.document.head.querySelector(`#${tagName}-preloader`)?.remove();
+
             if (!this.hasAttribute('linealign')) this.setAttribute('linealign', _defaults.lineAlign);
             if (!this.hasAttribute('linecolour')) this.setAttribute('linecolour', _defaults.lineColour);
 
@@ -297,21 +405,18 @@
          * Custom element removed from page
          */
         disconnectedCallback() {
-            // console.log('disconnectedCallback');
         }
 
         /**
          * Custom element moved to new page
          */
         adoptedCallback() {
-            // console.log('adoptedCallback');
         }
 
         /**
          * Attribute changed
          */
         attributeChangedCallback(name, oldValue, newValue) {
-            // console.log('attributeChangedCallback', name, oldValue, newValue);
             if (name == 'text') this.updateText();
             else this.updateStyle();
         }
@@ -340,10 +445,6 @@
     color: ${this.colour};
     text-align: ${this.textAlign};
     cursor: default;
-    // -webkit-user-select: none;
-    // -moz-user-select: none;
-    // -ms-user-select: none;
-    // user-select: none;
 }
 .qh-line {
     display: ${this.underline};
@@ -362,9 +463,22 @@
         updateText() {
             if (this.textContent != this.text) this.textContent = this.text;
             this.shadow.querySelector('div').textContent = this.text;
+            this.innerHTML = this.text;
         }
     }
 
+    /**
+     * Pre-loader: Hides the tag until is defined
+     */
+    if (GlobalConfig?.preloader !== false && (options?.preloader === true || GlobalConfig?.preloader == true)) (() => {
+        const styleHide = document.createElement('style');
+        styleHide.id = `${tagName}-preloader`;
+        styleHide.textContent = `${tagName}:not(:defined){visibility:hidden;}`;
+        window.document.head.appendChild(styleHide);
+    })();
+
     // Define the new element
-    customElements.define('quick-header', QuickHeader);
-})();
+    customElements.define(tagName, QuickHeader);
+})({
+    preloader: true,
+});

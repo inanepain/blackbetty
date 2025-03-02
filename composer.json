@@ -43,5 +43,8 @@
         "psr/http-client": "*",
         "psr/event-dispatcher": "^1.0",
         "ext-simplexml": "*"
+    },
+    "scripts": {
+        "makecss": "sass --no-source-map -s compressed .\\src-style\\styles.scss .\\public\\css\\style.css"
     }
 }
