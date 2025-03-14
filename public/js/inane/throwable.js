@@ -118,7 +118,7 @@ class Throwable extends Error {
     }
 }
 
-/**\/
+// /**\/
 try {
     if (true) throw new Throwable('Throwing custom error!', { namespace: 'doSomething', type:'Crash', detail: {bob: true, colour: 'purple'} });
 } catch (e) {
@@ -132,7 +132,7 @@ timeStamp: ${e.timeStamp}
 Detail: ${detailString}
 `);
 }
-/\**/
+// /\**/
 
 // export default Throwable;
 export { Throwable };

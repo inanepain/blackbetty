@@ -24,4 +24,8 @@ return [
 		'name'   => 'Philip Michael Raab',
 		'email' => 'peep@cathedral.co.za',
 	],
+	'cli' => [
+		'run' => 'VSCodiumPatcher',
+		// 'run' => 'PinCode',
+	],
 ];

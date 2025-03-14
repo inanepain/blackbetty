@@ -21,18 +21,35 @@ declare(strict_types=1);
 
 namespace Dev\Db;
 
-class UsersGateway {
+use PDO;
 
+/**
+ * UsersGateway
+ *
+ * @package Dev\Db
+ */
+class UsersGateway {
 	private \PDO|null $db = NULL;
 
+	/**
+	 * Constructor
+	 *
+	 * @param PDO $db
+	 * @return void
+	 */
 	public function __construct(\PDO $db) {
 		$this->db = $db;
 	}
 
+	/**
+	 * Retrieves all user records from the database.
+	 *
+	 * @return array An array of all user records.
+	 */
 	public function findAll(): array {
 		$statement = "
             SELECT
-                id, name, email
+                id, name, email, group
             FROM
                 users;
         ";
@@ -47,10 +64,17 @@ class UsersGateway {
 		}
 	}
 
+	/**
+	 * Finds a user by their ID.
+	 *
+	 * @param int $id The ID of the user to find.
+	 *
+	 * @return array The user data as an associative array.
+	 */
 	public function find(int $id): array {
 		$statement = "
             SELECT
-                id, name, email
+                id, name, email, group
             FROM
                 users
             WHERE id = ?;
@@ -67,12 +91,19 @@ class UsersGateway {
 		}
 	}
 
+	/**
+	 * Inserts a new record into the users table.
+	 *
+	 * @param array $input An associative array containing the data to be inserted.
+	 *
+	 * @return int The ID of the newly inserted record.
+	 */
 	public function insert(array $input): int {
 		$statement = "
             INSERT INTO users
-                (name, email)
+                (name, email, group)
             VALUES
-                (:name, :email);
+                (:name, :email, :group);
         ";
 
 		try {
@@ -80,6 +111,7 @@ class UsersGateway {
 			$statement->execute([
 				'name'       => $input['name'],
 				'email'        => $input['email'],
+				'group'        => $input['group'],
 			]);
 
 			return $statement->rowCount();
@@ -88,21 +120,31 @@ class UsersGateway {
 		}
 	}
 
+	/**
+	 * Updates a user's information in the database.
+	 *
+	 * @param int $id The ID of the user to update.
+	 * @param array $input An associative array of the user's new data.
+	 *
+	 * @return int The number of affected rows.
+	 */
 	public function update(int $id, array $input): int {
 		$statement = "
             UPDATE users
             SET
-                name = :firstname,
-                email  = :lastname,
+                name = :name,
+                email = :email,
+                group = :group,
             WHERE id = :id;
         ";
 
 		try {
 			$statement = $this->db->prepare($statement);
 			$statement->execute([
-				'id'              => (int) $id,
-				'name'       => $input['name'],
-				'email'        => $input['email'],
+				'id' => (int) $id,
+				'name' => $input['name'],
+				'email' => $input['email'],
+				'group' => $input['group'],
 			]);
 
 			return $statement->rowCount();
@@ -111,6 +153,13 @@ class UsersGateway {
 		}
 	}
 
+	/**
+	 * Deletes a user from the database.
+	 *
+	 * @param int $id The ID of the user to delete.
+	 *
+	 * @return int The number of rows affected by the delete operation.
+	 */
 	public function delete(int $id): int {
 		$statement = "
             DELETE FROM users
@@ -126,5 +175,4 @@ class UsersGateway {
 			exit($e->getMessage());
 		}
 	}
-
 }

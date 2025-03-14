@@ -18,9 +18,9 @@
         "group": "users"
     },
     {
+        "id": 4,
         "name": "Kayon",
         "email": "kayon@users.com",
-        "id": 4,
         "group": "users"
     }
 ]

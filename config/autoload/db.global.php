@@ -20,12 +20,10 @@
 declare(strict_types=1);
 
 return [
-	'developer'   => [
-		'name'   => 'Philip Michael Raab',
-		'email' => 'philip@cathedral.co.za',
-	],
-	'cli' => [
-		// 'run' => 'VSCodiumPatcher',
-		// 'run' => 'PinCode',
+	'db'   => [
+		// 'dsn'   => 'mysql:host=127.0.0.1;dbname=myDB',
+		'dsn'   => "sqlite:data/develop.db",
+		// 'username' => 'peep@cathedral.co.za',
+		// 'password' => 'password'
 	],
 ];

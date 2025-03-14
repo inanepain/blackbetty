@@ -9,3 +9,13 @@ Firstly you need `asciidoctor` but that's not all, `asciidoctor-reducer` is also
 ```
 gem install asciidoctor-reducer
 ```
+
+## Gitea
+
+### Package Management
+
+Download the tag from the project page as a zip file. Edit command bellow to point to zip file and version number.
+
+```
+curl --user philip:Esoter1c!@ --upload-file "C:\Users\Philip\Downloads\stdlib-0.4.6.zip" http://localhost:3000/api/packages/inanepain/composer?version=0.4.6
+```

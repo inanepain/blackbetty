@@ -85,9 +85,11 @@ if (Backbone) {
     if (icroot[Options.ICRoot.ChannelProperty]) {
         dumper.info(`Backbone.Channel`, `Test:`, Options.Backbone.Radio.TestEvent, Options.Backbone.Radio.TestRequest);
         icroot[Options.ICRoot.ChannelProperty].on(Options.Backbone.Radio.TestEvent, function () {
+            // test in console with: _icroot.iChannel.trigger('test:event', {name:'Peep'})
             dumper.log(`Radio channel: '${this.channelName}' test event '${Options.Backbone.Radio.TestEvent}' with arguments:`, arguments);
         });
         icroot[Options.ICRoot.ChannelProperty].reply(Options.Backbone.Radio.TestRequest, function () {
+            // test in console with: bob=_icroot.iChannel.request('test:request', {name:'Peep'})
             dumper.log(`Radio channel: '${this.channelName}' test event '${Options.Backbone.Radio.TestRequest}' with arguments:`, arguments);
             return `Reply: ${Options.Backbone.Radio.TestRequest}`;
         });

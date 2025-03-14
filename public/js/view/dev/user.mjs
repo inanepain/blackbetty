@@ -28,7 +28,7 @@ const config = {
     },
     logLevel: {
         model: dumper.level,
-        collection: 2 || dumper.level,
+        collection: dumper.level,
     },
 };
 

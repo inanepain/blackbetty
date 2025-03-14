@@ -32,6 +32,12 @@ GET {{host}}/{{resource}}
 
 ###
 # @ref session
+GET {{host}}/{{resource}}?group=user
+
+>>! ./one.json
+
+###
+# @ref session
 POST {{host}}/{{resource}}
 {
   "id": 3,

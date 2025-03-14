@@ -263,3 +263,16 @@ if (!Object.prototype.groupBy) {
         }
     });
 }
+
+// const obj = {
+//     "A": "Aye,",
+//     "B": "Bee",
+//     "C": {
+//         "A": "CAye,",
+//         "B": "CBee",
+//         "C": "CCee",
+//     },
+// };
+
+// console.log(obj.readPath('C.B'));
+// console.log(obj.readPath(['C', 'A']));

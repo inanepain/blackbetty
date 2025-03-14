@@ -24,6 +24,10 @@ namespace Dev\App;
 use Inane\Stdlib\Options;
 use Inane\View\Renderer\PhpRenderer;
 
+use function array_merge;
+use function array_reverse;
+use function implode;
+
 /**
  * ViewModel
  *
@@ -62,7 +66,7 @@ class ViewModel extends AbstractModel {
 	}
 
 	public function getScripts(): string {
-		return \implode("\n", \array_reverse($this::$scripts));
+		return implode("\n", array_reverse($this::$scripts));
 	}
 
 	/**

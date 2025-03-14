@@ -20,6 +20,7 @@
 declare(strict_types=1);
 
 use Inane\Dumper\Dumper;
+use Inane\Stdlib\Options;
 
 chdir(dirname(__DIR__));
 
@@ -33,7 +34,17 @@ require 'vendor/autoload.php';
 Dumper::setExceptionHandler();
 
 if (\Inane\Cli\Cli::isCli()) {
-	$pc = new Dev\Task\PinCode();
+	$config = new Options(include 'config/app.config.php');
+	$files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
+	foreach ($files as $file) $config->merge(include $file);
+	$config->lock();
+
+	if ($config->cli->run == 'PinCode')
+		$pc = new Dev\Task\PinCode();
+	elseif ($config->cli->run == 'VSCodiumPatcher') {
+		$vscodiumPatcher = new Dev\Util\VSCodiumPatcher($config->vscodium);
+		$vscodiumPatcher->patch();
+	}
 } else {
 	$file = 'public' . $_SERVER['REQUEST_URI'];
 	// Server existing files in web dir

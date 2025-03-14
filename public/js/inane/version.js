@@ -3,6 +3,8 @@ const matches = ['HIGHER', 'EQUAL', 'LOWER'];
 /**
  * VersionMatch
  *
+ * Returned by Version.compare
+ *
  * HIGHER = 1
  * EQUAL = 0
  * LOWER = -1
@@ -252,11 +254,12 @@ export { Version, VersionMatch };
 // const bbv2 = new Version('1.2.0', { zeroExtend: false });
 // if (!bbv2.isHigherOrEqual(Backbone.VERSION)) log('Please update Backbone'); // no error: versions match
 // else log('LOADING Backbone...');
-
+// log('');
 // if (bbv.isLower(Backbone.VERSION)) log('Please update Backbone'); // no error: versions match
 // else log('LOADING Backbone...');
 
-
+// log('');
+// log('TEST: VersionMatch');
 // log(VersionMatch.from(-1));
 
 // const $v = new Version('1.0');
