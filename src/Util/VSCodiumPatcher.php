@@ -23,9 +23,9 @@ namespace Dev\Util;
 
 use Inane\Cli\Cli;
 use Inane\Stdlib\Options;
-use \Inane\Cli\Pencil;
-use \Inane\Cli\Pencil\Colour;
-use \Inane\Cli\Pencil\Style;
+use Inane\Cli\Pencil;
+use Inane\Cli\Pencil\Colour;
+use Inane\Cli\Pencil\Style;
 use Inane\File\File;
 use Inane\Stdlib\Json;
 
@@ -77,8 +77,7 @@ class VSCodiumPatcher {
      * @return void
      */
     protected function showError(string $file, string $message, int $exit = 0): void {
-        // Cli::line("{$this->config->message->red}Error:{$this->config->message->blue} $file:{$this->config->message->reset} $message");
-        Cli::line("{$this->config->format->error}Error:{$this->config->format->file} $file:{$this->config->format->reset} $message");
+        Cli::err("{$this->config->format->error}Error:{$this->config->format->file} $file:{$this->config->format->reset} $message");
         if ($exit > 0) exit($exit);
     }
 
@@ -189,7 +188,7 @@ class VSCodiumPatcher {
      *
      * @return array The content of the file as an array.
      */
-    protected function readFile(string $configKey): array {
+    protected function parseFile(string $configKey): array {
         $json = $this->$configKey->read();
         return Json::decode($json);
     }
@@ -203,8 +202,8 @@ class VSCodiumPatcher {
      * @return void
      */
     public function patch(): void {
-        $vscode = $this->readFile('vscode');
-        $vscodium = $this->readFile('vscodium');
+        $vscode = $this->parseFile('vscode');
+        $vscodium = $this->parseFile('vscodium');
 
         if (count($vscodium[$this->config->gallery->keyName]) != count($vscode[$this->config->gallery->keyName])) {
             if (Cli::confirm('Do you want to update', true)) {

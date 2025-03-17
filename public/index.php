@@ -19,6 +19,9 @@
 
 declare(strict_types=1);
 
+use Inane\Cli\Cli;
+use Inane\Cli\Pencil;
+use Inane\Cli\Pencil\Colour;
 use Inane\Dumper\Dumper;
 use Inane\Stdlib\Options;
 
@@ -33,18 +36,31 @@ require 'vendor/autoload.php';
 
 Dumper::setExceptionHandler();
 
-if (\Inane\Cli\Cli::isCli()) {
+if (Cli::isCli()) {
+	// Load & lock configuration data
 	$config = new Options(include 'config/app.config.php');
 	$files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
 	foreach ($files as $file) $config->merge(include $file);
 	$config->lock();
 
-	if ($config->cli->run == 'PinCode')
-		$pc = new Dev\Task\PinCode();
-	elseif ($config->cli->run == 'VSCodiumPatcher') {
-		$vscodiumPatcher = new Dev\Util\VSCodiumPatcher($config->vscodium);
-		$vscodiumPatcher->patch();
-	}
+	// Welcome to Develop console application
+	$pP = new Pencil(Colour::Purple);
+	$pP->line('Develop running as console application.' . PHP_EOL);
+
+	// Pick and choose what to run
+	$menu = [
+		'VSCodiumPatcher' => 'VSCodiumPatcher: update extention gallery',
+		'PinCode' => 'PinCode: proof of concept',
+		'' => 'Exit',
+	];
+
+	$choice = Cli::menu($menu, null, 'Please choose the module you want to run', 1);
+
+	match($choice) {
+		'PinCode'=> new Dev\Task\PinCode(),
+		'VSCodiumPatcher'=> new Dev\Util\VSCodiumPatcher($config->vscodium)->patch(),
+		default => '',
+	};
 } else {
 	$file = 'public' . $_SERVER['REQUEST_URI'];
 	// Server existing files in web dir
