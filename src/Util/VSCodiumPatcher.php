@@ -212,7 +212,7 @@ class VSCodiumPatcher {
                 $vscodium[$this->config->gallery->keyName] = $vscode[$this->config->gallery->keyName];
                 $json = Json::encode($vscodium);
 
-                if (!$this->vscodium->write($json)) {
+                if ($this->vscodium->write($json) === false) {
                     $this->showError('vscodium', 'unable to write to file...', 10);
                 }
 

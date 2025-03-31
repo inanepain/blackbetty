@@ -177,7 +177,7 @@ class ZAIDNumber {
          * @returns {string} The concatenated ID number.
          */
         getIDNumber() {
-            return this.Birthday + this.Gender + this.Citizenship + this.Race;
+            return `${this.Birthday}${this.Gender}${this.Citizenship}${this.Race}`;
         }
     };
 
@@ -299,10 +299,15 @@ class ZAIDNumber {
      * @returns {ZAIDNumber} The current instance for chaining.
      */
     setGender(gender) {
-        if (Object.keys(this.constructor.Gender).slice(0, -1).includes(gender))
-            gender = this.constructor.Gender[gender];
+        if (/^\d+$/.test(gender)) {
+            this.#componets.Gender = gender;
+            return this;
+        }
 
-        this.#componets.Gender = Object.values(this.constructor.Gender).slice(0, -1).includes(gender) && gender || this.constructor.Gender.Random();
+        if (Object.keys(this.constructor.Gender).slice(0, -1).includes(gender))
+            this.#componets.Gender = this.constructor.Gender[gender];
+        else
+            this.#componets.Gender = this.constructor.Gender.Random();
         return this;
     }
 
@@ -363,3 +368,5 @@ Object.freeze(ZAIDNumber.Race);
 // const id = new ZAIDNumber('8001015009087');
 // id.setBirthday('900101').setGender('Male').setCitizenship('SouthAfricanCitizen').setRace('White');
 // console.log(id.IDNumber);
+
+export {ZAIDNumber};
