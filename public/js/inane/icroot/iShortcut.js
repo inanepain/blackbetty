@@ -5,7 +5,7 @@
  * Description
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iShortcut
  *
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  * @version 0.4.0
  */
 
@@ -162,8 +162,8 @@ const scDb = new Map();
 /**
  * Keyboard Shortcuts
  *
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
  *
  * @version 0.4.0
  *

@@ -1,7 +1,7 @@
 /**
  * Extend String
  *
- * @author Philip Michael Raab<peep@inane.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @version 1.7.1
  *
  * Changes

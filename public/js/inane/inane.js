@@ -4,8 +4,8 @@
  * @link https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane-Inane
  *
  * @version 0.17.2
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
  *
  * @license MIT
  *

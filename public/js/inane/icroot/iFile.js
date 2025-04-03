@@ -5,7 +5,7 @@
  *
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iFile
  *
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  * @version 0.3.0
  */
 

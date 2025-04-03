@@ -1,7 +1,7 @@
 /**
  * ScrollTo
  * @version 0.5.1
- * @author Philip Michael Raab<peep@inane.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  */
 
 /**
@@ -27,7 +27,7 @@ export default class ScrollTo {
 
     /**
      * ScrollTo Element
-     * 
+     *
      * @param {HTMLElement|string} el Element or selector string
      * @param {object} param1 configuration options
      */
@@ -50,7 +50,7 @@ export default class ScrollTo {
 
     /**
      * Version
-     * 
+     *
      * @property
      * @readonly
      * @type {string}
@@ -61,7 +61,7 @@ export default class ScrollTo {
 
     /**
      * Animate Scrolling
-     * 
+     *
      * @param {number} endingY final Y position after scroll
      * @param {number} duration millisecond scroll duration
      */
@@ -87,7 +87,7 @@ export default class ScrollTo {
 
     /**
      * Scroll el into view pad with offset in duration
-     * 
+     *
      * @param {HTMLElement} el element to scroll
      * @param {number} offset padding for el
      * @param {number} duration scroll animation duration

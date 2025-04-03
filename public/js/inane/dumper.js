@@ -3,8 +3,8 @@
  * Logging with filters, Named loggers, enhanced assert, ...<br/>
  * Module version
  *
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
  *
  * module Dumper
  *
@@ -295,8 +295,8 @@ Object.freeze(LogLevels);
  * Logging with filters, Named loggers, enhanced assert, ...
  *
  * @version 2.4.2
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
  *
  * @property {LogLevel} TRACE - trace
  * @property {LogLevel} DEBUG - debug

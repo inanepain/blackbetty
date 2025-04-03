@@ -1,15 +1,15 @@
 /**
  * iStr
- * 
+ *
  * Description
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iStr
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
 /**
  * Version
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iStr
@@ -18,7 +18,7 @@ const VERSION = '0.5.0';
 
 /**
 * moduleName
-* 
+*
 * @constant
 * @type {String}
 */
@@ -28,15 +28,15 @@ if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION)
 
 /**
  * iStr
- * 
+ *
  * Quick string functions
- * 
+ *
  * Prefs (on: CAP / off: small)
  *  - s: use joiner on/off
- * 
+ *
  * _icroot.iHelper.importModule(_icroot.iHelper.icModules.iStr)
  * iStr=_icroot.iStr
- * 
+ *
  * @example
  * // returns Hello World
  * iStr.c('Hello')._().a('world').ep('s').a('example').s
@@ -77,7 +77,7 @@ class iStr {
 
     /**
      * Creates an instance of iStr
-     * 
+     *
      * @constructor
      * @param {string} string
     //  * @memberof iStr
@@ -157,7 +157,7 @@ class iStr {
 
     /**
      * Sets joiner
-     * 
+     *
      * default string between string
      *
      * @param {string} string

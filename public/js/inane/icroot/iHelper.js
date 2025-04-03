@@ -4,7 +4,7 @@
  * Ease of use for icRoot
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iHelper
  *
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  * @version 0.6.2
  * @class iHelper
  */

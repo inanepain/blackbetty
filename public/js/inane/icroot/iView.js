@@ -5,7 +5,7 @@
  *
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iView
  *
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
 import iOptions from './iOptions.js';

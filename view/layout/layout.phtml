@@ -7,12 +7,14 @@
     <title>Develop</title>
 
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/js/lib/tagify/4.33.2/tagify.css">
 
     <?=
     $this
     ->appendScript('/js/main.mjs', true)
     ->appendScript('/js/inane/config.js', true)
-    // ->appendScript('/js/inane/dumperjs.js')
+    // ->appendScript('/js/userscripts/iTemplate.js')
+    ->appendScript('/js/lib/tagify/4.33.2/tagify.js')
     ->appendScript('/js/inane/icroot/iHelper.js')
     ->appendScript('/js/lib/marionette/4.1.2/backbone.marionette.min.js')
     ->appendScript('/js/lib/backbone/radio/2.0.0/backbone.radio.min.js')

@@ -2,7 +2,7 @@
  * Extend Object
  *
  * @version 1.7.0
- * @author Philip Michael Raab<peep@inane.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  *
  * Public Domain.
  * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
@@ -598,7 +598,7 @@ if (!Number.prototype.log) {
 /**
  * Extend String
  *
- * @author Philip Michael Raab<peep@inane.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @version 1.7.1
  *
  * Changes

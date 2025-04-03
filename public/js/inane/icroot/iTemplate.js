@@ -6,7 +6,7 @@
  *
  * _icroot.iHelper.importModule(_icroot.iHelper.icModules.iTemplate).then(iTemplate=>window.iTemplate=iTemplate)
  *
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
 /**
