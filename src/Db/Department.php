@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Dev\Db;
 
-use Cathedral\Db\AbstractEntity;
+use Inane\Db\Entity\AbstractEntity;
 
 /**
  * Department

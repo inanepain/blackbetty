@@ -1,0 +1,20 @@
+= Gitea
+:experimental:
+:icons: font
+:source-highlighter: highlight.js
+:sectnums: |,all|
+:toc: auto
+
+== Package Management
+
+Open the library's page on Gitea and go to the tags page. Create a release from a tag (optional, you can download the zip for the tag directly). Download the zip file.
+
+Change the few variables in the code below to match your package and run to get `curl` command.
+
+.package upload url helper
+[source,php]
+----
+include::package-url.php[]
+----
+
+Run the command then go to the vendor's package page and link package to repository.
