@@ -6,7 +6,17 @@
 	],
 	"settings": {
 		"intelephense.environment.documentRoot": "\"${workspaceFolder}/public\"",
-		"intelephense.environment.phpVersion": "8.4.4"
+		"intelephense.environment.phpVersion": "8.4.4",
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/.DS_Store": true,
+			"**/Thumbs.db": true,
+			".idea": true,
+			".vscode": true,
+			"**/*.code-workspace": true
+		}
 	},
 	"launch": {
 		"configurations": [

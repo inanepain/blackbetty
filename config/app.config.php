@@ -20,6 +20,9 @@
 declare(strict_types=1);
 
 return [
+	'config' => [
+		'glob_pattern' => realpath(__DIR__) . '/autoload/{{,*.}global,{,*.}local}.php',
+	],
 	'view'   => [
 		'path'   => 'View',
 		'layout' => 'layout/layout',

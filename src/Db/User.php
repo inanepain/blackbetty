@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Dev\Db;
 
-use Cathedral\Db\AbstractEntity;
+use Inane\Db\Entity\AbstractEntity;
 
 /**
  * User
@@ -66,7 +66,7 @@ class User extends AbstractEntity {
     public Department $department {
         get {
             $d = new Department();
-            $d->get($this->iddepartment);
+            $d->fetch($this->iddepartment);
             return $d;
         }
         set(Department $value) {

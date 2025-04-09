@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Dev\Db;
 
-use Cathedral\Db\AbstractTable;
+use Inane\Db\Table\AbstractTable;
 
 /**
  * DepartmentsTable
@@ -36,5 +36,5 @@ use Cathedral\Db\AbstractTable;
 class DepartmentsTable extends AbstractTable {
     protected string $table = 'departments';
     protected string $primaryId = 'id';
-    protected string $class = Department::class;
+    protected string $entityClass = Department::class;
 }

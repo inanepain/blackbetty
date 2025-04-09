@@ -1,8 +1,4 @@
-vendor/
-.vscode/
-.idea/
-public/js/inane-old/
-
-lib/cathedral/
 
 lib/inanepain/
+
+lib/cathedral/
