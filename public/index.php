@@ -24,6 +24,7 @@ use Inane\Db\Adapter\Adapter;
 use Inane\Dumper\Dumper;
 use Inane\Stdlib\Options;
 use Inane\Cli\{
+	Arguments,
 	Pencil\Colour,
 	Cli,
 	Pencil
@@ -51,7 +52,7 @@ if (Cli::isCli()) {
 	$pP = new Pencil(Colour::Purple);
 	$pP->line('Develop running as console application.' . PHP_EOL);
 
-	$testDBLayer = function(Options $config): void {
+	$testDBLayer = function (Options $config): void {
 		UsersTable::$db = new Adapter($config->get('db'));
 		$usersTable = new UsersTable();
 
@@ -69,26 +70,55 @@ if (Cli::isCli()) {
 		dd([
 			'users' => $users,
 			'user3' => $user3,
-			'user4'=> $user4,
+			'user4' => $user4,
 		]);
 	};
 
-	// Pick and choose what to run
-	$menu = [
-		'VSCodiumPatcher' => 'VSCodiumPatcher: update extention gallery',
-		'PinCode' => 'PinCode: proof of concept',
-		'PackageLibrary' => 'PackageLibrary Manager',
-		'TestDBLayer' => 'Test Database Layer',
-		'' => 'Exit',
-	];
+	$args = new Arguments([
+		'flags' => [
+			'help' => [
+				'description' => 'Shows the usage screen with flags and options explained.',
+				'aliases' => ['h'],
+			],
+		],
+		'options' => [
+			'module' => [
+				'description' => 'Module to run => id or name: 1, vscodium, 2, pin, 3, package, 4, db.',
+				'aliases' => ['m'],
+			],
+		],
+	]);
+	$args->parse();
 
-	$choice = Cli::menu($menu, null, 'Please choose the module you want to run', 1);
+	if ($args['help']) {
+		Cli::line('' . $args->getHelpScreen());
+		exit(0);
+	} elseif ($args['module']) {
+		$choice = match ($args['module']) {
+			'1', 'vscodium' => 'VSCodiumPatcher',
+			'2', 'pin' => 'PinCode',
+			'3', 'package' => 'PackageLibrary',
+			'4', 'db' => 'TestDBLayer',
+			default => 'Exit',
+		};
+	} else {
+		// Pick and choose what to run
+		$menu = [
+			'VSCodiumPatcher' => 'VSCodiumPatcher: update extention gallery',
+			'PinCode' => 'PinCode: proof of concept',
+			'PackageLibrary' => 'PackageLibrary Manager',
+			'TestDBLayer' => 'Test Database Layer',
+			'' => 'Exit',
+		];
 
-	match($choice) {
-		'PinCode'=> new Dev\Task\PinCode(),
-		'VSCodiumPatcher'=> new Dev\Util\VSCodiumPatcher($config->vscodium)->patch(),
-		'PackageLibrary'=> \Dev\Package\PackageLibrary::getInstance()->run(),
-		'TestDBLayer'=> $testDBLayer($config),
+		$choice = Cli::menu($menu, null, 'Please choose the module you want to run', 1);
+	}
+
+	match ($choice) {
+		'PinCode' => new Dev\Task\PinCode(),
+		'VSCodiumPatcher' => new Dev\Util\VSCodiumPatcher($config->vscodium)->patch(),
+		'PackageLibrary' => \Dev\Package\PackageLibrary::getInstance()->run(),
+		'TestDBLayer' => $testDBLayer($config),
 		default => '',
 	};
 } else {
