@@ -82,7 +82,7 @@ final class PackageLibrary {
             'vendors' => [],
         ]);
 
-		$vendors = $this->library->path->getFiles('*', GLOB_ONLYDIR);
+		$vendors = $this->library->path->getDirectories();
 
         foreach ($vendors as $vendor) {
             $this->library->vendors[$vendor->getBaseName()] = [
@@ -91,7 +91,7 @@ final class PackageLibrary {
                 'packages' => [],
             ];
 
-            foreach ($vendor->getFiles('*', GLOB_ONLYDIR) as $package) {
+            foreach ($vendor->getDirectories() as $package) {
                 $this->library->vendors[$vendor->getBaseName()]['packages'][$package->getBaseName()] = [
                     'vendor' => $vendor->getBaseName(),
                     'package' => $package->getBaseName(),
@@ -100,10 +100,10 @@ final class PackageLibrary {
                 ];
             }
         }
-        dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
 	}
 
     public function run(): void {
         dd($this->config);
+        dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
     }
 }
