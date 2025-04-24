@@ -1,27 +1,27 @@
 /**
  * iView
- * 
+ *
  * Control and viewport functionality
- * 
+ *
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iView
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
-import iOptions from './iOptions.min.js';
+import iOptions from './iOptions.js';
 
 /**
  * Version
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iView
  */
-const VERSION = '0.5.1';
+const VERSION = '0.5.2';
 
 /**
 * moduleName
-* 
+*
 * @constant
 * @type {String}
 */
@@ -31,17 +31,17 @@ if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION)
 
 /**
  * iView
- * 
+ *
  * Tools for working with viewport
- *  
- * @version 0.5.1
+ *
+ * @version 0.5.2
  * @extends iOptions
 //  * @class iView
  */
 class iView extends iOptions {
     /**
      * Creates an instance of iView
-     * 
+     *
      * @param element the element or selector
      * @constructor
      */
@@ -59,9 +59,19 @@ class iView extends iOptions {
 
         this.viewQueue.map(el => el.ariaHidden = !this.isEndInView(el));
 
-        // TODO: Move out of contructor and have options for automatic event handling
+        // TODO: Move out of constructor and have options for automatic event handling
         this.holder.addEventListener('scroll', I.throttle(event=>{
             this.viewQueue.map(el => el.ariaHidden = !this.isEndInView(el));
+
+            this.viewQueue.map(el => {
+                // prevent last item not being displayed
+                if (this.viewQueue.length > 2 && el == this.viewQueue[this.viewQueue.length - 1])
+                    el.ariaHidden = this.viewQueue[this.viewQueue.length - 2].ariaHidden;
+                else el.ariaHidden = !this.isEndInView(el)
+            });
+
+            if (this.viewQueue.length > 2 && !this.viewQueue[this.viewQueue.length - 2].ariaHidden)
+            this.viewQueue[this.viewQueue.length - 1].ariaHidden = false;
         }, this._options.throttle), false);
     }
 
@@ -103,6 +113,7 @@ class iView extends iOptions {
      *
      * @readonly
      * @memberof iView
+     * @type {Array}
      */
     get viewQueue() {
         return this._viewQueue;

@@ -1,1 +1,26 @@
-[{"id":1,"name":"Philip Raab","email":"philip@users.com"},{"id":2,"name":"Nicole Raab","email":"nicole@users.com"},{"id":3,"name":"Inane","email":"pain@users.com"}]
+[
+    {
+        "id": 1,
+        "name": "Philip Raab",
+        "email": "philip@users.com",
+        "group": "admin"
+    },
+    {
+        "id": 2,
+        "name": "Nicole Raab",
+        "email": "nicole@users.com",
+        "group": "users"
+    },
+    {
+        "id": 3,
+        "name": "Inane",
+        "email": "pain@users.com",
+        "group": "users"
+    },
+    {
+        "id": 4,
+        "name": "Kayon",
+        "email": "kayon@users.com",
+        "group": "users"
+    }
+]

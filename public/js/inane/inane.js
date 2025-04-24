@@ -2,13 +2,13 @@
  * InaneJS
  *
  * @link https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane-Inane
- * 
- * @version 0.17.0
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
- * 
+ *
+ * @version 0.17.2
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
+ *
  * @license MIT
- * 
+ *
  * @see {@link https://git.inane.co.za:3000/Inane/inane-js/raw/master/LICENSE MIT license}
  *
  * Public Domain.
@@ -16,58 +16,66 @@
  */
 /* vscode: vscode-fold=2 */
 /**
+ * 0.17.2 (2022 Feb 16)
+ * + throttle: options.context add to specify the `this` object
+ * + sortByLength: sort an array of string by their length
+ * - longestCommonSubstring: makes use of `sortByLength` to improve result
+ *
+ * 0.17.1 (2021 May 17)
+ * + objectToQuery: fix variable assignment in strict mode
+ *
  * 0.17.0 (2021 Mar 05)
  * + commonSubsequence: get the longest common substring in a string array
- * 
+ *
  * 0.16.2 (2020 Dec 15)
  * - parseValue: fix numeric strings with spaces
- * 
+ *
  * 0.16.1 (2020 Oct 13)
  * - parseValue: fix for dates
- * 
+ *
  * 0.16.0 (2020 Sep 07)
  * - pick: New function to create object with selected properties from source object
- * 
+ *
  * 0.15.0 (2020 Aug 06)
  * - pick: New function to create object with selected properties from source object
- * 
+ *
  * 0.14.1 (2020 Jul 29)
  * - queryToObject: Fix: Empty string now returns a empty object
- * 
+ *
  * 0.14.0 (2020 Jul 27)
  * - addFeatureFallback: checks object prototype for function and assign custom function if not found
  * - browserData: added basic isMobile property
  * - queryToObject: Fix: Empty string now returns a empty object
- * 
+ *
  * 0.13.0 (2020 Jun 26)
  * - objectToQuery: turns object to url query string
  * - queryToObject: turns url query string to object
- * 
+ *
  * 0.12.0 (2020 Jun 14)
  * - mergeOptions can now take any amount of source objects in decreasing order of priority
- * 
+ *
  * 0.11.2 (2020 Jun 10)
  * - Fix md5 function, variable not init
  * - Shuffle code around a little
- * 
+ *
  * 0.11.1 (2020 Jun 07)
  * - Updated animate classes to use new version
- * 
+ *
  * 0.11.0 (2020 Jun 01)
  * - converted to class
  * - throttle take optional options argument
- * 
+ *
  * 0.10.0 (2020 May 20)
  * - new     : modern setTimeout that returns a promise which resolves at timeout
  * - update  : mergeOptions: null & undefined properties on obj1 will now be updated
- * 
+ *
  * 0.9.3 (2020 Apr 27)
  * - new     : throttle function that returns a restricted version of passed in function
  * - new     : isElementInView returns true if element is in viewport
- * 
+ *
  * 0.9.2 (2020 Apr 20)
  * - fix     : mergeOptions was not handling objects in objects correctly
- * 
+ *
  * 0.9.0 (2020 Apr 01)
  *  - new    : mergeOptions function add
  *
@@ -115,17 +123,16 @@
 
     /**
      * Inane I
-     * 
+     *
      * @class I
      */
     root.I = factory(root, class I {
         constructor() {
             // console.log(`Inane v${VERSION}`);
-            console.log(`Inane`);
         }
     });
 })(function (root, Inane) {
-    const VERSION = '0.17.0';
+    const VERSION = '0.17.2';
 
     const getCache = [];
 
@@ -191,8 +198,8 @@
 
     /**
      * I
-     * 
-     * @version 0.17.0
+     *
+     * @version 0.17.2
      */
     class I extends Inane {
         /**
@@ -204,9 +211,9 @@
 
         /**
          * VERSION
-         * 
+         *
          * @readonly
-         * 
+         *
          * @returns version
          */
         static get VERSION() {
@@ -215,9 +222,9 @@
 
         /**
          * VERSION
-         * 
+         *
          * @readonly
-         * 
+         *
          * @returns version
          */
         get VERSION() {
@@ -237,35 +244,35 @@
 
         /**
          * Parses value to int|float|string
-         * 
+         *
          * @param {number|string|null} value - object to parse
          * @returns {number|string|null} the value cast to best matching type
          */
-        parseValue = value => value === "0" ? 0 : ((value && value.includes(' ')) ? value : Number.isNaN(value) == false && Number.isInteger(value) && Number.parseInt(value) || Number.parseFloat(value) || value);
+        parseValue = value => value === "0" ? 0 : ((typeof value != 'number' && value?.includes(' ')) ? value : Number.isNaN(value) == false && Number.isInteger(value) && Number.parseInt(value) || Number.parseFloat(value) || value);
 
         /**
-         * Adds ONLY missing properties from objs to target in decreasing priority
-         * 
+         * Adds ONLY missing properties from source objects to target in decreasing priority
+         *
          * @example
          * // copy values from defaults missing in options to options
          * I.mergeOptions(options, defaults);
-         * 
-         * @param {Object} target the targe object
-         * @param {Object[]} objs the source objects in decreasing order of priority
-         * 
+         *
+         * @param {Object} target the target object
+         * @param {Object[]} source the source objects in decreasing order of priority
+         *
          * @returns {Object} target with missing properties from objs
          */
-        mergeOptions(target, ...objs) {
+        mergeOptions(target, ...source) {
             let key, i;
-            for (i = 0; i < objs.length; i++) {
-                for (key in objs[i]) {
-                    if (!(key in target) && objs[i].hasOwnProperty(key)) {
-                        target[key] = objs[i][key];
+            for (i = 0; i < source.length; i++) {
+                for (key in source[i]) {
+                    if (!(key in target) && source[i].hasOwnProperty(key)) {
+                        target[key] = source[i][key];
                     } else {
                         try { // If we are dealing with child objects here we simple dive into them to process the whole object
-                            if (target[key].constructor === Object && objs[i][key].constructor === Object) this.mergeOptions(target[key], objs[i][key]);
+                            if (target[key].constructor === Object && source[i][key].constructor === Object) this.mergeOptions(target[key], source[i][key]);
                         } catch (error) { // If target has undefined or null we catch the error and set the value
-                            if (error.message.includes('target[key].constructor')) target[key] = objs[i][key];
+                            if (error.message.includes('target[key].constructor')) target[key] = source[i][key];
                         }
                     }
                 }
@@ -274,8 +281,8 @@
         }
 
         /**
-         * Creates a new object with propsArray preoperties from obj
-         * 
+         * Creates a new object with propsArray properties from obj
+         *
          * @param {object} obj - the source object
          * @param {string[]} propsArray - array of properties you want in new object
          */
@@ -296,14 +303,41 @@
         }
 
         /**
+         * Sort array by string length
+         *
+         * @since 0.17.2
+         *
+         * @param {string[]} list string array
+         *
+         * @returns array sorted by string length
+         */
+        sortByLength(list) {
+            // const buffer = '1'.padEnd(`${list.length}`.length, '0') * 1;
+            const buffer = Math.pow(10, `${list.length}`.length);
+
+            const cache = {};
+            list.sort().forEach(str => {
+                let len = str.length * buffer;
+                while (cache.hasOwnProperty(len)) len++;
+                cache[len] = str;
+            });
+
+            return Object.values(cache);
+        }
+
+        /**
          * Returns the longest substring contained in a list of strings
+         *
          * @param {string[]} list list of strings to search
          * @param {boolean} showCandidates return object with longest substring and candidates used in process
+         *
          * @returns {string|object}
          */
         longestCommonSubstring(list, showCandidates = false) {
+            // sort by string length to make the shortest string our base of comparison.
+            list = this.sortByLength(list);
+
             let tw = list.shift();
-            // log(`testWord: ${testWord}`);
             let tl = tw.split(``);
             let t = ``;
             let l = ``;
@@ -321,7 +355,7 @@
                         lc.push(p);
                         l = p;
                     }
-                } else t = t.length > 1 ? p[p.length - 1] : ``; // if not every word 
+                } else t = t.length > 1 ? p[p.length - 1] : ``; // if not every word
             });
 
             if (showCandidates) return { longest: l, longestCandidates: lc };
@@ -329,25 +363,31 @@
         }
 
         /**
+         * Throttle Options
+         *
+         * @typedef {Object} ThrottleOptions
+         * @property {boolean} [skipfirst=false] - False: first call is instant, True: first call delayed
+         * @property {object} context - the object to use as `this` @since 0.17.2
+         */
+        /**
          * Throttles and debounces a function
-         * 
+         *
          * @param {Function} func the function to restrict
          * @param {number} limitDelay the milliseconds between calls and delay to wait for last call
          * @param {ThrottleOptions} options extra options for throttle
-         * 
+         *
          * @returns {Function} the restricted function
-         * 
-         * @memberof I
          */
         throttle(func, limitDelay = 1000, options = {}) {
             this.mergeOptions(options, {
-                skipfirst: false
+                skipfirst: false,
+                context: this,
             });
             let inThrottle = options.skipfirst;
             let inDebounce;
             return function () {
                 const args = arguments;
-                const context = this;
+                const context = options.context;
                 if (!inThrottle) {
                     inThrottle = true;
                     func.apply(context, args);
@@ -359,21 +399,23 @@
             }
         }
 
+        // const getUrlCache = new WeakMap();
+
         /**
          * getUrl
-         * 
+         *
          * Uses a promise to get the url contents
-         * 
+         *
          * @example
          * getUrl('http://some.url/to/fetch').then(result=>{
          *  console.log('result', result);
          * }).catch(error=>{
          *  console.log('Error:', error);
          * })
-         * 
+         *
          * @param {string} url the url to request
          * @param {boolean} useCache cache the request and return cached version on repeated calls
-         * 
+         *
          * @returns {Promise}
          */
         getUrl(url, useCache = false) {
@@ -395,7 +437,7 @@
                 }
             } else cache = {
                 url: url,
-                data: false,
+                data: undefined,
                 hits: 0,
                 index: getCache.length
             };
@@ -405,12 +447,11 @@
                 req.open('GET', url);
                 req.onload = () => {
                     if (req.status == 200) {
-                        cache.data = req.response;
-
-                        if (cache.data === false)
+                        if (cache.data === undefined) {
+                            cache.data = req.response;
                             getCache.push(cache);
-                        else
-                            getCache[cache.index] = cache;
+                        } else getCache[cache.index] = cache;
+
                         resolve(req.response);
                     } else {
                         reject(req.statusText);
@@ -469,7 +510,7 @@
 
         /**
          * Get browser name and version data
-         * 
+         *
          * @returns {object} browser info
          */
         browserData() {
@@ -525,15 +566,15 @@
 
         /**
          * Convert Object to URL Query String
-         * 
+         *
          * @param {Object} obj - object to convert
          * @param {string} prefix - uses prefix as an array instead of property name
-         * 
+         *
          * @returns {string} - the url query string
          */
         objectToQuery(obj, prefix) {
             let queryParts = []
-            for (param in obj) {
+            for (let param in obj) {
                 if (obj.hasOwnProperty(param)) {
                     let key = prefix ? prefix + "[]" : param;
                     let value = obj[param];
@@ -551,9 +592,9 @@
 
         /**
          * Convert URL Query String to Object
-         * 
+         *
          * @param {string} urlParams - url query string
-         * 
+         *
          * @returns {Object} - JSON object of query params
          */
         queryToObject(urlParams) {
@@ -576,47 +617,12 @@
         }
 
         /**
-         * Throttle Options
-         * 
-         * @typedef {Object} ThrottleOptions
-         * @property {boolean} skipfirst - False: first call is instant, True: first call delayed
-         */
-        /**
-         * Throttles and debounces a function
-         * 
-         * @param {Function} func the function to restrict
-         * @param {number} limitDelay the milliseconds between calls and delay to wait for last call
-         * @param {ThrottleOptions} options extra options for throttle
-         * 
-         * @returns {Function} the restricted function
-         */
-        throttle(func, limitDelay = 1000, options = {}) {
-            this.mergeOptions(options, {
-                skipfirst: false
-            });
-            let inThrottle = options.skipfirst;
-            let inDebounce;
-            return function () {
-                const args = arguments;
-                const context = this;
-                if (!inThrottle) {
-                    inThrottle = true;
-                    func.apply(context, args);
-                    inThrottle = setTimeout(() => inThrottle = undefined, limitDelay);
-                } else {
-                    clearTimeout(inDebounce);
-                    inDebounce = setTimeout(() => func.apply(context, args), limitDelay);
-                }
-            }
-        }
-
-        /**
          * addFeatureFallback
-         * 
+         *
          * @param {*} obj - object to test for feature
-         * @param {string} feature - requiered function
+         * @param {string} feature - required function
          * @param {*} fallback - function to emulate feature
-         * 
+         *
          * @returns {I}
          */
         addFeatureFallback(obj, feature, fallback) {
@@ -625,12 +631,12 @@
         }
 
         /**
-         * Promiss version of setTimeout
-         * 
+         * Promise version of setTimeout
+         *
          * @example I.onTimeout(10*1000).then(() => saySomething("10 seconds")).catch(failureCallback);
-         * 
+         *
          * @param {number} ms milliseconds to wait
-         * 
+         *
          * @returns {Promise} on timeout
          */
         onTimeout = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -639,7 +645,7 @@
          * Is Element in Viewport
          *
          * @param {node} element
-         * 
+         *
          * @returns {boolean}
          */
         isElementInView(element) {

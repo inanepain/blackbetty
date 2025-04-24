@@ -1,27 +1,27 @@
 /**
  * iHelper
- * 
+ *
  * Ease of use for icRoot
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iHelper
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
- * @version 0.6.0
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @version 0.6.2
  * @class iHelper
  */
 /** vscode-fold=2 */
 (function (root) {
     /**
      * Version
-     * 
+     *
      * @constant
      * @type {String}
      * @memberof iHelper
      */
-    const VERSION = '0.6.0';
+    const VERSION = '0.6.2';
 
     /**
      * moduleName
-     * 
+     *
      * @constant
      * @type {String}
      * @memberof iHelper
@@ -33,7 +33,7 @@
 
     /**
      * iHelper
-     * 
+     *
      * @constant
      * @type {Object}
      * @memberof iHelper
@@ -43,14 +43,13 @@
         importModule: undefined,
         module: undefined,
         icModules: undefined,
-        enableDevMode: undefined,
     };
 
     /**
      * DevMode
-     * 
+     *
      * Development Mode
-     * 
+     *
      * @type {boolean}
      * @memberof iHelper
      */
@@ -58,9 +57,9 @@
 
     /**
      * icPath
-     * 
+     *
      * path of icModules
-     * 
+     *
      * @constant
      * @type {String}
      * @memberof iHelper
@@ -70,9 +69,9 @@
 
     /**
      * icModules
-     * 
+     *
      * Valid icModules collection
-     * 
+     *
      * @constant
      * @type {Object}
      * @memberof iHelper
@@ -90,44 +89,28 @@
 
     /**
      * rootModules
-     * 
+     *
      * icModules that get loaded into root as well as icRoot
-     * 
+     *
      * @constant
      * @type {string[]}
      * @memberof iHelper
      */
     const rootModules = ['iShortcut'];
 
-    let dlogger = root['Dumper'] ? root.Dumper.get('iHelper', {
+    let logger = root['Dumper'] ? root.Dumper.get('Inane', {
         level: Dumper.WARN,
-    }) : console;
+    }).get(`iHelper`) : console;
 
     /**
      * Loads an ic module
-     * 
-     * @param {string} icModule
-     * @returns {iHelper}
-     * @memberof iHelper
-     */
-    const setDevelopmentMode = () => {
-        devMode = true;
-        if (dlogger instanceof Dumper) dlogger.setLevel(dlogger.DEBUG);
-        dlogger.debug('Development Mode', 'Enabled');
-        return iHelper;
-    }
-    iHelper.enableDevMode = setDevelopmentMode;
-
-    /**
-     * Loads an ic module
-     * 
+     *
      * @param {string} icModule
      * @memberof iHelper
      */
     const importModule = (icModule, callback = null) => {
-        if (!dlogger instanceof Dumper && root.Dumper) dlogger = root.Dumper.get('iHelper');
         // Return if the module is invalid
-        if (!icModules[icModule]) return dlogger.warn('importModule', 'Invalid IC Module: '.concat(Object.keys(icModules).join(': ')));
+        if (!icModules[icModule]) return logger.warn('importModule', 'Invalid IC Module: '.concat(Object.keys(icModules).join(': ')));
 
         // If rootModule found in root but not icroot we copy it to icroot
         if (rootModules.includes(icModule) && root[icModule]) if (!root._icroot[icModule]) root._icroot[icModule] = root[icModule];
@@ -136,11 +119,11 @@
         if (root._icroot[icModule]) return new Promise(module => module(root._icroot[icModule]));
 
         // Build the file path
-        const icFile = icPath.replace('__IC__', icModule.concat(devMode ? '' : '.min')).concat(devMode ? '?e=' + _.now() : '');
+        const icFile = icPath.replace('__IC__', icModule).concat(devMode ? '?e=' + _.now() : '');
 
         return new Promise(resolve => {
             import(icFile).then((module) => {
-                dlogger.debug('importModule', 'Loadded: '.concat(icModule));
+                logger.debug('importModule', 'Loaded: '.concat(icModule));
 
                 // Also and it to the _icroot and root if a rootModule
                 root._icroot[icModule] = module.default;
@@ -161,7 +144,7 @@
         /**
          * iqs<br />
          * Shorter version of QuerySelector
-         * 
+         *
          * @param {string} selectors
          */
         HTMLElement.prototype.iqs = function (selectors) {
@@ -177,7 +160,7 @@
         /**
          * iqsa<br />
          * Shorter version of QuerySelectorAll
-         * 
+         *
          * @param {string} selectors
          */
         HTMLElement.prototype.iqsa = function (selectors) {
@@ -213,5 +196,5 @@
     // Check for _icroot or create
     if (root['_icroot'] === undefined) root['_icroot'] = {};
     // Check for module in _icroot or create
-    if (!root._icroot[moduleName]) root._icroot[moduleName] = eval(moduleName);
+    if (!root._icroot[moduleName]) root._icroot[moduleName] = iHelper;
 }(window));

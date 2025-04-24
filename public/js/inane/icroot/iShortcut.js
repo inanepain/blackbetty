@@ -1,31 +1,13 @@
 /**
  * iShortcut
  * @module icroot/iShortcut
- * 
+ *
  * Description
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iShortcut
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
- * @version 0.3.1
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @version 0.4.0
  */
-
-/**
-* moduleName
-* 
-* @constant
-* @type {String}
-*/
-const moduleName = 'iShortcut';
-
-/**
- * Version
- * 
- * @constant
- * @type {String}
- */
-const VERSION = '0.3.1';
-
-if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION), 'LOAD');
 
 /**
  * KeyMapping
@@ -178,17 +160,31 @@ const kbKeys = {
 const scDb = new Map();
 
 /**
- * Keyboard Shorcuts
+ * Keyboard Shortcuts
  *
- * @author Philip Michael Raab <peep@inane.co.za>
- * @copyright 2020 Philip Michael Raab <peep@inane.co.za>
- * 
- * @version 0.3.1
- * 
+ * @author Philip Michael Raab <philip@cathedral.co.za>
+ * @copyright 2020 Philip Michael Raab <philip@cathedral.co.za>
+ *
+ * @version 0.4.0
+ *
  * @license MIT
  * @see {@link https://git.inane.co.za:3000/Inane/inane-js/raw/master/LICENSE MIT license}
  */
 class iShortcut {
+    /**
+     * Version
+     *
+     * @readonly
+     * @type {string} Version
+     * @ignore
+     */
+    static get VERSION() {
+        return '0.4.0';
+    }
+    get VERSION() {
+        return this.constructor.VERSION;
+    }
+
     /**
      * Creates an instance of iShortcut.
      */
@@ -204,26 +200,35 @@ class iShortcut {
     }
 
     /**
-     * @type {String} Version
+     * Creates a code from shortcut text
+     *
+     * @param {string} shortcut text shortcut
+     *
+     * @returns {string}
      */
-    get VERSION() {
-        return VERSION;
+    #parseShortcut(shortcut) {
+        let cmd = shortcut.toUpperCase().replaceAll(' ', '').replaceAll('CONTROL', 'CTRL').split('+');
+        let cmdMod = Object.keys(kbKeys.mod).map(key => {
+            if (cmd.includes(key)) return kbKeys.mod[cmd.splice(cmd.indexOf(key), 1)[0]]; return;
+        });
+        return cmdMod.concat([':']).concat(cmd).join('');
     }
 
     /**
-     * Add keyboard shorcut and callback
-     * 
+     * Add keyboard shortcut and callback
+     *
      * @example
-     * // adds shortcut
+     * // adds a shortcut
      * iShortcut.addShortcut('shift + alt + h', myFunc, 'Does Something');
      *
      * @param {string} shortcut the keyboard shortcut as text
      * @param {function} callback callback to run when shortcut is used
-     * @param {string} description a description of shortcut for help
+     * @param {string} [description=''] a description of shortcut for help
+     *
      * @returns {iShortcut}
      */
     addShortcut(shortcut, callback, description = '') {
-        let code = this.parseShortcut(shortcut);
+        const code = this.#parseShortcut(shortcut);
         if (!scDb.has(code)) scDb.set(code, {
             code: code,
             shortcut: shortcut.split(' + ').join('+').replaceAll('+', ' + '),
@@ -238,10 +243,12 @@ class iShortcut {
     /**
      * Show registered shortcuts and descriptions
      *
-     * @returns {iShortcut}
+     * @param {boolean} [alert=true] show alert of registered shortcuts
+     *
+     * @returns {string[]} shortcuts list
      */
-    help() {
-        let shortcutDescriptions = [];
+    help(alert = true) {
+        const shortcutDescriptions = [];
         shortcutDescriptions.push('SHORTCUT DESCRIPTIONS');
 
         for (const [key, element] of scDb) {
@@ -251,18 +258,20 @@ class iShortcut {
             const tab = shortcut.length < 12 ? "\t\t\t" : "\t";
             shortcutDescriptions.push(`${shortcut}${tab}: ${element.description}`);
         }
-        const message = shortcutDescriptions.join("\n");
-        window.alert(message);
-        return this;
+
+        window.alert(shortcutDescriptions.join("\n"));
+        return shortcutDescriptions;
     }
 
     /**
      * Keyup Event Handler
      *
      * @param {KeyboardEvent} event event to evaluate for keys
+     *
      * @returns {iShortcut}
      */
     onKeyup(event) {
+        // if (!event.key) return;
         if (!event.which) return;
 
         let code = '';
@@ -270,27 +279,19 @@ class iShortcut {
         code += event.altKey ? 'A' : '';
         code += event.ctrlKey ? 'C' : '';
         code += ':';
+        // code += event.key;
+        // code += kbKeys.code[event.key];
         code += kbKeys.code[event.which];
 
+        // if (scDb.has(code)) scDb.get(code).listeners.forEach(callback => callback(event, {
+        //     code: event.key,
+        //     char: event.key
+        // }));
         if (scDb.has(code)) scDb.get(code).listeners.forEach(callback => callback(event, {
             code: event.which,
             char: kbKeys.code[event.which]
         }));
         return this;
-    }
-
-    /**
-     * Creates a code from shortcut text
-     *
-     * @param {string} shortcut text shortcut
-     * @returns {string}
-     */
-    parseShortcut(shortcut) {
-        let cmd = shortcut.toUpperCase().replaceAll(' ', '').replaceAll('CONTROL', 'CTRL').split('+');
-        let cmdMod = Object.keys(kbKeys.mod).map(key => {
-            if (cmd.includes(key)) return kbKeys.mod[cmd.splice(cmd.indexOf(key), 1)[0]]; return;
-        });
-        return cmdMod.concat([':']).concat(cmd).join('');
     }
 }
 
@@ -300,4 +301,4 @@ class iShortcut {
  */
 const shortcut = new iShortcut();
 
-export { shortcut as default };
+export default shortcut;

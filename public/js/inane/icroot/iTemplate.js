@@ -1,36 +1,36 @@
 /**
  * iTemplate
- * 
+ *
  * Simple JavaScript Templating
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iTemplate
- * 
+ *
  * _icroot.iHelper.importModule(_icroot.iHelper.icModules.iTemplate).then(iTemplate=>window.iTemplate=iTemplate)
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
 /**
  * Version
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iTemplate
  */
-const VERSION = '0.6.0';
+const VERSION = '0.6.1';
 
 /**
 * moduleName
-* 
+*
 * @constant
 * @type {String}
 */
-const moduleName = 'iTemplate.min.js';
+const moduleName = 'iTemplate.js';
 
 if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION), 'LOAD');
 
 /**
  * Template function cache
- * 
+ *
  * @constant
  * @type {Object}
  * @memberof iTemplate
@@ -42,10 +42,10 @@ const cache = {};
  *
  * @param {String} tpl the template string or template id
  * @param {Object} data the object used to fill the template
- * 
+ *
  * @returns {Function|String}
- * 
- * @version 0.6.0
+ *
+ * @version 0.6.1
  * @class iTemplate
  */
 const iTemplate = function (tpl, data) {
@@ -58,7 +58,7 @@ const iTemplate = function (tpl, data) {
 
         // Generate a reusable function that will serve as a template
         // generator (and which will be cached).
-        new Function("obj",
+        new Function("obj={}",
             "let p=[],print=function(){p.push.apply(p,arguments);};" +
 
             // Introduce the data as local variables using with(){}

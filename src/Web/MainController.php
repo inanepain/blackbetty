@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
@@ -21,20 +21,26 @@ declare(strict_types=1);
 
 namespace Dev\Web;
 
+use Dev\App\AbstractController;
+use Dev\App\ModelInterface;
+use Dev\App\ViewModel;
 use Dev\People\Person;
 use Inane\Routing\Route;
 
-class MainController {
+use function file_exists;
+
+class MainController extends AbstractController {
 	#[Route(path: '/', name: 'home')]
-	public function home(): array {
+	public function home(): array|ModelInterface {
 		$philip = new Person('Philip', 'Raab');
-		return [
+
+		return new ViewModel([
 			'developer' => $philip->fullName,
-		];
+		]);
 	}
 
 	#[Route(path: '/view/{item}', name: 'item', )]
-	public function viewTask(array $params): array {
+	public function viewTask(array $params): array|ModelInterface {
 		if (file_exists('public/img/' . $params["item"] . '.png')) {
 			$img = '<img width="300" src="/img/' . $params["item"] . '.png" alt="' . $params["item"] . '"/>';
 		} else {
@@ -42,6 +48,6 @@ class MainController {
 		}
 
 		$params["img"] = $img;
-		return $params;
+		return new ViewModel($params);
 	}
 }

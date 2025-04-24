@@ -4,9 +4,9 @@
  * Load scripts/css lazy
  * Setup deps between scripts
  * @link https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane-JSLoader
- * 
+ *
  * @version 0.11.1
- * @author Philip <peep@inane.co.za>
+ * @author Philip <philip@cathedral.co.za>
  *
  * Public Domain.
  * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
@@ -33,26 +33,26 @@
 
 /**
  * Change Log
- * 
+ *
  * 0.11.1 (2020 Jul 06)
  * - update      : script params use data attributes.
  * - new         : data-basepath script attribute added to set base path.
- * 
+ *
  * 0.11.0 (2020 May 24)
  * update        : manualTrigger: when set to true JSLoader does not trigger on load event but waits for manual call of start function.
  *
  * 0.10.0 (2020 May 21)
  * update        : new attachment functions that are uniform and cleaner then before.
- * 
+ *
  * 0.9.0 (2018 Oct 04)
  *  - loadCheck  : About time, validate module name right up front and ignore invalid ones and triggers an ignore event
  *  - dotRequire : For some items it make sense to put to requirement onto the module name. IE a custom jquiery select => myselect could be called jqueryui.myselect. This looks for jqueryui as a requirement.
  *  - events     : Replaced onreadystatechange with addEvent...
- * 
+ *
  * 0.8.3 (2018 Sep 19)
  *  - logging    : Totally quiet when off
  *  - Inane      : No longer used
- * 
+ *
  * 0.8.2 (2018 Jul 3)
  *  - ready      : Fixed: Ready scripts not run if no modules loaded
  *  - arg check  : Fix: Error if loadModules called with no arguments
@@ -109,7 +109,7 @@
 	 * @typedef {Object} LoaderModule
 	 * @property {string} script - The javascript file
 	 * @property {string} style - The stylesheet file
-	 * @property {string[]} require - array listing the id's of requiered modules
+	 * @property {string[]} require - array listing the id's of required modules
      * @memberof JSLoader
  	 */
 
@@ -238,13 +238,13 @@
 	 * About JSLoader
 	 *
 	 * Show some basic JSLoader info
-     * 
+     *
      * @memberof JSLoader
 	 */
     JSLoader.about = function () {
         logger(
             `
-Author: Philip Michael Raab<peep@inane.co.za>
+Author: Philip Michael Raab<philip@cathedral.co.za>
 Version: ${JSLoader.VERSION}
 Script verbosity attribute: 1`);
     }; // about
@@ -257,7 +257,7 @@ Script verbosity attribute: 1`);
 
 	/**
 	 * Adds a function to be called when the system is ready
-	 * 
+	 *
 	 * @function ready
 	 * @param {function} listener
      * @memberof JSLoader
@@ -378,7 +378,7 @@ Script verbosity attribute: 1`);
 
 	/**
 	 * Return array of loaded scripts
-     * 
+     *
      * @memberof JSLoader
 	 */
     JSLoader.getHistory = function () {
@@ -387,7 +387,7 @@ Script verbosity attribute: 1`);
 
 	/**
 	 * Returns true if script already loaded
-     * 
+     *
      * @memberof JSLoader
 	 */
     JSLoader.hasHistory = function (script) {
@@ -395,7 +395,7 @@ Script verbosity attribute: 1`);
     };
 
 	/**
-	 * Adds script to history if no recored exists
+	 * Adds script to history if no recorded exists
 	 */
     let addHistory = function (script) {
         JSLoader.hasHistory(script) || history.push(script);
@@ -403,11 +403,11 @@ Script verbosity attribute: 1`);
     };
 
 	/**
-	 * dependancy
-     * 
+	 * dependency
+     *
      * @memberof JSLoader
 	 */
-    JSLoader.checkDependants = _.once(function () {
+    JSLoader.checkDependents = _.once(function () {
         var keys = _(JSLoader.moduleList).allKeys();
         keys.forEach(function (module) {
             var requs = JSLoader.moduleList[module].require || [];
@@ -430,7 +430,7 @@ Script verbosity attribute: 1`);
 	 * @deprecated
 	 * @param scripts	array
 	 * @param priority	int
-     * 
+     *
      * @memberof JSLoader
 	 */
     JSLoader.addScripts = function (scripts, priority) {
@@ -458,12 +458,12 @@ Script verbosity attribute: 1`);
     }
 
 	/**
-	 * Check module name for requierments
+	 * Check module name for requirements
 	 *
 	 * @param {string} modules
 	 */
     function parseModuleName(moduleName) {
-        logger('parsing => ' + moduleName + ': for requierments');
+        logger('parsing => ' + moduleName + ': for requirements');
         let moduleNameArray = moduleName.split('.');
         moduleNameArray.pop();
         JSLoader.moduleList[moduleName]['require'] = JSLoader.moduleList[moduleName].require || [];
@@ -477,7 +477,7 @@ Script verbosity attribute: 1`);
 	 *
 	 * @param {Array} modules
 	 * @param {number} priority
-	 * 
+	 *
 	 * @returns {JSLoader}
      * @memberof JSLoader
 	 */
@@ -530,7 +530,7 @@ Script verbosity attribute: 1`);
 
     /**
      * Attach Script
-     * 
+     *
 	 * Attaches a script to document header
 	 *
 	 * @param {string} src	property for script element
@@ -560,7 +560,7 @@ Script verbosity attribute: 1`);
 
     /**
      * Attach Style
-     * 
+     *
 	 * Attaches a style link to document header
 	 *
 	 * @param {string} href	property for link element
@@ -585,8 +585,8 @@ Script verbosity attribute: 1`);
 
     /**
      * attachHandler
-     * 
-	 * Send file to relavent function for attaching and that is a Promise 
+     *
+	 * Send file to relevant function for attaching and that is a Promise
 	 *
 	 * @param {string} file	link of file to attach
      * @returns {Promise}
@@ -650,7 +650,7 @@ Script verbosity attribute: 1`);
             $.holdReady(true);
             let aScript = scripts.shift(); // + '?' + Date.now();
             aScript = baseURL.concat(aScript);
-            
+
             if (JSLoader.hasHistory(aScript)) {
                 logger('duplicate => ' + aScript);
                 JSLoader.trigger('skipped', aScript);
@@ -694,7 +694,7 @@ Script verbosity attribute: 1`);
         logger('loading => start');
         JSLoader.trigger('start');
 
-        JSLoader.checkDependants();
+        JSLoader.checkDependents();
         if (createQueue()) process(processQueue);
 
         $.holdReady(false);

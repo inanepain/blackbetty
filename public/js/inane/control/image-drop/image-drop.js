@@ -1,14 +1,14 @@
 /**
  * Image Drop
- * 
+ *
  * Drop/Select image and the control displays it ready for upload.
- * 
+ *
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_Control-ImageDrop
- * 
+ *
  * @class ImageDrop
- * @author Philip Michael Raab <peep@inane.co.za>
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  * @version 0.9.1
- * 
+ *
  * CHANGELOG
  * 0.9.1 (2020 May 07)
  *  - Uses iHelper to iFile dependency
@@ -16,7 +16,7 @@
 (function (window, I) {
     /**
      * Version
-     * 
+     *
      * @constant
      * @type {String}
      * @memberof ImageDrop
@@ -57,9 +57,9 @@
 
 	/**
 	 * Create an Image Drop Object
-	 * 
-	 * @param {Element} imageDrop 
-	 * @param {*} options 
+	 *
+	 * @param {Element} imageDrop
+	 * @param {*} options
 	 */
     const ImageDrop = function (imageDrop, options = {}) {
         this.VERSION = VERSION;
@@ -122,7 +122,7 @@
             if (this.files && this.files[0]) {
                 /**
                  * file
-                 * 
+                 *
                  * @type {iFile}
                  * @memberof ImageDrop
                  */

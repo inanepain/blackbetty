@@ -1,9 +1,26 @@
+<?php
+    $this->appendScript('/js/view/main/home.mjs', true);
+?>
+
 <h1>Home <small style="font-size: small"><?=$developer?></small></h1>
+
+<p>
+    <input name='basic' value='tag1, tag2' autofocus><br/>
+</p>
+
+<hr/>
+<p>
+<textarea name='mix'>[[{"id":101, "value":"cartman", "title":"Eric Cartman"}]] and [[kyle]] do not know [[{"value":"homer simpson", "readonly":true}]] because he's a relic.</textarea>
+</p>
+
+<hr/>
 
 <a href="view/panther">Item: Panther</a><br/>
 
 <a href="view/tiger">Item: Tiger</a><br/>
 
 <a href="parse">Parse</a><br/>
+
+<a href="dev">Develop</a><br/>
 
 <a href="api/user">REST User</a><br/>

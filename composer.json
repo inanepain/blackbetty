@@ -3,10 +3,12 @@
     "description": "Experimenting with code before implementing it in a project",
     "homepage": "http://develop/",
     "type": "project",
-    "license": "UNLICENSE",
+    "license": "Unlicense",
     "autoload": {
         "psr-4": {
             "Dev\\": "src/",
+            "Cathedral\\Db\\": "lib/cathedral/db/src/",
+            "Cathedral\\Builder\\": "lib/cathedral/builder/src/",
             "Inane\\Auth\\": "lib/inanepain/view/src/",
             "Inane\\Cache\\": "lib/inanepain/cache/src/",
             "Inane\\Cli\\": "lib/inanepain/cli/src/",
@@ -31,7 +33,7 @@
     "authors": [
         {
             "name": "Philip Raab",
-            "email": "philip@kycdd.co.za"
+            "email": "philip@cathedral.co.za"
         }
     ],
     "minimum-stability": "dev",
@@ -43,5 +45,8 @@
         "psr/http-client": "*",
         "psr/event-dispatcher": "^1.0",
         "ext-simplexml": "*"
+    },
+    "scripts": {
+        "makecss": "sass --no-source-map -s compressed .\\src-style\\styles.scss .\\public\\css\\style.css"
     }
 }

@@ -1,7 +1,7 @@
 /**
  * Switch
  */
-import Dumper from '../dumper.min.js';
+import { Dumper } from '../dumper.js';
 
 Dumper.dump('MODULE', 'Switch', 'Load');
 
@@ -25,13 +25,13 @@ const SwitchData = {
 
 /**
  * @description Switch
- * @author Philip Michael Raab<peep@inane.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @version 1.0.0
  */
 class Switch {
     /**
      * Creates an instance of Switch.
-     * 
+     *
      * @constructor
      * @param {boolean} defaultValue
      */

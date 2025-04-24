@@ -1,17 +1,17 @@
 /**
  * iFile
- * 
+ *
  * File Attributes made easy
- * 
+ *
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iFile
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  * @version 0.3.0
  */
 
 /**
  * Version
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iFile
@@ -20,18 +20,16 @@ const VERSION = '0.3.0';
 
 /**
  * moduleName
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iFile
  */
 const moduleName = 'iFile';
 
-if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION), 'LOAD');
-
 /**
  * iFile
- * 
+ *
  * @version 0.3.0
  */
 class iFile {
@@ -158,8 +156,6 @@ class iFile {
      * @memberof iFile
      */
     get objectURL() {
-        // if (!this._objurl) this._objurl = URL.createObjectURL(this.file);
-        // return this._objurl;
         return URL.createObjectURL(this.file);
     }
 
