@@ -25,8 +25,6 @@ use Dev\Config\ConfigTrait;
 use Inane\File\Path;
 use Inane\Stdlib\Options;
 
-use const GLOB_ONLYDIR;
-
 /**
  * PackageLibrary
  *
@@ -77,33 +75,39 @@ final class PackageLibrary {
 	 * @return void
 	 */
 	protected function bootstrap(): void {
-        $this->library = new Options([
-            'path' => new Path($this->config->path),
-            'vendors' => [],
-        ]);
+        if (!isset($this->library)) {
+            $this->library = new Options([
+                'path' => new Path($this->config->path),
+                'vendors' => [],
+            ]);
 
-		$vendors = $this->library->path->getDirectories();
+            /**
+             * @var \Inane\File\Path $this->library->path
+             */
+            $vendors = $this->library->path->getDirectories();
 
-        foreach ($vendors as $vendor) {
-            $this->library->vendors[$vendor->getBaseName()] = [
-                'name' => $vendor->getBaseName(),
-                'path' => $vendor,
-                'packages' => [],
-            ];
-
-            foreach ($vendor->getDirectories() as $package) {
-                $this->library->vendors[$vendor->getBaseName()]['packages'][$package->getBaseName()] = [
-                    'vendor' => $vendor->getBaseName(),
-                    'package' => $package->getBaseName(),
-                    'name' => $vendor->getBaseName() . '/' . $package->getBaseName(),
-                    'path' => $package,
+            foreach ($vendors as $vendor) {
+                $this->library->vendors[$vendor->getBaseName()] = [
+                    'name' => $vendor->getBaseName(),
+                    'path' => $vendor,
+                    'packages' => [],
                 ];
+
+                foreach ($vendor->getDirectories() as $package) {
+                    $this->library->vendors[$vendor->getBaseName()]['packages'][$package->getBaseName()] = [
+                        'vendor' => $vendor->getBaseName(),
+                        'package' => $package->getBaseName(),
+                        'name' => $vendor->getBaseName() . '/' . $package->getBaseName(),
+                        'path' => $package,
+                    ];
+                }
             }
         }
 	}
 
     public function run(): void {
         dd($this->config);
-        dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
+        // dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
+        dd($this->library->vendors->inanepain->packages->keys(), 'lib', ['useVarExport' => true]);
     }
 }

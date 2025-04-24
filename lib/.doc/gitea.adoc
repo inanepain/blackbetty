@@ -7,6 +7,20 @@
 
 == Package Management
 
+Run the `gitea-package.php` file to simplify package uploads. It looks in *C:\Users\Philip\Downloads* for files matching the pattern `\*-*.\*.*.zip`, next it asks for the *vendor*.
+
+With the information gathered it will first prompt to *upload* followed by a *delete* prompt which ends to process.
+
+.gitea-package uploader
+[source,shell]
+----
+php .\lib\gitea-package.php
+----
+
+NOTE: At some point this will probably be added to the develop commandline interface.
+
+=== Outdated
+
 Open the library's page on Gitea and go to the tags page. Create a release from a tag (optional, you can download the zip for the tag directly). Download the zip file.
 
 Change the few variables in the code below to match your package and run to get `curl` command.

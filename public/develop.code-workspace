@@ -13,6 +13,7 @@
 			"**/.hg": true,
 			"**/.DS_Store": true,
 			"**/Thumbs.db": true,
+			"**/.vscode": true,
 			".idea": true,
 			".vscode": true,
 			"**/*.code-workspace": true

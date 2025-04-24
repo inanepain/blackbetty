@@ -50,7 +50,7 @@ class VSCodiumPatcher {
      *
      * @var string
      */
-    public const VERSION = '0.1.0';
+    public const string VERSION = '0.1.0';
 
     /**
      * @var Options $config Configuration options for the application.

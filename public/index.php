@@ -44,7 +44,8 @@ Dumper::setExceptionHandler();
 if (Cli::isCli()) {
 	// Load & lock configuration data
 	$config = new Options(include 'config/app.config.php');
-	$files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
+	// $files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
+	$files = glob($config->config->glob_pattern, GLOB_BRACE | GLOB_NOSORT);
 	foreach ($files as $file) $config->merge(include $file);
 	$config->lock();
 
@@ -83,7 +84,7 @@ if (Cli::isCli()) {
 		],
 		'options' => [
 			'module' => [
-				'description' => 'Module to run => id or name: 1, vscodium, 2, pin, 3, package, 4, db.',
+				'description' => 'Module to run => id or name: 1, vscodium, 2, pin, 3, package, 4, db, 5, strip.',
 				'aliases' => ['m'],
 			],
 		],
@@ -99,6 +100,7 @@ if (Cli::isCli()) {
 			'2', 'pin' => 'PinCode',
 			'3', 'package' => 'PackageLibrary',
 			'4', 'db' => 'TestDBLayer',
+			'5', 'strip' => 'Stripper',
 			default => 'Exit',
 		};
 	} else {
@@ -108,19 +110,25 @@ if (Cli::isCli()) {
 			'PinCode' => 'PinCode: proof of concept',
 			'PackageLibrary' => 'PackageLibrary Manager',
 			'TestDBLayer' => 'Test Database Layer',
+			'Stripper' => 'URL Stripper',
 			'' => 'Exit',
 		];
 
 		$choice = Cli::menu($menu, null, 'Please choose the module you want to run', 1);
 	}
 
-	match ($choice) {
+	$result = match ($choice) {
 		'PinCode' => new Dev\Task\PinCode(),
 		'VSCodiumPatcher' => new Dev\Util\VSCodiumPatcher($config->vscodium)->patch(),
 		'PackageLibrary' => \Dev\Package\PackageLibrary::getInstance()->run(),
 		'TestDBLayer' => $testDBLayer($config),
+		'Stripper' => new Dev\Strip\ImageStripper($config->imagestripper)->strip('https://fuskator.com/expanded/e8OzkzxDDbj/Teen-Lolita-Lolita-Wearing-Striped-Socks.html'),
 		default => '',
 	};
+
+	if ($result != '' && $result != null && !empty($result) && $result != false) {
+		dd($result, 'Console Module Result');
+	}
 } else {
 	$file = 'public' . $_SERVER['REQUEST_URI'];
 	// Server existing files in web dir

@@ -1,5 +1,7 @@
 # develop
 
+> $Id$ ($Date$)
+
 ## debugging from vscodium to browser
 
 web site: https://code.visualstudio.com/docs/nodejs/browser-debugging
