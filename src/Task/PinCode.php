@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
@@ -23,9 +23,31 @@ namespace Dev\Task;
 
 use Inane\Cli\Cli;
 
+/**
+ * PinCode
+ *
+ * This **VERY** basic proof of concept.
+ *
+ * PinCode makes it harder to spy a code by watching people you enter it repeatedly.
+ * Not every digit is actually a part of the code. These fluffer digits are used to confuse the spy.
+ *
+ * Things a real implementation would need (over the PoC):
+ * - A pattern to determine which digits are fluffers (something like: ++-+--+)
+ */
 class PinCode {
-
+	/**
+	 * The default pin code
+	 *
+	 * @var string
+	 */
 	private string $pinCode = '1470';
+
+	/**
+	 * The pin code length
+	 *
+	 * @var int
+	 */
+	private int $pinLength = 8;
 
 	protected string $input;
 
@@ -43,10 +65,10 @@ class PinCode {
 
 	protected function requestCode(): string {
 		$this->attempts++;
-		$input = Cli::prompt('Enter PinCode');
+		$input = Cli::prompt('Enter PinCode (' . $this->pinLength . ' digits): ');
 
-		if (!is_numeric($input) || strlen($input) !== 8) {
-			Cli::line('Attempt ' . $this->attempts . '. Invalid PinCode. Must be 8 digits');
+		if (!is_numeric($input) || strlen($input) !== $this->pinLength) {
+			Cli::line('Attempt ' . $this->attempts . '. Invalid PinCode. Must be ' . $this->pinLength . ' digits');
 			return $this->requestCode();
 		}
 

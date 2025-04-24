@@ -31,7 +31,7 @@ export default class AniCSS {
         this._nodes = undefined;
         // if (typeof selector !== 'undefined' && document.querySelectorAll(selector).length  > 0) this._nodes = Array.from(document.querySelectorAll(selector));
         // I need to know if no selector but if it selects nothing... mmm...
-        // TODO: Maybe store selector and re-evaluate later if opertunity arises
+        // TODO: Maybe store selector and re-evaluate later if opportunity arises
         if (typeof selector !== 'undefined') {
             this._nodes = Array.from(document.querySelectorAll(selector));
             for (let index = 0; index < this._nodes.length; index++) {

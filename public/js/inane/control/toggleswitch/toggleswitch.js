@@ -1,8 +1,13 @@
 (function () {
     /**
+     * @type {string} The custom tag's name
+     */
+    const tagName = 'toggle-switch';
+
+    /**
      * Version
      */
-    const version = '0.1.0';
+    const version = '0.3.0';
 
     /**
      * @type {Object} defaults
@@ -14,34 +19,170 @@
         background: '#CCC',
         chkBackground: '#2196F3',
         outline: 'transparent',
-        textOn: '',
-        colourOn: 'initial',
-        textOff: '',
-        colourOff: 'initial',
-        onoffAlt: false,
+        labelOn: '',
+        labelOnColour: 'initial',
+        labelOff: '',
+        labelOffColour: 'initial',
+        labelSwitch: false,
     };
 
     /**
+     * Update Style
+     */
+    function updateStyle() {
+        this.shadow.querySelector('style').textContent = `
+:host {
+    all: initial;
+    contain: content;
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    height: 2em;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    width: ${this.ctrlSize.width};
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: ${this.background};
+    box-shadow: 0 0 1px 1px ${this.outline}, 0 0 1px 1px ${this.outline}, 0 0 1px 1px ${this.outline};
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+:host-context(.shadow) .slider {
+    box-shadow: 1px 1px 4px -1px ${this.outline};
+}
+.slider:after,
+.slider:before {
+    position: absolute;
+    overflow: hidden;
+    line-height: 1.5em;
+    text-align: center;
+    height: 1.5em;
+    width: 1.5em;
+    bottom: 0.25em;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+.slider:before {
+    left: 0.35em;
+    content: "${!this.labelSwitch ? this.labelOff : _defaults.labelOff}";
+    color: ${!this.labelSwitch ? this.labelOffColour : _defaults.labelOffColour};
+    background-color: ${this.colour};
+}
+.slider:after {
+    right: .35em;
+    content: "${this.labelSwitch ? this.labelOn : _defaults.labelOn}";
+    color: ${this.labelSwitch ? this.labelOnColour : _defaults.labelOnColour};
+    bottom: 0.15em;
+    padding: 1px;
+}
+:host([checked]) .slider {
+    background-color: ${this.chkBackground};
+}
+:host:focus .slider {
+    box-shadow: 0 0 1px ${this.chkBackground};
+}
+:host([checked]) .slider:before {
+    content: "${!this.labelSwitch ? this.labelOn : _defaults.labelOn}";
+    color: ${!this.labelSwitch ? this.labelOnColour : _defaults.labelOnColour};
+    background-color: ${this.chkColour};
+    -webkit-transform: translateX(${this.ctrlSize.swap});
+    -ms-transform: translateX(${this.ctrlSize.swap});
+    transform: translateX(${this.ctrlSize.swap});
+}
+:host([checked]) .slider:after {
+    content: "${this.labelSwitch ? this.labelOff : _defaults.labelOff}";
+    color: ${this.labelSwitch ? this.labelOffColour : _defaults.labelOffColour};
+    -webkit-transform: translateX(-${this.ctrlSize.swap});
+    -ms-transform: translateX(-${this.ctrlSize.swap});
+    transform: translateX(-${this.ctrlSize.swap});
+}
+.slider.round {
+    border-radius: 2.125em;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+.switch .text {
+    right: -100%;
+    left: 50%;
+    top: 50%;
+    font-size: 150%;
+    margin: 0;
+    cursor: pointer;
+    margin-left: ${this.ctrlSize.margin};
+    white-space: nowrap;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    transform: translate(50%, -50%);
+}
+:host(toggle-switch) {
+    font-family: inherit;
+    padding: 2px;
+}`;
+    }
+
+    /**
+     * Update Text
+     */
+    function updateText() {
+        if (this.textContent != this.text) this.textContent = this.text;
+        this.shadow.querySelector('.text').textContent = this.text;
+    }
+
+    function upgradeProperty(prop) {
+        if (this.hasOwnProperty(prop)) {
+            let value = this[prop];
+            delete this[prop];
+            this[prop] = value;
+        }
+    }
+
+    /**
+     * mutationObserver
+     */
+    const mutationObserver = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.type == `childList`) {
+                console.log(`MATCH:mutationObserver`, mutation);
+                mutation.addedNodes[0].parentNode.setAttribute('text', Array.from(mutation.addedNodes).map(el => el.textContent).join());
+            }
+            // console.log(mutation);
+        });
+    });
+
+    /**
      * ToggleSwitch
-     * 
+     *
      * @attribute size - font size
-     * 
+     *
      * PS: label wins over img if both set
      *
      * @extends {HTMLElement}
-     * @version 0.1.0
+     * @version 0.2.0
      */
     class ToggleSwitch extends HTMLElement {
         /**
          * Attributes that trigger an update
-         * 
+         *
          * @static
          * @property
          * @readonly
          * @returns {String[]}
          */
         static get observedAttributes() {
-            return ['checked', 'round', 'colour', 'chkColour', 'background', 'chkbackground', 'outline', 'text', 'texton', 'colouron', 'textoff', 'colouroff', 'onoffalt'];
+            return ['checked', 'round', 'colour', 'disabled', 'chkColour', 'background', 'chkbackground', 'outline', 'text', `label-on`, 'label-on-colour', `label-off`, 'label-off-colour', 'label-switch'];
         }
 
         /**
@@ -86,59 +227,82 @@
             label.appendChild(input);
             label.appendChild(span);
             label.appendChild(text);
+
             shadow.appendChild(style);
             shadow.appendChild(label);
         }
 
         /**
-         * colour
-         * 
+         * colour<br/>
+         *
+         * colour may specify both unchecked and checked colours by using a comma `,`
+         * in this case it chkcolour is not used
+         *
          * @property
          * @readonly
          * @returns {string}
          */
         get colour() {
-            return this.getAttribute('colour') || _defaults.colour;
+            let colour = this.getAttribute('colour') || _defaults.colour;
+            if (colour.includes(`,`)) return colour.split(`,`).map(col => col = col.trim()).shift();
+            return colour;
         }
 
         /**
-         * chkColour
-         * 
+         * chkColour<br/>
+         *
+         * if colour uses a comma `,` to set unchecked and checked colours
+         * chkColour is not used
+         *
          * @property
          * @readonly
          * @returns {string}
          */
         get chkColour() {
-            let colour = this.getAttribute('chkcolour') || _defaults.chkColour;
+            let colour = this.getAttribute('colour') || _defaults.colour;
+            if (colour.includes(`,`)) return colour.split(`,`).map(col => col = col.trim()).pop();
+
+            colour = this.getAttribute('chkcolour') || _defaults.chkColour;
             if (colour == 'colour') colour = this.colour;
             return colour;
         }
 
         /**
-         * background
-         * 
+         * background<br/>
+         *
+         * background may specify both unchecked and checked colours by using a comma `,`
+         * in this case it chkbackground is not used
+         *
          * @property
          * @readonly
          * @returns {string}
          */
         get background() {
-            return this.getAttribute('background') || _defaults.background;
+            let colour = this.getAttribute('background') || _defaults.background;
+            if (colour.includes(`,`)) return colour.split(`,`).map(col => col = col.trim()).shift();
+            return colour;
         }
 
         /**
-         * chkBackground
-         * 
+         * chkBackground<br/>
+         *
+         * if background uses a comma `,` to set unchecked and checked colours
+         * chkBackground is not used
+         *
          * @property
          * @readonly
          * @returns {string}
          */
         get chkBackground() {
+            let colour = this.getAttribute('background') || _defaults.background;
+            if (colour.includes(`,`)) return colour.split(`,`).map(col => col = col.trim()).pop();
+
             return this.getAttribute('chkbackground') || _defaults.chkBackground;
         }
 
         /**
-         * outline
-         * 
+         * outline colour
+         *
          * @property
          * @readonly
          * @returns {string}
@@ -148,8 +312,8 @@
         }
 
         /**
-         * text
-         * 
+         * text description right of toggle
+         *
          * @property
          * @readonly
          * @returns {string}
@@ -159,74 +323,98 @@
         }
 
         /**
-         * textOn
-         * 
+         * state on: label text
+         *
          * @property
          * @readonly
          * @returns {string}
          */
-        get textOn() {
-            return this.getAttribute('texton') || _defaults.textOn;
+        get labelOn() {
+            return this.getAttribute('label-on') || _defaults.labelOn;
         }
 
         /**
-         * colourOn
-         * 
+         * state on: label colour
+         *
          * @property
          * @readonly
          * @returns {string}
          */
-        get colourOn() {
-            return this.getAttribute('colouron') || _defaults.colourOn;
+        get labelOnColour() {
+            return this.getAttribute('label-on-colour') || _defaults.labelOnColour;
         }
 
         /**
-         * textOff
-         * 
+         * state off: label text
+         *
          * @property
          * @readonly
          * @returns {string}
          */
-        get textOff() {
-            return this.getAttribute('textoff') || _defaults.textOff;
+        get labelOff() {
+            return this.getAttribute('label-off') || _defaults.labelOff;
         }
 
         /**
-         * colourOff
-         * 
+         * state off: label colour
+         *
          * @property
          * @readonly
          * @returns {string}
          */
-        get colourOff() {
-            return this.getAttribute('colouroff') || _defaults.colourOff;
+        get labelOffColour() {
+            return this.getAttribute('label-off-colour') || _defaults.labelOffColour;
         }
 
         /**
-         * onoffAlt
-         * 
+         * label-switch: label switch on/off position<br/>
+         *
+         * Default: false - label shows current state on the slider<br/>
+         * true - labels shows on/off position
+         *
          * @property
          * @readonly
          * @returns {boolean}
          */
-        get onoffAlt() {
-            return this.hasAttribute('onoffalt');
+        get labelSwitch() {
+            return this.hasAttribute('label-switch');
+        }
+
+        /**
+         * disabled state
+         *
+         * @property
+         * @type {boolean}
+         */
+        get disabled() {
+            return this.hasAttribute('disabled');
+        }
+
+        set disabled(value) {
+            if (Boolean(value)) this.setAttribute('disabled', '');
+            else this.removeAttribute('disabled');
+        }
+
+        /**
+         * Checked state
+         *
+         * @property
+         * @type {boolean}
+         */
+        get checked() {
+            return this.hasAttribute('checked');
         }
 
         set checked(value) {
-            const isChecked = Boolean(value);
-            if (isChecked) this.setAttribute('checked', '');
+            if (Boolean(value)) this.setAttribute('checked', '');
             else this.removeAttribute('checked');
-        }
-
-        get checked() {
-            return this.hasAttribute('checked');
         }
 
         get ctrlSize() {
             if (true) {
                 return {
                     width: '3.75em',
+                    margin: '3em',
                     swap: '1.625em',
                 };
             } else {
@@ -237,42 +425,62 @@
             }
         }
 
-        _upgradeProperty(prop) {
-            if (this.hasOwnProperty(prop)) {
-                let value = this[prop];
-                delete this[prop];
-                this[prop] = value;
-            }
-        }
+        /**
+         * Toggled the checked value
+         *
+         * @fires ToggleSwitch#change
+         *
+         * @return {boolean} the checked state
+         */
+        toggle() {
+            if (this.disabled) return;
 
-        _onClick(event) {
-            event.preventDefault();
-            this._toggleChecked();
-        }
-
-        _toggleChecked() {
             this.checked = !this.checked;
+            /**
+             * Change event<br/>
+             *
+             * Fired when the toggle checked status changes.
+             *
+             * @event ToggleSwitch#change
+             *
+             * @type {object}
+             * @property {boolean} checked - Indicates whether toggle is checked or not.
+             */
             this.dispatchEvent(new CustomEvent('change', {
                 detail: {
                     checked: this.checked,
                 },
                 bubbles: true,
             }));
+
+            return this.checked;
         }
 
         /**
          * Custom element added to page
          */
         connectedCallback() {
+            window.document.head.querySelector(`#${tagName}-preloader`)?.remove();
+
             if (this.hasAttribute('round')) this.shadow.querySelector('.slider').classList.add('round');
 
-            this.updateStyle();
-            this.updateText();
-            this._upgradeProperty('checked');
-            this.addEventListener('click', this._onClick);
+            updateStyle.apply(this);
+            updateText.apply(this);
+            upgradeProperty.apply(this, ['checked']);
+            upgradeProperty.apply(this, ['disabled']);
 
-            this.watch('textContent', (data) => {
-                this.setAttribute('text', data.value);
+            this.addEventListener('click', event => {
+                event.preventDefault();
+                this.toggle();
+            });
+
+            mutationObserver.observe(this, {
+                attributes: true,
+                characterData: true,
+                childList: true,
+                subtree: false,
+                attributeOldValue: false,
+                characterDataOldValue: false
             });
         }
 
@@ -302,119 +510,24 @@
                     else this.shadow.querySelector('.slider').classList.remove('round');
                     break;
                 case 'text':
-                    this.updateText();
+                    updateText.apply(this);
                     break;
                 default:
-                    this.updateStyle();
+                    updateStyle.apply(this);
             }
-        }
-
-        /**
-         * Update Style
-         */
-        updateStyle() {
-            this.shadow.querySelector('style').textContent = `
-:host {
-    all: initial;
-    contain: content;
-}
-.switch {
-    position: relative;
-    display: inline-block;
-    width: ${this.ctrlSize.width};
-    height: 2em;
-}
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-.slider {
-    position: absolute;
-    cursor: pointer;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: ${this.background};
-    box-shadow: 0 0 1px 1px ${this.outline}, 0 0 1px 1px ${this.outline}, 0 0 1px 1px ${this.outline};
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-:host-context(.shadow) .slider {
-    box-shadow: 1px 1px 4px -1px ${this.outline};
-}
-.slider:after,
-.slider:before {
-    position: absolute;
-    overflow: hidden;
-    line-height: 1.5em;
-    text-align: center;
-    height: 1.5em;
-    width: 1.5em;
-    bottom: 0.25em;
-    -webkit-transition: .4s;
-    transition: .4s;
-}
-.slider:before {
-    left: 0.35em;
-    content: "${!this.onoffAlt ? this.textOff : _defaults.textOff}";
-    color: ${!this.onoffAlt ? this.colourOff : _defaults.colourOff};
-    background-color: ${this.colour};
-}
-.slider:after {
-    right: .35em;
-    content: "${this.onoffAlt ? this.textOn : _defaults.textOn}";
-}
-:host([checked]) .slider {
-    background-color: ${this.chkBackground};
-}
-:host:focus .slider {
-    box-shadow: 0 0 1px ${this.chkBackground};
-}
-:host([checked]) .slider:before {
-    content: "${!this.onoffAlt ? this.textOn : _defaults.textOn}";
-    color: ${!this.onoffAlt ? this.colourOn : _defaults.colourOn};
-    background-color: ${this.chkColour};
-    -webkit-transform: translateX(${this.ctrlSize.swap});
-    -ms-transform: translateX(${this.ctrlSize.swap});
-    transform: translateX(${this.ctrlSize.swap});
-}
-:host([checked]) .slider:after {
-    content: "${this.onoffAlt ? this.textOff : _defaults.textOff}";
-    color: ${this.onoffAlt ? this.colourOff : _defaults.colourOff};
-    -webkit-transform: translateX(-${this.ctrlSize.swap});
-    -ms-transform: translateX(-${this.ctrlSize.swap});
-    transform: translateX(-${this.ctrlSize.swap});
-}
-.slider.round {
-    border-radius: 2.125em;
-}
-.slider.round:before {
-    border-radius: 50%;
-}
-.switch .text {
-    position: absolute;
-    right: -100%;
-    left: 50%;
-    top: 50%;
-    font-size: 150%;
-    margin: 0;
-    cursor: pointer;
-    white-space: nowrap;
-    transform: translate(50%, -50%);
-}`;
-        }
-
-        /**
-         * Update Text
-         */
-        updateText() {
-            if (this.textContent != this.text) this.textContent = this.text;
-            this.shadow.querySelector('.text').textContent = this.text;
         }
     }
 
+    /**
+     * Pre-loader: Hides the tag untill is defined
+     */
+    (() => {
+        const styleHide = document.createElement('style');
+        styleHide.id = `${tagName}-preloader`;
+        styleHide.textContent = `${tagName}:not(:defined){visibility:hidden;}`;
+        window.document.head.appendChild(styleHide);
+    })();
+
     // Define the new element
-    customElements.define('toggle-switch', ToggleSwitch);
+    customElements.define(tagName, ToggleSwitch);
 })();

@@ -5,7 +5,7 @@ RewriteCond %{REQUEST_FILENAME} -s [OR]
 RewriteCond %{REQUEST_FILENAME} -l [OR]
 RewriteCond %{REQUEST_FILENAME} -d
 RewriteRule ^.*$ - [L]
-# The following rewrites all other queries to index.php. The 
+# The following rewrites all other queries to index.php. The
 # condition ensures that if you are using Apache aliases to do
 # mass virtual hosting or installed the project in a subdirectory,
 # the base path will be prepended to allow proper resolution of
@@ -22,3 +22,18 @@ RewriteRule ^(.*)$ %{ENV:BASE}/index.php [L]
 # Apache > 2.4 requires:
 Require all granted
 </Limit>
+
+<IfModule mod_headers.c>
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+
+    # Enable cross domain access control
+    # Header add Access-Control-Allow-Origin "*"
+    # Header add Access-Control-Allow-Headers "origin, x-requested-with, content-type"
+    # Header add Access-Control-Allow-Methods "PUT, GET, POST, DELETE, OPTIONS"
+
+    Header set Access-Control-Allow-Origin "*, https://yts.mx"
+    # Header set Access-Control-Allow-Methods "GET,PUT,POST,DELETE"
+    # Header set Access-Control-Allow-Headers "Content-Type, Authorization"
+</IfModule>

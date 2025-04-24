@@ -1,24 +1,24 @@
 /**
  * iStr
- * 
+ *
  * Description
  * @see https://git.inane.co.za:3000/Inane/inane-js/wiki/Inane_icRoot-iStr
- * 
- * @author Philip Michael Raab <peep@inane.co.za>
+ *
+ * @author Philip Michael Raab <philip@cathedral.co.za>
  */
 
 /**
  * Version
- * 
+ *
  * @constant
  * @type {String}
  * @memberof iStr
  */
-const VERSION = '0.4.0';
+const VERSION = '0.5.0';
 
 /**
 * moduleName
-* 
+*
 * @constant
 * @type {String}
 */
@@ -28,32 +28,63 @@ if (window.Dumper) Dumper.dump('MODULE', moduleName.concat(' v').concat(VERSION)
 
 /**
  * iStr
- * 
+ *
  * Quick string functions
- * 
+ *
+ * Prefs (on: CAP / off: small)
+ *  - s: use joiner on/off
+ *
+ * _icroot.iHelper.importModule(_icroot.iHelper.icModules.iStr)
+ * iStr=_icroot.iStr
+ *
  * @example
  * // returns Hello World
  * iStr.c('Hello')._().a('world').ep('s').a('example').s
  *
- * @version 0.4.0
+ * @version 0.5.0
 //  * @class iStr
  */
 class iStr {
     /**
+     * @type {String} the string
+     */
+    #string;
+
+    /**
+     * @type {String} italic
+     */
+    #i = `*`;
+
+    /**
+    * @type {String} bold
+    */
+    #b = `__`;
+
+    /**
+     * @type {String} bolditalic
+     */
+    #bi = `***`;
+
+    /**
+     * @type {String} join string
+     */
+    #j = ` `;
+
+    /**
+     * @type {String} preferences
+     */
+    #prefs = `s`;
+
+    /**
      * Creates an instance of iStr
-     * 
+     *
      * @constructor
      * @param {string} string
     //  * @memberof iStr
      */
-    constructor(string) {
-        this._string = string;
-        this._i = '*';
-        this._b = '__';
-        this._bi = '***';
-        this.prefs = 's';
-
-        this._j = ' ';
+    constructor(string, prefs) {
+        this.#string = string || ``;
+        if (prefs) this.#prefs = prefs;
     }
 
     /**
@@ -62,7 +93,6 @@ class iStr {
      * @readonly
      * @static
      * @returns {String}
-     * @memberof iStr
      */
     static get VERSION() {
         return VERSION;
@@ -73,43 +103,9 @@ class iStr {
      *
      * @readonly
      * @returns {String}
-     * @memberof iStr
      */
     get VERSION() {
         return VERSION;
-    }
-
-    /**
-     * italic
-     *
-     * @static
-     * @returns {String}
-     * @memberof iStr
-     */
-    static get italic() {
-        return '*';
-    }
-
-    /**
-     * bold
-     *
-     * @static
-     * @returns {String}
-     * @memberof iStr
-     */
-    static get bold() {
-        return '__';
-    }
-
-    /**
-     * bolditalic
-     *
-     * @static
-     * @returns {String}
-     * @memberof iStr
-     */
-    static get boldItalic() {
-        return '***';
     }
 
     /**
@@ -117,12 +113,12 @@ class iStr {
      *
     //  * @constructs
      * @static
-     * @param {String}
+     * @param {String} string - starting string
+     * @param {String} prefs - set prefs
      * @returns {String}
-     * @memberof iStr
      */
-    static c(string = '') {
-        return (new this(string));
+    static c(string, prefs = null) {
+        return (new this(string, prefs));
     }
 
     /**
@@ -130,10 +126,9 @@ class iStr {
      *
      * @param {string} pref
      * @returns
-     * @memberof iStr
      */
     cp(pref) {
-        return this.prefs.includes(pref.toUpperCase());
+        return this.#prefs.includes(pref.toUpperCase());
     }
 
     /**
@@ -141,11 +136,10 @@ class iStr {
      *
      * @param {string} pref
      * @returns
-     * @memberof iStr
      */
     ep(pref) {
         if (!this.cp(pref))
-            this.prefs = this.prefs.replace(pref.toLowerCase(), pref.toUpperCase());
+            this.#prefs = this.#prefs.replace(pref.toLowerCase(), pref.toUpperCase());
         return this;
     }
 
@@ -154,23 +148,23 @@ class iStr {
      *
      * @param {string} pref
      * @returns
-     * @memberof iStr
      */
     dp(pref) {
         if (this.cp(pref))
-            this.prefs = this.prefs.replace(pref.toUpperCase(), pref.toLowerCase());
+            this.#prefs = this.#prefs.replace(pref.toUpperCase(), pref.toLowerCase());
         return this;
     }
 
     /**
      * Sets joiner
      *
+     * default string between string
+     *
      * @param {string} string
      * @returns {iStr}
-     * @memberof iStr
      */
     sj(joiner) {
-        this._j = joiner;
+        this.#j = joiner;
         return this;
     }
 
@@ -179,10 +173,9 @@ class iStr {
      *
      * @static
      * @returns {String}
-     * @memberof iStr
      */
     get s() {
-        return this._string;
+        return this.#string;
     }
 
     /**
@@ -190,11 +183,10 @@ class iStr {
      *
      * @param {string} string
      * @returns {iStr}
-     * @memberof iStr
      */
     a(string) {
-        if (this.cp('s')) this._string += this._j;
-        this._string += string;
+        if (this.cp('s')) this.#string += this.#j;
+        this.#string += string;
         return this;
     }
 
@@ -203,11 +195,9 @@ class iStr {
      *
      * @param {string} string
      * @returns {iStr}
-     * @memberof iStr
      */
     b(string) {
-        this.a(this._b + string + this._b);
-        return this;
+        return this.a(this.#b + string + this.#b);
     }
 
     /**
@@ -215,11 +205,9 @@ class iStr {
      *
      * @param {string} string
      * @returns {iStr}
-     * @memberof iStr
      */
     i(string) {
-        this.a(this._i + string + this._i);
-        return this;
+        return this.a(this.#i + string + this.#i);
     }
 
     /**
@@ -227,22 +215,18 @@ class iStr {
      *
      * @param {string} string
      * @returns {iStr}
-     * @memberof iStr
      */
     bi(string) {
-        this.a(this._bi + string + this._bi);
-        return this;
+        return this.a(this.#bi + string + this.#bi);
     }
 
     /**
      * Add Space
      *
      * @returns {iStr}
-     * @memberof iStr
      */
     _() {
-        this.a(' ');
-        return this;
+        return this.a(` `);
     }
 }
 

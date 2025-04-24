@@ -5,7 +5,7 @@
  *
  * Tinkering development environment. Used to play with or try out stuff.
  *
- * PHP version 8.3
+ * PHP version 8.4
  *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
@@ -21,58 +21,138 @@ declare(strict_types=1);
 
 namespace Dev\App;
 
-use Inane\File\File;
 use Inane\Http\Client as HttpClient;
 use Inane\Http\Request;
 use Inane\Http\Response;
+use Inane\Routing\Exception\InvalidRouteException;
+use Inane\Routing\RouteMatch;
 use Inane\Routing\Router;
-use Inane\Stdlib\Json;
 use Inane\Stdlib\Options;
-use Inane\View\Renderer\PhpRenderer;
-use Inane\View\Renderer\RendererInterface;
-use Inane\Stdlib\ArrayObject;
 
+use const GLOB_BRACE;
+use const GLOB_NOSORT;
+use const true;
+
+use function glob;
+use function is_array;
+use function is_null;
+
+/**
+ * The application class
+ *
+ * This class is the main entry point of the application. It is responsible for setting up the application, routing the request to the controller, rendering the view and sending the response to the client.
+ *
+ * @version 0.1.0
+ */
 final class Application {
+
+	/**
+	 * The instance of the application
+	 *
+	 * @var \Dev\App\Application The instance of the application
+	 */
 	private static Application $instance;
 
-	protected Options $config;
+	/**
+	 * The application configuration
+	 *
+	 * @var \Inane\Stdlib\Options The application configuration
+	 */
+	protected(set) Options $config;
 
+	/**
+	 * The router object
+	 *
+	 * @var \Inane\Routing\Router The router object
+	 */
 	protected Router $router;
 
-	protected(set) Request $request;
-	protected Response $response;
+	/**
+	 * The matched route
+	 *
+	 * @var \Inane\Routing\RouteMatch The matched route
+	 */
+	protected(set) ?RouteMatch $routeMatch;
+
+	/**
+	 * @var \Dev\App\ViewManager The view object
+	 */
+	protected ViewManager $view;
+
+	/**
+	 * @var \Inane\Http\Request The request object read from View
+	 */
+	protected(set) Request $request {
+		get => $this->view->request;
+		set {}
+	}
+
+	/**
+	 * @var \Inane\Http\Response The response object read from View
+	 */
+	protected(set) Response $response {
+		get => $this->view->response;
+		set {}
+	}
+
+	/**
+	 * @var \Inane\Http\Client The HTTP client object
+	 */
 	protected HttpClient $httpClient;
 
-	protected RendererInterface $renderer;
-
-	protected Options $runenv;
-
+	/**
+	 * The constructor
+	 *
+	 * The constructor is private to prevent creating multiple instances of the application.
+	 *
+	 * @return void
+	 */
 	private function __construct() {
+		$this->bootstrap();
+	}
+
+	/**
+	 * Sets up the application
+	 *
+	 * Creates requiered objects and configuration them so that everything is ready to run.
+	 *
+	 * @return void
+	 */
+	protected function bootstrap(): void {
+		$this->configure();
+
+		$this->router = new Router(splitQuerystring: true);
+		$this->router->addRoutes($this->config->router->controllers);
+
+		$this->view = new ViewManager($this->config->view->path);
+		$this->httpClient = new HttpClient();
+	}
+
+	/**
+	 * Configures the application
+	 *
+	 * Reads the configuration files and merges them into the configuration object.
+	 *
+	 * @return void
+	 */
+	protected function configure(): void {
 		$this->config = new Options(include 'config/app.config.php');
 
-		$this->router = new Router();
-		$this->request = new Request();
-		$this->httpClient = new HttpClient();
+		$files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
+		foreach ($files as $file) $this->config->merge(include $file);
 
-		$this->renderer = new PhpRenderer($this->config->view->path);
+		$this->config->lock();
+	}
 
-		$this->response = $this->request->getResponse();
-		$this->runenv = new Options([
-			'route' => [
-				'match' => null,
-				'controller' => null,
-			],
-			'view' => [
-				'layout' => null,
-				'data' => null,
-				'path' => $this->config->view->path,
-				'file' => null,
-				'content' => null,
-			],
-			'render' => [
-				'html' => null,
-			],
-		]);
+	/**
+	 * Runs the application
+	 *
+	 * @return void
+	 */
+	public function run(): never {
+		$this->routing();
+		$this->rendering();
+		$this->responding();
 	}
 
 	/**
@@ -85,16 +165,10 @@ final class Application {
 	 * @throws \ReflectionException
 	 */
 	protected function routing(): void {
-		$this->router->addRoutes($this->config->router->controllers);
+		$this->routeMatch = $this->router->match($this->request);
 
-		$this->runenv->route->match = $this->router->match();
-
-		if ($this->runenv->route->match) {
-			$this->runenv->route->controller = new $this->runenv->route->match['class']();
-			$this->runenv->view->data = $this->runenv->route->controller->{$this->runenv->route->match['method']}($this->runenv->route->match->params->toArray()) + ['raw' => false];
-		} else {
-			throw new Exception('Request Error: Unmatched `file` or `route`!');
-		}
+		if (is_null($this->routeMatch))
+			throw new InvalidRouteException('Request Error: Unmatched `file` or `route`!', AppError::InvalidRoute->value);
 	}
 
 	/**
@@ -105,47 +179,26 @@ final class Application {
 	 * @throws \Inane\View\Exception\RuntimeException
 	 */
 	protected function rendering(): void {
-		$this->runenv->view->layout = new ArrayObject(['content' => '']);
+		// TODO: Check for REST controller and structure method calls based on command.
+		$controller = new $this->routeMatch->class();
+		$modelOrArray = $controller->{$this->routeMatch->method}($this->routeMatch->params);
+		$model = is_array($modelOrArray) ? new ViewModel($modelOrArray) : $modelOrArray;
 
-		if ($this->runenv->view->data->raw == false) {
-			$path = explode('\\', $this->runenv->route->match['class']);
-			$this->runenv->view->path = implode(DIRECTORY_SEPARATOR, [
-				str_replace('Controller', '', array_pop($path)),
-				str_replace('Task', '', $this->runenv->route->match['method'])
-			]);
+		if (!$model->terminate) $model->setOptions([
+			'template' => $this->routeMatch->template,
+			'layout' => $this->config->view->layout,
+		]);
 
-			$this->runenv->view->file = new File($this->config->view->path . DIRECTORY_SEPARATOR . $this->runenv->view->path . '.phtml');
-			$this->runenv->view->content = $this->runenv->view->file->isValid() ? $this->renderer->render($this->runenv->view->path, $this->runenv->view->data) : '';
-
-			$this->runenv->view->layout->content = $this->runenv->view->layout->content;
-			$this->runenv->render->html = $this->renderer->render($this->config->view->layout, [], $this->runenv->view->layout);
-
-
-		} else {
-			$this->runenv->render->html = Json::encode($this->runenv->view->data['data']);
-			$this->response->addHeader('Content-Type', 'application/json');
-		}
+		$this->view->render($model);
 	}
 
 	/**
 	 * Sends the response to client
 	 *
-	 * @return void
+	 * @return never
 	 */
 	protected function responding(): void {
-		$this->response->setBody($this->runenv->render->html);
 		$this->httpClient->send($this->response);
-	}
-
-	/**
-	 * Runs the application
-	 *
-	 * @return void
-	 */
-	public function run(): void {
-		$this->routing();
-		$this->rendering();
-		$this->responding();
 	}
 
 	/**
@@ -154,9 +207,9 @@ final class Application {
 	 * @return \Dev\App\Application
 	 */
 	public static function getInstance(): Application {
-		if (!isset(self::$instance)) {
+		if (!isset(self::$instance))
 			self::$instance = new static();
-		}
+
 		return self::$instance;
 	}
 }

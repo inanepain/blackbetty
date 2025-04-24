@@ -22,7 +22,7 @@ Back to [README](README.md)
 
 ## 0.8.1 (2017 Nov 23)
 
-- baseURL    : Add option for a base url to preappend urls
+- baseURL    : Add option for a base url to prepend urls
 - fix spinner: Spinner fades out based on transTime
 
 ## 0.8.0 (2016 May 26)

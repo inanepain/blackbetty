@@ -1,5 +1,6 @@
 /**
- * Date Enhancements
+ * Extend Date
+ *
  * @author Philip Michael Raab<philip@cathedral.co.za>
  * @version 1.1.0
  */
@@ -14,8 +15,8 @@ if (!Date.prototype.getWeekNumber) {
     /**
      * Adds getWeekNumber to date objects
      * The ISO-8601 week of year number if the date
-     * 
-     * @return {number} 
+     *
+     * @return {number}
      */
     Date.prototype.getWeekNumber = function () {
         var d = new Date(+this);
@@ -29,8 +30,8 @@ if (!Date.prototype.nextYear) {
     /**
      * Adds a year to date<br />
      * 31536000000 = 1 year (365 * 24 * 60 * 60 * 1000)
-     * 
-     * @return {Date} 
+     *
+     * @return {Date}
      */
     Date.prototype.nextYear = function () {
         return new Date(this.getTime() + 31536000000);
@@ -40,8 +41,8 @@ if (!Date.prototype.nextYear) {
 if (!Date.prototype.nextYearGMTString) {
     /**
      * Adds a year to date and return GMT string
-     * 
-     * @return {string} 
+     *
+     * @return {string}
      */
     Date.prototype.nextYearGMTString = function () {
         return this.nextYear().toGMTString();
@@ -51,8 +52,8 @@ if (!Date.prototype.nextYearGMTString) {
 if (!Date.unixZero) {
     /**
      * Date for timestamp 0
-     * 
-     * @return {string} 
+     *
+     * @return {string}
      */
     Date.unixZero = function () {
         return new Date(0);
@@ -62,8 +63,8 @@ if (!Date.unixZero) {
 if (!Date.unixZeroGMTString) {
     /**
      * GMT String for timestamp 0
-     * 
-     * @return {string} 
+     *
+     * @return {string}
      */
     Date.unixZeroGMTString = function () {
         return (new Date(0)).toGMTString();

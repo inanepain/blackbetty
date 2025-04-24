@@ -1,0 +1,29 @@
+= MySQL: querying tables information
+:author: Philip Michael Raab
+:email: <peep@cathedral.co.za>
+:revnumber: 0.1.0
+:revdate: 2025-03-27
+:experimental:
+:icons: font
+:source-highlighter: highlight.js
+:toc: auto
+
+Some nifty sql queries to get information about columns and tables.
+
+.show tables in active schema
+[source,sql]
+----
+include::show-tables.sql[]
+----
+
+.get columns for table
+[source,sql]
+----
+include::column-info.sql[]
+----
+
+.get detailed column information for table
+[source,sql]
+----
+include::column-details.sql[]
+----
