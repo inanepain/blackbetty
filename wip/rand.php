@@ -1,4 +1,10 @@
 <?php
+
+declare(strict_types=1);
+
+$exitAfterIncludes = true;
+$pen->red->line(__FILE__);
+
 /**
  * getRandomWeightedElement()
  * Utility function for getting random values with weighting.

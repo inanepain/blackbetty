@@ -41,7 +41,7 @@ trait DefaultConfigTrait {
     protected function configure(array|Options|null $config = null): void {
         $this->config = new Options( property_exists($this, 'defaultConfig') ? $this->defaultConfig : []);
 
-        if (!is_null($config)) $this->config->merge($config);
+        if ($config !== null) $this->config->merge($config);
         $this->config->lock();
     }
 }

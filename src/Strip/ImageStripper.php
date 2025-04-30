@@ -22,17 +22,21 @@ declare(strict_types=1);
 namespace Dev\Strip;
 
 use Dev\App\DefaultConfigTrait;
-use Inane\Stdlib\Options;
+use Inane\Cache\RemoteFileCache;
+use Inane\Dumper\Silence;
 use Inane\Cli\{
     Pencil\Colour,
     Pencil\Style,
     Cli,
-    Colors,
     Pencil
 };
 use Inane\File\{
     File,
     Path
+};
+use Inane\Stdlib\{
+    Json,
+    Options
 };
 
 use function basename;
@@ -40,6 +44,8 @@ use function count;
 use function end;
 use function explode;
 use function str_pad;
+use function str_replace;
+use function str_starts_with;
 use function strlen;
 use function strval;
 use function uniqid;
@@ -73,6 +79,14 @@ class ImageStripper {
             'fileObjects' => false,
             'path' => [
                 'baseDownload' => 'C:/',
+                /**
+                 * How to process the rather common `image-1` directory.
+                 *
+                 * - increment: `image-2`, `image-3`, etc.
+                 * - md5: `image-1` is replaced with a hash of the links to try reduce duplicate downloads.
+                 * - uniqid: `image-1` number is replaced with a unique ID.
+                 */
+                'image1Handler' => 'md5',
             ],
             'format' => [
                 'file' => new Pencil(Colour::Blue, style: Style::Bold),
@@ -83,18 +97,32 @@ class ImageStripper {
                 'white' => new Pencil(Colour::White),
                 'reset' => Pencil::reset(),
             ],
+            'images' => [],
         ];
     }
+
+    protected RemoteFileCache $rfc;
 
     /**
      * Constructor for the Stripper class.
      *
      * @param array|Options|null $config Configuration options for the Stripper instance.
      */
+    #[Silence(true)]
     public function __construct(array|Options|null $config = null) {
         $this->configure($config);
 
+        dd($this->config, 'Parsed Config');
+
         $this->config->format->title->line('Image Stripper ' . $this->config->format->white . '(' . $this->config->format->blue . static::VERSION . $this->config->format->white . ')');
+
+        $this->bootstrap();
+    }
+
+    protected function bootstrap(): void {
+        // 1 week = 604800
+        $this->rfc = new RemoteFileCache('cache-storage', 604800);
+        $this->rfc;
     }
 
     /**
@@ -111,6 +139,44 @@ class ImageStripper {
     }
 
     /**
+     * Verify links and download directories.
+     *
+     * Checks for links and tries half heartedly to keep from downloading duplicates.
+     *
+     * @param array|string[]    $links  An array of links to verify the directory structure against.
+     * @param string|null       $dir    An optional directory path to use as the base for verification.
+     *
+     * @return Path Returns a Path object representing the verified directory.
+     */
+    protected function veryfyInAndOutputs(array $links, ?string $dir = null): Path {
+        if (!$dir) $dir = uniqid(date('Y-m-d_H-i-s_'), true);
+
+        // Here I fiddle the directory name a bit if it is `image-1` which pops up far to often
+        $wasImage = false;
+        if ($dir == 'image-1') {
+            $wasImage = true;
+            $img_dirs = new Path($this->config->path->download)->getDirectories('image-*');
+
+            $dir = match ($this->config->path->image1Handler) {
+                'increment' => 'image-' . (count($img_dirs) + 1),
+                'md5' => \md5(Json::encode($links)),
+                'uniqid' => uniqid('images-'),
+                default => $dir,
+            };
+        }
+
+        $path = new Path($this->config->path->download)->getChildPath($dir);
+
+        if ($path->isValid() && $wasImage) {
+            $this->showError("Special MD5 Directory already exists which may indicate that the files have already been downloaded: $path", 10);
+        }
+
+        if (!$path->isDir()) $path->makePath(permissions: 0777);
+
+        return $path;
+    }
+
+    /**
      * Downloads images from the provided list of links and saves them to the specified directory.
      *
      * $dir is created in the base download directory.
@@ -122,10 +188,7 @@ class ImageStripper {
      * @return array|File[] downloaded files
      */
     protected function downloadImages(array $links, ?string $dir = null): array {
-        if (!$dir) $dir = uniqid(date('Y-m-d_H-i-s_'), true);
-        $path = new Path($this->config->path->download)->getChildPath($dir);
-
-        if (!$path->isDir()) $path->makePath(permissions: 0777);
+        $path = $this->veryfyInAndOutputs($links, $dir);
 
         Cli::line("Downloading images to: $path");
 
@@ -138,12 +201,18 @@ class ImageStripper {
 
         foreach ($links as $index => $link) {
             $file_name = end(explode('/', $link));
+
+            // check if its one of those pescy `image-` files and replace it with the directory name
+            if (str_starts_with($file_name, 'image-')) {
+                $file_name = str_replace('image', $path->getBasename(), $file_name);
+            }
+
             $current = str_pad(strval($index + 1), strlen("$total"), '0', STR_PAD_LEFT);
 
             $msg = $this->config->format->file . $file_name . $this->config->format->reset . " [" . $this->config->format->progress . "$current{$this->config->format->reset} of $total]:";
 
             $file = $path->getFile($file_name);
-            $file->write(contents: file_get_contents($link), cacheContents: false);
+            $file->write(contents: $this->rfc->get($link), cacheContents: false);
 
             $files[] = $file->getPathname();
             $fileObjects[] = $file;
@@ -166,29 +235,15 @@ class ImageStripper {
      * @return array|File[] downloaded files
      */
     public function strip(string $url, ?string $dir = null): array {
-        /**
-         * Embeds a JavaScript block into the PHP code using the heredoc syntax.
-         *
-         * This block of code initializes a JavaScript variable or script content
-         * within the PHP file. Ensure that the JavaScript code is properly formatted
-         * and escaped if necessary to avoid syntax errors.
-         */
-        $js = <<<JS
-links = [];
-for (let name of Array.from(document.querySelectorAll('img'))) {
-    if (name.src.includes('large')) {
-        links.push(name.src);
-    }
-}
-console.log("['" + links.join("', '") + "']");
-JS;
-
         $links = [];
-        $links = ['https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-1.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-2.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-3.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-4.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-5.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-6.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-7.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-8.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-9.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-10.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-11.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-12.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-13.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-14.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-15.jpg', 'https://i1.fuskator.com/large/aMqKNCdjGma/Shaved-Teen-Babe-Anastasia-Petrova-from-Met-Art-Wearing-White-Lingerie-16.jpg'];
+
+        if (!empty($this->config->images)) {
+            $links = $this->config->images->toArray();
+        }
 
         if (empty($links)) $this->showError("No images found.", 5);
 
-        if (!$dir) $dir = basename(end(explode('/', $links[0])), '.jpg');
+        if (!$dir) $dir = str_replace('-1', '', basename(end(explode('/', $links[0])), '.jpg'));;
         return $this->downloadImages($links, $dir);
     }
 }

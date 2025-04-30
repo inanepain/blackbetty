@@ -1,0 +1,67 @@
+= UUIDTool
+:firstname: Philip
+:middlename: Michael
+:lastname: Raab
+:author: Philip Michael Raab
+:authorinitials: PMR
+:email: <philip@cathedral.co.za>
+:homepage: https://localhost
+:version-label: Release
+:revnumber: 0.1.0
+:revdate: 2025-12-31
+:revremark: -initial
+:description: Template document
+:keywords: AsciiDoc, template
+:copyright: Unlicense
+:experimental:
+:hide-uri-scheme:
+:table-stripes: even
+:icons: font
+:source-highlighter: highlight.js
+:sectnums: |,all|
+:toclevels: 5
+:sectnumlevels: 2
+:sectanchors:
+// :sectlinks:
+:toc: auto
+:toc-title: Document Sections
+// :table-frame: none
+// :table-grid: all
+// :table-stripes: all
+
+version: $Id$ ($Date$)
+
+[source,]
+----
+seconds (10-digit)      time()
+seconds (10-digit)      intval(microtime(true))
+
+milliseconds (13-digit) intval(microtime(true)*1000)
+microseconds (16-digit) intval(microtime(true)*1000000)
+1745919582561157
+
+// Generate a version 3 (name-based and hashed with MD5) UUID
+// Namespaces: NAMESPACE_DNS, NAMESPACE_URL, NAMESPACE_OID, NAMESPACE_X500
+// $uuid3 = UUID::uuid3(UUID::NAMESPACE_DNS, 'php.net');
+--
+// Generate a version 4 (random) UUID
+//$uuid4 = UUID::uuid4();
+--
+// Generate a version 5 (name-based and hashed with SHA1) UUID
+// $uuid5 = UUID::uuid5(UUID::NAMESPACE_DNS, 'php.net');
+--
+// Generate a version 6 (lexicographically sortable) UUID
+// $uuid6_first = UUID::uuid6();
+// $uuid6_second = UUID::uuid6();
+// var_dump($uuid6_first < $uuid6_second); // bool(true)
+--
+// Generate a version 7 (lexicographically sortable) UUID
+// $uuid7_first = UUID::uuid7();
+// $uuid7_second = UUID::uuid7();
+// var_dump($uuid7_first < $uuid7_second); // bool(true)
+
+// Generate a version 8 (lexicographically sortable) UUID
+// $uuid8_first = UUID::uuid8();
+// $uuid8_second = UUID::uuid8();
+// var_dump($uuid8_first < $uuid8_second); // bool(true)
+----

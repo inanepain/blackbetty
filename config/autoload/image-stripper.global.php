@@ -25,9 +25,17 @@ use Inane\Cli\Pencil\Style;
 
 return [
 	'imagestripper'   => [
-		'fileObjects' => true,
+		'fileObjects' => false,
 		'path' => [
-			'download' => 'C:/Users/Philip/Downloads/p/',
+			'download' => 'C:/',
+			/**
+			 * How to process the rather common `image-1` directory.
+			 *
+			 * - increment: `image-2`, `image-3`, etc.
+			 * - md5: `image-1` is replaced with a hash of the links to try reduce duplicate downloads.
+			 * - uniqid: `image-1` number is replaced with a unique ID.
+			 */
+			'image1Handler' => 'md5',
 		],
 		'format' => [
 			'file' => new Pencil(Colour::Blue, style: Style::Bold),
@@ -38,5 +46,6 @@ return [
 			'white' => new Pencil(Colour::White),
 			'reset' => Pencil::reset(),
 		],
+		'images' => [],
 	],
 ];

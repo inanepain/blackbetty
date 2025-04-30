@@ -34,6 +34,28 @@ chdir(dirname(__DIR__));
 
 require 'vendor/autoload.php';
 
+#region includes
+
+$pen = new Options([
+	'red' => new Pencil(Colour::Red),
+]);
+$exitAfterIncludes = false;
+
+if (true) require 'wip/dumper-hide-runkit7.php';
+if (!true) require 'wip/dumper-buffer-off.php';
+if (!true) require 'wip/cli-playground.php';
+if (true) require 'wip/datatime-test.php';
+if (!true) require 'wip/rand.php';
+if (!true) require 'wip/letter-usage.php';
+if (!true) require 'wip/UUIDTool.php';
+
+if ($exitAfterIncludes) {
+	$pen->red->line('Exiting after includes.');
+	exit;
+}
+
+#endregion includes
+
 // TODO: PhpRenderer example
 // BUG: bug
 // HACK: hack
@@ -127,7 +149,7 @@ if (Cli::isCli()) {
 	};
 
 	if ($result != '' && $result != null && !empty($result) && $result != false) {
-		dd($result, 'Console Module Result');
+		// dd($result, 'Console Module Result');
 	}
 } else {
 	$file = 'public' . $_SERVER['REQUEST_URI'];

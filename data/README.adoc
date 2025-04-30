@@ -1,0 +1,69 @@
+= Readme: Data
+:reproducible:
+:author: Philip Michael Raab
+:email: <philip@cathedral.co.za>
+:homepage: https://localhost
+:revnumber: 0.1.0
+:revdate: 2025-05-28
+:revremark: initial
+:experimental:
+:hide-uri-scheme:
+:table-stripes: even
+:icons: font
+:source-highlighter: highlight.js
+:sectnums: |,all|
+:toc-title: Document Sections
+:toclevels: 5
+:toc: auto
+
+Notes on the data.
+
+== SQLite
+
+.table row count
+[source,sql]
+----
+SELECT 'departments' AS "name", 'table' AS "type", COUNT(*) AS "rows" FROM "departments"
+UNION SELECT 'sqlite_sequence' AS "name", 'table' AS "type", COUNT(*) AS "rows" FROM "sqlite_sequence"
+UNION SELECT 'users' AS "name", 'table' AS "type", COUNT(*) AS "rows" FROM "users"
+----
+
+== Part 1
+
+.examples
+[%collapsible]
+====
+e.g.: *A*pple => **A**pple. +
+e.g.: **C**reate, **R**ead, **U**pdate, and **D**elete (CRUD)
+====
+
+== Part 2
+
+. http://vaieen.local
+** http://vaieen.local[Vaieen]
+** link:template.pdf[Template as PDF]
+. Link to <<Part 1>> anchor.
+* [ ] Go to <<Table Templates>>
+
+== Part 3
+
+Quickly knockout a table or more.
+
+.All columns auto width
+["%autowidth"opts="header",stripes=even]
+|===
+| One | Two | Three | Four
+
+| 1   | 2   | 3     | 4
+| A   | B   | C     | D
+|===
+
+
+.All columns auto width
+[.stripes-even,"%autowidth"opts="header"]
+|===
+| One | Two | Three | Four
+
+| 1   | 2   | 3     | 4
+| A   | B   | C     | D
+|===
