@@ -5,6 +5,11 @@ declare(strict_types=1);
 $exitAfterIncludes = true;
 $pen->red->line(__FILE__);
 
+// ==================================================================
+// Test UUIDTool
+// Start code here
+// ==================================================================
+
 class UUIDTool {
     #region UUID Constants
     /**

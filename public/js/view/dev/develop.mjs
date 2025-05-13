@@ -9,11 +9,16 @@ window.users = users;
 
 
 const Basics = Marionette.Behavior.extend({
-    channelName: 'develop',
-    initialize(options) {
-        // this.mergeOptions(options, ['logger']);
-        dumper.debug('Behavior', 'initialize', options);
+    options: {
+        logger: null,
+        channel: null,
     },
+
+    // channelName: 'develop',
+    // initialize(options) {
+    //     // this.mergeOptions(options, ['logger']);
+    //     dumper.debug('Behavior', 'initialize', options);
+    // },
     // onRender() {
     //     this.logger.debug('onRender');
     // },

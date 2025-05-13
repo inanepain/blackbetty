@@ -3,18 +3,40 @@
 declare(strict_types=1);
 
 use Inane\Cli\Cli;
+use Inane\Cli\Shell;
 use Inane\Cli\Streams;
+use Inane\Stdlib\Options;
 
 $exitAfterIncludes = true;
 $pen->red->line(__FILE__);
 
-$result = Cli::confirm('Do you want to continue (true)', true);
-dd($result);
+// ==================================================================
+// Test Cli
+// Start code here
+// ==================================================================
 
-$result = Cli::confirm('Do you want to continue (false)', false);
-dd($result);
+$optCli = new Options([
+    'columns' => true,
+    'confirm' => false,
+    'prompt' => false,
+]);
 
-if (!true) {
+if ($optCli->columns) {
+    $divider = str_repeat('=', Shell::columns());
+    Cli::line($divider);
+    dd('bob');
+    dd('hey');
+}
+
+if ($optCli->confirm) {
+    $result = Cli::confirm('Do you want to continue (true)', true);
+    dd($result);
+
+    $result = Cli::confirm('Do you want to continue (false)', false);
+    dd($result);
+}
+
+if ($optCli->prompt) {
     $result = Streams::prompt('What\'s your name?', 'Philip Raab', ': ', false);
     Cli::line($result);
 

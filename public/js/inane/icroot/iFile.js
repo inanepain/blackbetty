@@ -10,15 +10,6 @@
  */
 
 /**
- * Version
- *
- * @constant
- * @type {String}
- * @memberof iFile
- */
-const VERSION = '0.3.0';
-
-/**
  * moduleName
  *
  * @constant
@@ -34,16 +25,6 @@ const moduleName = 'iFile';
  */
 class iFile {
     /**
-     * Creates an instance of iFile.
-     *
-     * @param {File} file the file
-     * @constructor
-     */
-    constructor(file) {
-        this._file = file;
-    }
-
-    /**
      * Version
      *
      * @readonly
@@ -52,7 +33,7 @@ class iFile {
      * @memberof iFile
      */
     static get VERSION() {
-        return VERSION;
+        return '0.3.0';
     }
 
     /**
@@ -63,7 +44,26 @@ class iFile {
      * @memberof iFile
      */
     get VERSION() {
-        return VERSION;
+        return this.constructor.VERSION;
+    }
+
+    /**
+     * File to be enhanced with iFile
+     *
+     * @private
+     * @type {File|null}
+     * @description Represents a file object. It is initially set to null.
+     */
+    #file = null; // File object
+
+    /**
+     * Creates an instance of iFile.
+     *
+     * @param {File} file the file
+     * @constructor
+     */
+    constructor(file) {
+        this.#file = file;
     }
 
     /**
@@ -74,7 +74,7 @@ class iFile {
      * @memberof iFile
      */
     get file() {
-        return this._file;
+        return this.#file;
     }
 
     /**
@@ -132,7 +132,7 @@ class iFile {
      * @memberof iFile
      */
     get ext() {
-        if (!this._ext) this._ext = this.name.substr((this.name.lastIndexOf('.') + 1));
+        if (!this._ext) this._ext = this.name.substring((this.name.lastIndexOf('.') + 1));
         return this._ext;
     }
 

@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace Dev\Strip;
 
-use Dev\App\DefaultConfigTrait;
+use Dev\Config\DefaultConfigTrait;
 use Inane\Cache\RemoteFileCache;
 use Inane\Dumper\Silence;
 use Inane\Cli\{
@@ -43,6 +43,7 @@ use function basename;
 use function count;
 use function end;
 use function explode;
+use function md5;
 use function str_pad;
 use function str_replace;
 use function str_starts_with;
@@ -153,13 +154,13 @@ class ImageStripper {
 
         // Here I fiddle the directory name a bit if it is `image-1` which pops up far to often
         $wasImage = false;
-        if ($dir == 'image-1') {
+        if ($dir == 'image') {
             $wasImage = true;
             $img_dirs = new Path($this->config->path->download)->getDirectories('image-*');
 
             $dir = match ($this->config->path->image1Handler) {
                 'increment' => 'image-' . (count($img_dirs) + 1),
-                'md5' => \md5(Json::encode($links)),
+                'md5' => md5(Json::encode($links)),
                 'uniqid' => uniqid('images-'),
                 default => $dir,
             };
@@ -169,6 +170,8 @@ class ImageStripper {
 
         if ($path->isValid() && $wasImage) {
             $this->showError("Special MD5 Directory already exists which may indicate that the files have already been downloaded: $path", 10);
+        } elseif ($path->isValid()) {
+            $this->showError("Directory already exists which may indicate that the files have already been downloaded: $path", 10);
         }
 
         if (!$path->isDir()) $path->makePath(permissions: 0777);
@@ -193,7 +196,8 @@ class ImageStripper {
         Cli::line("Downloading images to: $path");
 
         $total = count($links);
-        $notify = new \Inane\Cli\Progress\Bar("Downloading $total images... ", $total);
+        $msg = "{$this->config->format->file}Downloading{$this->config->format->reset} a gallary of {$this->config->format->progress}$total{$this->config->format->reset} images:";
+        $notify = new \Inane\Cli\Progress\Bar($msg, $total);
         $notify->display();
 
         $files = [];
@@ -243,7 +247,13 @@ class ImageStripper {
 
         if (empty($links)) $this->showError("No images found.", 5);
 
-        if (!$dir) $dir = str_replace('-1', '', basename(end(explode('/', $links[0])), '.jpg'));;
+        if (!$dir) {
+            $parts = explode('/', $links[0]);
+            $dir = str_replace('-1', '', basename(array_pop($parts), '.jpg'));
+            $dir = array_pop($parts) . '-' . $dir;
+        }
+
+        // if (!$dir) $dir = str_replace('-1', '', basename(end(explode('/', $links[0])), '.jpg'));;
         return $this->downloadImages($links, $dir);
     }
 }

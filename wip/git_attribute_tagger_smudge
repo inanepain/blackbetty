@@ -1,39 +1,58 @@
 #!/usr/bin/env php
 <?php
 /**
- * version 2
+ * Develop
+ *
+ * Tinkering development environment. Used to play with or try out stuff.
+ *
+ * PHP version 8.4
+ *
+ * @author Philip Michael Raab<philip@cathedral.co.za>
+ * @package Develop\Tinker
+ *
+ * @license UNLICENSE
+ * @license https://unlicense.org/UNLICENSE UNLICENSE
+ *
+ * @version $Id$
+ * $Date$
  */
-if (count($argv) > 1) {
-    if (file_exists("{$argv[1]}")) $code = file_get_contents("{$argv[1]}");
-    else if (file_exists(getcwd() . "/{$argv[1]}")) $code = file_get_contents(getcwd() . "/{$argv[1]}");
-} else $code = stream_get_contents(STDIN);
 
+declare(strict_types= 1);
+
+/**
+ * git attribute tagger smudge
+ *
+ * version 3
+ *
+ * added @version tagging
+ */
+if (count($argv) > 1) { // we have some command line arguments to deal with
+    if (file_exists("{$argv[1]}")) $code = file_get_contents("{$argv[1]}"); // the first argument is a valid file
+    else if (file_exists(getcwd() . "/{$argv[1]}")) $code = file_get_contents(getcwd() . "/{$argv[1]}"); // ok, now its valid with some massaging
+} else $code = stream_get_contents(STDIN); // no arguments we read stdin for the file contents
+
+// get the git date
 $date = shell_exec('git log --pretty=format:"%ad" -1');
 $date = date('Y-m-d', strtotime($date));
 
+// get the git tag as version with commit count (x.y.z-a)
 $version = shell_exec('git describe');
-// $version = shell_exec('/usr/local/Cellar/git/2.37.0/libexec/git-core/git-describe');
-
 $version = match ($version) {
     null => '0.0.0',
     false => '0.0.0',
     default => str_replace("\n", '', $version),
 };
-
 $version = implode('-', array_slice(explode('-', $version), 0, 2));
-// $version = str_contains($version, '-') ? strstr($version, '-', true) : $version;
 
-// function str_replace_once($search, $replace, $subject): string {
-//     $pos = strpos($subject, $search);
-//     if ($pos !== false)
-//         $subject = substr_replace($subject, $replace, $pos, strlen($search));
-//     return $subject;
-// }
-//
-// $code = str_replace_once('$Date$', "\$Date: {$date}\$", $code);
-// $code = str_replace_once('$Id$', "\$Id: {$version}\$", $code);
+// version without commit count (x.y.z)
+$ver = strstr($version, '-', true) ?: $version;
 
+// apply the data and version
 if (str_contains($code, '$Date$') || str_contains($code, '$Id$'))
     $code = str_replace(['$Date$', '$Id$'], ["\$Date: {$date}\$", "\$Id: {$version}\$"], $code);
+
+// the ver
+if (str_contains($code, ' * @version $version'))
+	$code = str_replace(' * @version $version', " * @version $ver", $code);
 
 echo $code;

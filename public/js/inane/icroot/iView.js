@@ -60,7 +60,7 @@ class iView extends iOptions {
         this.viewQueue.map(el => el.ariaHidden = !this.isEndInView(el));
 
         // TODO: Move out of constructor and have options for automatic event handling
-        this.holder.addEventListener('scroll', I.throttle(event=>{
+        this.holder.addEventListener('scroll', I.throttle(event => {
             this.viewQueue.map(el => el.ariaHidden = !this.isEndInView(el));
 
             this.viewQueue.map(el => {
@@ -71,7 +71,7 @@ class iView extends iOptions {
             });
 
             if (this.viewQueue.length > 2 && !this.viewQueue[this.viewQueue.length - 2].ariaHidden)
-            this.viewQueue[this.viewQueue.length - 1].ariaHidden = false;
+                this.viewQueue[this.viewQueue.length - 1].ariaHidden = false;
         }, this._options.throttle), false);
     }
 

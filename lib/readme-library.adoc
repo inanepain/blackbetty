@@ -1,15 +1,29 @@
 = Library: Readme
 :author: Philip Michael Raab
 :email: <philip@cathedral.co.za>
+:description: Notes on managing and working with the `inanepain` and `cathedral` libraries.
+:keywords: cathedral, inane, inanepain, library, readme, notes, information
 :revnumber: 0.1.0
 :revdate: 2025-04-03
+:copyright: Unlicense
 :experimental:
+:hide-uri-scheme:
 :icons: font
 :source-highlighter: highlight.js
 :sectnums: |,all|
 :toc: auto
+:sectanchors:
 
 Some simple and basic information worth keeping in mind when working with either the `inanepain` or `cathedral` libraries.
+
+== PHPDOC
+
+[source,shell]
+----
+phpdoc -d inanepain/*/src/ -d cathedral/*/src/ -t doc/api --title="Libraries"
+----
+
+---
 
 include::.doc/asciidoc.adoc[leveloffset=+1]
 

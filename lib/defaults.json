@@ -1,0 +1,52 @@
+{
+    "name": "",
+    "description": "",
+    "type": "",
+    "license": "Unlicense",
+    "homepage": "",
+    "readme": "",
+    "authors": [
+        {
+            "name": "Philip Michael Raab",
+            "email": "philip@cathedral.co.za",
+            "role": "Developer"
+        }
+    ],
+    "support": {},
+    "keywords": [
+		"php",
+        "inane",
+		"inanepain"
+    ],
+    "autoload": {
+        "psr-4": {
+        },
+        "files": [
+        ]
+    },
+    "config": {
+        "preferred-install": "dist",
+        "optimize-autoloader": true,
+        "discard-changes": true,
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=8.1"
+    },
+    "require-dev": {},
+    "suggest": {
+    },
+    "scripts": {
+		"build": [
+            "@build-adoc",
+            "@build-xml",
+            "@build-md",
+            "@clean"
+        ],
+        "build-adoc": "asciidoctor-reducer -o README.adoc doc/readme/index.adoc",
+        "build-xml": "asciidoctor -b docbook README.adoc",
+        "build-md": "pandoc -f docbook -t markdown_strict README.xml -o README.md",
+        "clean": "del README.xml"
+    }
+}

@@ -58,7 +58,7 @@ final class Application {
 	 *
 	 * @var \Inane\Stdlib\Options The application configuration
 	 */
-	protected(set) Options $config;
+	public protected(set) Options $config;
 
 	/**
 	 * The router object
@@ -72,7 +72,7 @@ final class Application {
 	 *
 	 * @var \Inane\Routing\RouteMatch The matched route
 	 */
-	protected(set) ?RouteMatch $routeMatch;
+	public protected(set) ?RouteMatch $routeMatch;
 
 	/**
 	 * @var \Dev\App\ViewManager The view object
@@ -147,7 +147,7 @@ final class Application {
 	/**
 	 * Runs the application
 	 *
-	 * @return void
+	 * @return never
 	 */
 	public function run(): never {
 		$this->routing();

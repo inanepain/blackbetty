@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 /**
@@ -20,7 +21,11 @@
 declare(strict_types= 1);
 
 /**
- * version 2
+ * git attribute tagger clean
+ *
+ * version 3
+ *
+ * added @version tagging
  */
 if (count($argv) > 1) { // we have some command line arguments to deal with
     if (file_exists("{$argv[1]}")) $code = file_get_contents("{$argv[1]}"); // the first argument is a valid file
@@ -30,6 +35,13 @@ if (count($argv) > 1) { // we have some command line arguments to deal with
 // our regex pattern to match the $Date$ and $Id$ tags
 $pattern = '/(\$(Date|Id))(: [a-zA-Z0-9 :+\.\-]+)(\$)/i';
 $replacement = '$1$4';
-
 // replace those tags
-echo preg_replace($pattern, $replacement, $code);
+$code = preg_replace($pattern, $replacement, $code);
+
+// our regex pattern to match the @version $version tag
+$pattern = '/^( * @version )([0-9+\.?]+)(-[0-9]+)?$/i';
+$replacement = '$1$version';
+// replace that tag
+$code = preg_replace($pattern, $replacement, $code);
+
+echo $code;

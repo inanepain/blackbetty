@@ -19,13 +19,13 @@
 
 declare(strict_types=1);
 
-namespace Dev\App;
+namespace Dev\Config;
 
 use Inane\Stdlib\Options;
 
 trait DefaultConfigTrait {
     /**
-     * @var Options
+     * @var Options Configuration options for the application.
      */
     protected Options $config;
 

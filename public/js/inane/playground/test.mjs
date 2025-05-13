@@ -1,12 +1,15 @@
 /**
  * A simple example of how to use the Dumper class levels and control it's inheritance in children.
  */
-import { Dumper } from '../dumper.js';
+// import { Dumper } from '../dumper.js';
+import { Dumper } from '../dumper.2.4.3.js';
 
 // Let's create out main Dumper
 const logger = Dumper.get('App', {
     level: 'debug'
 });
+
+Dumper.log('Dumper version', Dumper.VERSION);
 
 logger.log('My Level:', logger.level, 'Our first level dumper');
 

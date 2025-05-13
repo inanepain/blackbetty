@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use Dev\App\DefaultConfigTrait;
+use Dev\Config\DefaultConfigTrait;
 use Inane\Cli\Cli;
 use Inane\Cli\Pencil;
 use Inane\Cli\Pencil\Colour;
