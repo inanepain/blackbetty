@@ -15,27 +15,27 @@ $pen->red->line(__FILE__);
  * weight was 2, and the other weight of 1, the value with the weight of 2 has about a 66%
  * chance of being selected.  Also note that weights should be integers.
  *
- * @param array $weightedValues
+ * @param   array  $weightedValues
  */
 function getRandomWeightedElement(array $weightedValues) {
-  $rand = mt_rand(1, (int) array_sum($weightedValues));
+	$rand = mt_rand(1, (int) array_sum($weightedValues));
 
-  foreach ($weightedValues as $key => $value) {
-    $rand -= $value;
-    if ($rand <= 0) {
-      return $key;
-    }
-  }
+	foreach ($weightedValues as $key => $value) {
+		$rand -= $value;
+		if ($rand <= 0) {
+			return $key;
+		}
+	}
 }
 
-$a = ['A'=>5, 'B'=>45, 'C'=>50];
+$a = ['A' => 5, 'B' => 45, 'C' => 50];
 $b = [
-    'A' => 10,
-    'B' => 5,
-    'C' => 4,
-    'D' => 3,
-    'E' => 2,
-    'F' => 1,
+	'A' => 10,
+	'B' => 5,
+	'C' => 4,
+	'D' => 3,
+	'E' => 2,
+	'F' => 1,
 ];
 
 echo getRandomWeightedElement($b);

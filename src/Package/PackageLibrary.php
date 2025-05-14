@@ -31,43 +31,45 @@ use Inane\Stdlib\Options;
  * @package Develop\Package
  */
 final class PackageLibrary {
-    use ConfigTrait;
 
-    /**
-     * PackageLibrary instance for singleton
-     *
-     * @var PackageLibrary
-     */
-    private static PackageLibrary $instance;
+	use ConfigTrait;
 
-    protected Options $config;
+	/**
+	 * PackageLibrary instance for singleton
+	 *
+	 * @var PackageLibrary
+	 */
+	private static PackageLibrary $instance;
 
-    protected Options $library;
+	protected Options $config;
 
-    /**
+	protected Options $library;
+
+	/**
 	 * Gets the instance of PackageLibrary
 	 *
 	 * @return \Dev\Package\PackageLibrary The instance of PackageLibrary
 	 */
 	public static function getInstance(): static {
-		if (!isset(self::$instance))
+		if (!isset(self::$instance)) {
 			self::$instance = new static();
+		}
 
 		return self::$instance;
 	}
 
-    /**
-     * Private constructor for singleton
-     *
-     * @return void
-     */
-    private function __construct() {
-        $this->config = $this->getConfig()->package_library;
+	/**
+	 * Private constructor for singleton
+	 *
+	 * @return void
+	 */
+	private function __construct() {
+		$this->config = $this->getConfig()->package_library;
 
-        $this->bootstrap();
-    }
+		$this->bootstrap();
+	}
 
-    /**
+	/**
 	 * Sets up the application
 	 *
 	 * Creates requiered objects and configuration them so that everything is ready to run.
@@ -75,39 +77,40 @@ final class PackageLibrary {
 	 * @return void
 	 */
 	protected function bootstrap(): void {
-        if (!isset($this->library)) {
-            $this->library = new Options([
-                'path' => new Path($this->config->path),
-                'vendors' => [],
-            ]);
+		if (!isset($this->library)) {
+			$this->library = new Options([
+				'path'    => new Path($this->config->path),
+				'vendors' => [],
+			]);
 
-            /**
-             * @var \Inane\File\Path $this->library->path
-             */
-            $vendors = $this->library->path->getDirectories();
+			/**
+			 * @var \Inane\File\Path $this ->library->path
+			 */
+			$vendors = $this->library->path->getDirectories();
 
-            foreach ($vendors as $vendor) {
-                $this->library->vendors[$vendor->getBaseName()] = [
-                    'name' => $vendor->getBaseName(),
-                    'path' => $vendor,
-                    'packages' => [],
-                ];
+			foreach ($vendors as $vendor) {
+				$this->library->vendors[$vendor->getBaseName()] = [
+					'name'     => $vendor->getBaseName(),
+					'path'     => $vendor,
+					'packages' => [],
+				];
 
-                foreach ($vendor->getDirectories() as $package) {
-                    $this->library->vendors[$vendor->getBaseName()]['packages'][$package->getBaseName()] = [
-                        'vendor' => $vendor->getBaseName(),
-                        'package' => $package->getBaseName(),
-                        'name' => $vendor->getBaseName() . '/' . $package->getBaseName(),
-                        'path' => $package,
-                    ];
-                }
-            }
-        }
+				foreach ($vendor->getDirectories() as $package) {
+					$this->library->vendors[$vendor->getBaseName()]['packages'][$package->getBaseName()] = [
+						'vendor'  => $vendor->getBaseName(),
+						'package' => $package->getBaseName(),
+						'name'    => $vendor->getBaseName() . '/' . $package->getBaseName(),
+						'path'    => $package,
+					];
+				}
+			}
+		}
 	}
 
-    public function run(): void {
-        dd($this->config);
-        // dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
-        dd($this->library->vendors->inanepain->packages->keys(), 'lib', ['useVarExport' => true]);
-    }
+	public function run(): void {
+		dd($this->config);
+		// dd($this->library->toArray(), 'lib', ['useVarExport' => true]);
+		dd($this->library->vendors->inanepain->packages->keys(), 'lib', ['useVarExport' => true]);
+	}
+
 }

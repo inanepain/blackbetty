@@ -39,7 +39,7 @@ class MainController extends AbstractController {
 		]);
 	}
 
-	#[Route(path: '/view/{item}', name: 'item', )]
+	#[Route(path: '/view/{item}', name: 'item',)]
 	public function viewTask(array $params): array|ModelInterface {
 		if (file_exists('public/img/' . $params["item"] . '.png')) {
 			$img = '<img width="300" src="/img/' . $params["item"] . '.png" alt="' . $params["item"] . '"/>';
@@ -48,6 +48,7 @@ class MainController extends AbstractController {
 		}
 
 		$params["img"] = $img;
+
 		return new ViewModel($params);
 	}
 }

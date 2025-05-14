@@ -7,7 +7,7 @@
  *
  * PHP version 8.4
  *
- * @author  Philip Michael Raab<philip@cathedral.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
  *
  * @license UNLICENSE
@@ -32,6 +32,7 @@ return [
 			\Dev\Web\MainController::class,
 			\Dev\Parse\ParseController::class,
 			\Dev\Rest\UserController::class,
+			\Dev\Rest\UsersController::class,
 			\Dev\Controller\DevController::class,
 		],
 	],

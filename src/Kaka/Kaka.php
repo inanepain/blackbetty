@@ -29,31 +29,34 @@ namespace Dev\Kaka;
  * @package Develop\Kaka
  */
 class Kaka {
-    /**
-     * Kaka instance for singleton
-     *
-     * @var Kaka
-     */
-    private static Kaka $instance;
 
-    /**
-     * Private constructor for singleton
-     *
-     * @return void
-     */
-    private function __construct() {
-        // Do nothing
-    }
+	/**
+	 * Kaka instance for singleton
+	 *
+	 * @var Kaka
+	 */
+	private static Kaka $instance;
 
-    /**
+	/**
+	 * Private constructor for singleton
+	 *
+	 * @return void
+	 */
+	private function __construct() {
+		// Do nothing
+	}
+
+	/**
 	 * Gets the instance of Kaka
 	 *
 	 * @return \Dev\Kaka\Kaka The instance of Kaka
 	 */
 	public static function getInstance(): static {
-		if (!isset(self::$instance))
+		if (!isset(self::$instance)) {
 			self::$instance = new static();
+		}
 
 		return self::$instance;
 	}
+
 }

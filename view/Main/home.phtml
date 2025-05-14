@@ -1,5 +1,9 @@
 <?php
+
+use Dev\App\Application;
+
     $this->appendScript('/js/view/main/home.mjs', true);
+    $router = Application::getInstance()->router;
 ?>
 
 <h1>Home <small style="font-size: small"><?=$developer?></small></h1>
@@ -15,12 +19,14 @@
 
 <hr/>
 
-<a href="view/panther">Item: Panther</a><br/>
+<a href="<?=$router->url('item', ['item' => 'panther'])?>">Item: Panther</a><br/>
 
-<a href="view/tiger">Item: Tiger</a><br/>
+<a href="<?=$router->url('item', ['item' => 'tiger'])?>">Item: Tiger</a><br/>
 
-<a href="parse">Parse</a><br/>
+<a href="<?=$router->url('parse')?>">Parse</a><br/>
 
-<a href="dev">Develop</a><br/>
+<a href="<?=$router->url('develop')?>">Develop</a><br/>
 
-<a href="api/user">REST User</a><br/>
+<a href="<?=$router->url('user-list')?>">REST User</a><br/>
+
+<a href="<?=$router->url('user-get', ['id' => 1])?>">REST User: 1</a><br/>

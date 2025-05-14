@@ -75,7 +75,7 @@ if (Cli::isCli()) {
 	$files = glob($config->config->glob_pattern, GLOB_BRACE | GLOB_NOSORT);
 	foreach ($files as $file) $config->merge(include $file);
 
-	dd(label: 'Make a console app to manage all of this.', options: ['type' => Type::Todo]);
+	// dd(label: 'Make a console app to manage all of this.', options: ['type' => Type::Todo]);
 	if (!true) { // The Console App
 		$ca = new Dev\Console\App($config);
 		$ca->run();
@@ -164,9 +164,9 @@ if (Cli::isCli()) {
 		}
 	}
 } else {
-	dd(label: 'Make a console app to manage all of this.', options: ['type' => Type::Todo]);
-	Dumper::todo('kick something!', 'Another task');
-	Dumper::todo(new Options(['a']), 'Another task');
+	// dd(label: 'Make a console app to manage all of this.', options: ['type' => Type::Todo]);
+	// Dumper::todo('kick something!', 'Another task');
+	// Dumper::todo(new Options(['a']), 'Another task');
 	$file = 'public' . $_SERVER['REQUEST_URI'];
 	// Server existing files in web dir
 	if (file_exists($file) && !is_dir($file)) return false;

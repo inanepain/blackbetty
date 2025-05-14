@@ -7,7 +7,7 @@
  *
  * PHP version 8.4
  *
- * @author  Philip Michael Raab<philip@cathedral.co.za>
+ * @author Philip Michael Raab<philip@cathedral.co.za>
  * @package Develop\Tinker
  *
  * @license UNLICENSE

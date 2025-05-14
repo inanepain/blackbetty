@@ -14,12 +14,13 @@ $pen->red->line(__FILE__);
 // Test Cli
 // Start code here
 // ==================================================================
-
-$optCli = new Options([
-    'columns' => true,
-    'confirm' => false,
-    'prompt' => false,
-]);
+$optCli = new Options(
+    [
+        'columns' => true,
+        'confirm' => false,
+        'prompt'  => false,
+    ]
+);
 
 if ($optCli->columns) {
     $divider = str_repeat('=', Shell::columns());
@@ -41,10 +42,14 @@ if ($optCli->prompt) {
     Cli::line($result);
 
     $result = Streams::prompt('What\'s your name (null)?', null, ': ', false);
-    Cli::line($result ?? 'No name given.');
-    if (!$result) dd($result);
+    Cli::line(($result ?? 'No name given.'));
+    if (!$result) {
+        dd($result);
+    }
 
     $result = Streams::prompt('What\'s your name (false)?', false, ': ', false);
-    Cli::line($result ?? 'No name given.');
-    if (!$result) dd($result);
+    Cli::line(($result ?? 'No name given.'));
+    if (!$result) {
+        dd($result);
+    }
 }

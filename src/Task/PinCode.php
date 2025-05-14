@@ -64,24 +64,27 @@ class PinCode {
 	}
 
 	protected function requestCode(): string {
-		$this->attempts++;
+		$this->attempts ++;
 		$input = Cli::prompt('Enter PinCode (' . $this->pinLength . ' digits): ');
 
 		if (!is_numeric($input) || strlen($input) !== $this->pinLength) {
 			Cli::line('Attempt ' . $this->attempts . '. Invalid PinCode. Must be ' . $this->pinLength . ' digits');
+
 			return $this->requestCode();
 		}
 
 		$this->input = $input;
+
 		return $input;
 	}
 
 	protected function verifyAttempt(string $input): bool {
-		$tmp = str_split($input);
+		$tmp  = str_split($input);
 		$code = '';
-		for($i = 0; $i < count($tmp); $i++) {
-			if ($i % 2 == 0)
+		for ($i = 0; $i < count($tmp); $i ++) {
+			if ($i % 2 == 0) {
 				$code .= $tmp[$i];
+			}
 		}
 
 		$this->valid = $code === $this->pinCode;
