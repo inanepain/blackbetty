@@ -18,7 +18,7 @@ if (!Date.prototype.getWeekNumber) {
      *
      * @return {number}
      */
-    Date.prototype.getWeekNumber = function () {
+    Date.prototype.getWeekNumber = function() {
         var d = new Date(+this);
         d.setHours(0, 0, 0);
         d.setDate(d.getDate() + 4 - (d.getDay() || 7));
@@ -33,7 +33,7 @@ if (!Date.prototype.nextYear) {
      *
      * @return {Date}
      */
-    Date.prototype.nextYear = function () {
+    Date.prototype.nextYear = function() {
         return new Date(this.getTime() + 31536000000);
     };
 }
@@ -44,7 +44,7 @@ if (!Date.prototype.nextYearGMTString) {
      *
      * @return {string}
      */
-    Date.prototype.nextYearGMTString = function () {
+    Date.prototype.nextYearGMTString = function() {
         return this.nextYear().toGMTString();
     };
 }
@@ -55,7 +55,7 @@ if (!Date.unixZero) {
      *
      * @return {string}
      */
-    Date.unixZero = function () {
+    Date.unixZero = function() {
         return new Date(0);
     };
 }
@@ -66,7 +66,7 @@ if (!Date.unixZeroGMTString) {
      *
      * @return {string}
      */
-    Date.unixZeroGMTString = function () {
+    Date.unixZeroGMTString = function() {
         return (new Date(0)).toGMTString();
     };
 }
@@ -75,7 +75,7 @@ if (!Date.prototype.log) {
     /**
      * Logs Debug output
      */
-    Date.prototype.log = function () {
+    Date.prototype.log = function() {
         console.log(this.constructor.toString().split(' ')[1].replace('()', '').toLowerCase() + '(' + this.toLocaleString().length + '): ' + this.toLocaleString());
     };
 }

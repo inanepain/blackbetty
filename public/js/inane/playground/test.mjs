@@ -1,8 +1,7 @@
 /**
  * A simple example of how to use the Dumper class levels and control it's inheritance in children.
  */
-// import { Dumper } from '../dumper.js';
-import { Dumper } from '../dumper.2.4.3.js';
+import { Dumper } from '../dumper.mjs';
 
 // Let's create out main Dumper
 const logger = Dumper.get('App', {
@@ -28,7 +27,8 @@ logger.log('Set `AreaD` to `NOT` inherit the parent level on change by setting `
 logger.log('Then set parent level to `error`');
 
 // But this one we tell not to listen for level changes
-logger.get('AreaD').optionBubble = false;
+// logger.get('AreaD').optionBubble = false;
+logger.get('AreaD').optionBubbleFromParent = false;
 
 // Lets set the parent level
 logger.setLevel('error');

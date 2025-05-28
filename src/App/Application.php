@@ -65,7 +65,7 @@ final class Application {
 	 *
 	 * @var \Inane\Routing\Router The router object
 	 */
-	protected Router $router;
+	protected(set) Router $router;
 
 	/**
 	 * The matched route

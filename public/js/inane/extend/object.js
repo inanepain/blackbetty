@@ -1,7 +1,7 @@
 /**
  * Extend Object
  *
- * @version 1.7.0
+ * @version 1.8.0
  * @author Philip Michael Raab<philip@cathedral.co.za>
  *
  * Public Domain.
@@ -9,6 +9,12 @@
  */
 
 /**
+ * 1.8.0 (2025 May 22)
+ *  +/- groupByProperty/groupBy : `groupBy` renamed to `groupByProperty` no to clash with official `Object.groupBy`
+ *  + keys                      : `Object.keys` alias
+ *  + values                    : `Object.values` alias
+ *  + renameProperty            : `Object.propertyRename` alias
+ *
  * 1.7.0 (2022 Jan 12)
  *  + groupBy: Group by a property
  *
@@ -50,7 +56,7 @@ if (!Object.prototype.watch) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (prop, handler) {
+        value: function(prop, handler) {
             var getter,
                 setter,
                 change = {
@@ -64,10 +70,10 @@ if (!Object.prototype.watch) {
                         return true;
                     }
                 },
-                getter = function () {
+                getter = function() {
                     return change.value;
                 },
-                setter = function (val) {
+                setter = function(val) {
                     if (change.update = val) handler.call(this, change);
                     return val;
                 };
@@ -90,7 +96,7 @@ if (!Object.prototype.unwatch) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (prop) {
+        value: function(prop) {
             var val = this[prop];
             delete this[prop]; // remove accessors
             this[prop] = val;
@@ -98,6 +104,9 @@ if (!Object.prototype.unwatch) {
     });
 }
 
+/**
+ * Returns json string of object
+ */
 if (!Object.prototype.jsonString) {
     // if ('function' == typeof window.dump) window.dump('INANE:EXTEND', 'OBJECT', 'jsonString');
     /**
@@ -109,7 +118,7 @@ if (!Object.prototype.jsonString) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function () {
+        value: function() {
             return JSON.stringify(this);
         }
     });
@@ -133,7 +142,7 @@ if (!Object.prototype.pick) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (propsArray) {
+        value: function(propsArray) {
             if (!propsArray) return;
             if (!Array.isArray(propsArray) && (typeof propsArray == "string")) propsArray = [propsArray];
             propsArray = propsArray.unique();
@@ -166,7 +175,7 @@ if (!Object.prototype.readPath) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (path, delimiter = '.') {
+        value: function(path, delimiter = '.') {
             if (!path) return this;
 
             const eP = typeof path == 'string' ? path.split(delimiter) : path;
@@ -196,8 +205,8 @@ if (!Object.prototype.sorted) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function () {
-            return this.pick(Object.keys(this).sort());
+        value: function() {
+            return this.pick(this.keys().sort());
         }
     });
 }
@@ -222,7 +231,7 @@ if (!Object.prototype.propertyRename) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (old_key, new_key) {
+        value: function(old_key, new_key) {
             if ((old_key !== new_key) && (this.hasOwnProperty(old_key) && !this.hasOwnProperty(new_key))) {
                 Object.defineProperty(this, new_key, Object.getOwnPropertyDescriptor(this, old_key));
                 delete this[old_key];
@@ -234,25 +243,54 @@ if (!Object.prototype.propertyRename) {
 }
 
 /**
+ * Rename property
+ */
+if (!Object.prototype.renameProperty) {
+    /**
+     * Rename property
+     *
+     * - if new_key exists nothing is done
+     *
+     * @see Object.propertyRename
+     *
+     * @since 1.8.0 alias of propertyRename
+     *
+     * @param {string} old_key - property to rename
+     * @param {string} new_key - new name for property
+     *
+     * @return {Object} this object
+     */
+    Object.defineProperty(Object.prototype, 'renameProperty', {
+        enumerable: false,
+        configurable: false,
+        writable: true,
+        value: function(old_key, new_key) {
+            return this.propertyRename(old_key, new_key);
+        }
+    });
+}
+
+/**
  * Returns object grouped by property
  */
-if (!Object.prototype.groupBy) {
+if (!Object.prototype.groupByProperty) {
     /**
      * Group by property
      *
      * @since 1.7.0
+     * @since 1.8.0 renamed to `groupByProperty` in 2024
      *
      * @param {string} key - property to group by
      *
      * @return {Object} object with values group by key
      */
-    Object.defineProperty(Object.prototype, 'groupBy', {
+    Object.defineProperty(Object.prototype, 'groupByProperty', {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (key) {
+        value: function(key) {
             try {
-                let target = Array.isArray(this) ? this : Object.values(this);
+                let target = Array.isArray(this) ? this : this.values();
                 return target.reduce((rv, x) => {
                     (rv[x[key]] = rv[x[key]] || []).push(x);
                     return rv;
@@ -260,6 +298,48 @@ if (!Object.prototype.groupBy) {
             } catch (error) {
                 console.error('Unable to group object.');
             }
+        }
+    });
+}
+
+/**
+ * Returns the object's keys
+ */
+if (!Object.prototype.keys) {
+    /**
+     * Returns the object's keys
+     *
+     * @since 1.8.0
+     *
+     * @return {string[]} the object's keys
+     */
+    Object.defineProperty(Object.prototype, 'keys', {
+        enumerable: false,
+        configurable: false,
+        writable: true,
+        value: function() {
+            return Object.keys(this);
+        }
+    });
+}
+
+/**
+ * Returns the object's values
+ */
+if (!Object.prototype.values) {
+    /**
+     * Returns the object's values
+     *
+     * @since 1.8.0
+     *
+     * @return {Array} the object's values
+     */
+    Object.defineProperty(Object.prototype, 'values', {
+        enumerable: false,
+        configurable: false,
+        writable: true,
+        value: function() {
+            return Object.values(this);
         }
     });
 }

@@ -35,13 +35,13 @@ if (!String.prototype.toTitleCase) {
      *
      * @return string
      */
-    String.prototype.toTitleCase = function (lowerAsWell = false, isName = false) {
+    String.prototype.toTitleCase = function(lowerAsWell = false, isName = false) {
         let string = lowerAsWell === true ? this.toLowerCase() : this;
 
         if (isName) return string.replace(/\b[a-z]/g, txt => {
             return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
         });
-        else return string.replace(/(?:^|\s)\w/g, function (match) {
+        else return string.replace(/(?:^|\s)\w/g, function(match) {
             return match.toUpperCase();
         });
     };
@@ -53,7 +53,7 @@ if (!String.prototype.replaceAll) {
      *
      * @return string
      */
-    String.prototype.replaceAll = function (find, replace) {
+    String.prototype.replaceAll = function(find, replace) {
         return this.split(find).join(replace);
     };
 }
@@ -70,7 +70,7 @@ if (!String.prototype.trimChars) {
      *
      * @return string
      */
-    String.prototype.trimChars = function (chars) {
+    String.prototype.trimChars = function(chars) {
         return this.replace(new RegExp('^(' + chars + ')+|(' + chars + ')+$', 'gm'), '');
     };
 }
@@ -83,7 +83,7 @@ if (!String.prototype.trimCharsLeft) {
      *
      * @return string
      */
-    String.prototype.trimCharsLeft = function (chars) {
+    String.prototype.trimCharsLeft = function(chars) {
         return this.replace(new RegExp('^(' + chars + ')+', 'gm'), '');
     };
 }
@@ -96,7 +96,7 @@ if (!String.prototype.trimCharsRight) {
      *
      * @return string
      */
-    String.prototype.trimCharsRight = function (chars) {
+    String.prototype.trimCharsRight = function(chars) {
         return this.replace(new RegExp('(' + chars + ')+$', 'gm'), '');
     };
 }
@@ -108,10 +108,10 @@ if (!String.prototype.camelCaseToHyphen) {
      * @param  {String} str
      * @return {String}
      */
-    String.prototype.camelCaseToHyphen = function () {
+    String.prototype.camelCaseToHyphen = function() {
         let str = this;
         str = str.replace(/[^\w\s\-]/gi, '');
-        str = str.replace(/([A-Z])/g, function ($1) {
+        str = str.replace(/([A-Z])/g, function($1) {
             return '-' + $1.toLowerCase();
         });
 
@@ -126,7 +126,7 @@ if (!String.prototype.hyphenToCamelCase) {
      * @param  {String} str
      * @return {String}
      */
-    String.prototype.hyphenToCamelCase = function () {
+    String.prototype.hyphenToCamelCase = function() {
         return this.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
     }
 }
@@ -144,7 +144,7 @@ if (!String.prototype.splice) {
      * @param {string} newSubStr The String that is spliced in.
      * @return {string} A new string with the spliced substring.
      */
-    String.prototype.splice = function (start, delCount, newSubStr) {
+    String.prototype.splice = function(start, delCount, newSubStr) {
         return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
     };
 }
@@ -155,7 +155,7 @@ if (!String.prototype.parseJSON) {
      *
      * @return Object
      */
-    String.prototype.parseJSON = function () {
+    String.prototype.parseJSON = function() {
         try {
             return JSON.parse(this);
         } catch (error) {
@@ -167,14 +167,14 @@ if (!String.prototype.parseJSON) {
 /***************************************************
  * LOG/DEBUG
  ***************************************************/
- if (!String.prototype.log) {
+if (!String.prototype.log) {
     /**
      * Logs the string to console but still returns unchanged string
      *
      * @param label false: no label, true: default label, string: custom label
      * @returns {String}
      */
-    String.prototype.log = function (label = false) {
+    String.prototype.log = function(label = false) {
         if (label?.constructor?.name == `String`) console.log(`${label}: ` + this.toString());
         else if (label === true) console.log(`${this.constructor.name} (${this.length}): ` + this.toString());
         else console.log(this.toString());

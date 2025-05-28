@@ -1,5 +1,5 @@
 // import {Dumper} from './inane/dumper.js';
-import {Dumper} from './inane/dumper.2.4.3.js';
+import {Dumper} from './inane/dumper.mjs';
 
 const dumper = Dumper.get('Develop');
 
@@ -57,12 +57,16 @@ const MyApp = Marionette.Application.extend({
     },
 
     onBeforeStart(app, options) {
+        this.logger.debug('onBeforeStart', 'app:', app, 'options:', options);
         // this.model = new MyModel(options.data);
     },
 
     onStart(app, options) {
+        this.logger.debug('onStart', 'app:', app, 'options:', options);
         // this.showView(new MyView({ model: this.model }));
-        Backbone.history.start();
+        // Backbone.history.start();
+
+        Backbone.history.start({pushState: true, root: "/temp/"});
     }
 });
 
@@ -93,4 +97,3 @@ window.document.addEventListener('readystatechange', function (evt) {
             break;
     }
 }, false);
-

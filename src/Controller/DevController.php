@@ -32,4 +32,9 @@ class DevController extends AbstractController {
 	public function developTask(): array|ModelInterface {
 		return new ViewModel([]);
 	}
+
+	#[Route(path: '/temp', name: 'temperature', methods: [HttpMethod::Get])]
+	public function temperatureTask(): array|ModelInterface {
+		return new ViewModel([]);
+	}
 }

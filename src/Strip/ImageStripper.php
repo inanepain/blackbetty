@@ -58,6 +58,12 @@ use const STR_PAD_LEFT;
  *
  * Strips images from a given URL and downloads them to a specified directory.
  *
+ * write clipboard to config file:
+ * `cb > config/autoload/image-stripper-data.local.php`
+ *
+ * run stripper:
+ * `php public/index.php -m 5`
+ *
  * @package ImageStripper
  */
 class ImageStripper {
@@ -122,7 +128,9 @@ class ImageStripper {
 
     protected function bootstrap(): void {
         // 1 week = 604800
-        $this->rfc = new RemoteFileCache('cache-storage', 604800);
+        // 4 week = 2419200
+        // 52 week = 31449600
+        $this->rfc = new RemoteFileCache('cache-storage', 31449600);
         $this->rfc;
     }
 
@@ -216,7 +224,12 @@ class ImageStripper {
             $msg = $this->config->format->file . $file_name . $this->config->format->reset . " [" . $this->config->format->progress . "$current{$this->config->format->reset} of $total]:";
 
             $file = $path->getFile($file_name);
-            $file->write(contents: $this->rfc->get($link), cacheContents: false);
+            try {
+                $file->write(contents: $this->rfc->get($link), cacheContents: false);
+            } catch (\Throwable $th) {
+                echo $th->getMessage();
+                exit;
+            }
 
             $files[] = $file->getPathname();
             $fileObjects[] = $file;

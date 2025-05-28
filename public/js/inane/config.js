@@ -1,4 +1,4 @@
-import { Dumper } from './dumper.js';
+import { Dumper } from './dumper.mjs';
 
 Dumper.dump('MODULE', 'config', 'Load');
 /**

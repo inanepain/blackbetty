@@ -50,7 +50,7 @@ if (!Object.prototype.watch) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (prop, handler) {
+        value: function(prop, handler) {
             var getter,
                 setter,
                 change = {
@@ -64,10 +64,10 @@ if (!Object.prototype.watch) {
                         return true;
                     }
                 },
-                getter = function () {
+                getter = function() {
                     return change.value;
                 },
-                setter = function (val) {
+                setter = function(val) {
                     if (change.update = val) handler.call(this, change);
                     return val;
                 };
@@ -90,7 +90,7 @@ if (!Object.prototype.unwatch) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (prop) {
+        value: function(prop) {
             var val = this[prop];
             delete this[prop]; // remove accessors
             this[prop] = val;
@@ -109,7 +109,7 @@ if (!Object.prototype.jsonString) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function () {
+        value: function() {
             return JSON.stringify(this);
         }
     });
@@ -133,7 +133,7 @@ if (!Object.prototype.pick) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (propsArray) {
+        value: function(propsArray) {
             if (!propsArray) return;
             if (!Array.isArray(propsArray) && (typeof propsArray == "string")) propsArray = [propsArray];
             propsArray = propsArray.unique();
@@ -166,7 +166,7 @@ if (!Object.prototype.readPath) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (path, delimiter = '.') {
+        value: function(path, delimiter = '.') {
             if (!path) return this;
 
             const eP = typeof path == 'string' ? path.split(delimiter) : path;
@@ -196,7 +196,7 @@ if (!Object.prototype.sorted) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function () {
+        value: function() {
             return this.pick(Object.keys(this).sort());
         }
     });
@@ -222,7 +222,7 @@ if (!Object.prototype.propertyRename) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (old_key, new_key) {
+        value: function(old_key, new_key) {
             if ((old_key !== new_key) && (this.hasOwnProperty(old_key) && !this.hasOwnProperty(new_key))) {
                 Object.defineProperty(this, new_key, Object.getOwnPropertyDescriptor(this, old_key));
                 delete this[old_key];
@@ -250,7 +250,7 @@ if (!Object.prototype.groupBy) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function (key) {
+        value: function(key) {
             try {
                 let target = Array.isArray(this) ? this : Object.values(this);
                 return target.reduce((rv, x) => {
@@ -301,7 +301,7 @@ for (let element of [HTMLCollection, NodeList]) {
          *
          * @returns {Array}
          */
-        element.prototype.toArray = function () {
+        element.prototype.toArray = function() {
             return Array.from(this);
         }
     }
@@ -322,7 +322,7 @@ for (let element of [HTMLDocument, HTMLElement, ShadowRoot]) {
          *
          * @returns {null|Element} An Element representing the first match or null if no match
          */
-        element.prototype.iqs = function (selectors) {
+        element.prototype.iqs = function(selectors) {
             const el = this?.querySelector ? this : window.document;
             return el.querySelector(selectors);
         }
@@ -342,7 +342,7 @@ for (let element of [HTMLDocument, HTMLElement, ShadowRoot]) {
          *
          * @returns {Element[]} An Element array containing all matches
          */
-        element.prototype.iqsa = function (selectors) {
+        element.prototype.iqsa = function(selectors) {
             const el = this?.querySelectorAll ? this : window.document;
             return Array.from(el.querySelectorAll(selectors));
         }
@@ -367,7 +367,7 @@ for (let element of [HTMLDocument, HTMLElement, ShadowRoot]) {
          *
          * @returns {null|Element|Element[]} An Element representing the first match, an Element array containing all matches or null if nothing matched
          */
-        element.prototype.iq = function (selectors) {
+        element.prototype.iq = function(selectors) {
             const cmd = selectors.startsWith('@') || selectors.split(' ').pop().charAt(0) === "#" && !selectors.includes(',') ? 'querySelector' : 'querySelectorAll';
             if (selectors.startsWith('@')) selectors = selectors.replace('@', '');
             const el = this?.[cmd] ? this : window.document;
@@ -400,7 +400,7 @@ if (!Date.prototype.getWeekNumber) {
      *
      * @return {number}
      */
-    Date.prototype.getWeekNumber = function () {
+    Date.prototype.getWeekNumber = function() {
         var d = new Date(+this);
         d.setHours(0, 0, 0);
         d.setDate(d.getDate() + 4 - (d.getDay() || 7));
@@ -415,7 +415,7 @@ if (!Date.prototype.nextYear) {
      *
      * @return {Date}
      */
-    Date.prototype.nextYear = function () {
+    Date.prototype.nextYear = function() {
         return new Date(this.getTime() + 31536000000);
     };
 }
@@ -426,7 +426,7 @@ if (!Date.prototype.nextYearGMTString) {
      *
      * @return {string}
      */
-    Date.prototype.nextYearGMTString = function () {
+    Date.prototype.nextYearGMTString = function() {
         return this.nextYear().toGMTString();
     };
 }
@@ -437,7 +437,7 @@ if (!Date.unixZero) {
      *
      * @return {string}
      */
-    Date.unixZero = function () {
+    Date.unixZero = function() {
         return new Date(0);
     };
 }
@@ -448,7 +448,7 @@ if (!Date.unixZeroGMTString) {
      *
      * @return {string}
      */
-    Date.unixZeroGMTString = function () {
+    Date.unixZeroGMTString = function() {
         return (new Date(0)).toGMTString();
     };
 }
@@ -457,7 +457,7 @@ if (!Date.prototype.log) {
     /**
      * Logs Debug output
      */
-    Date.prototype.log = function () {
+    Date.prototype.log = function() {
         console.log(this.constructor.toString().split(' ')[1].replace('()', '').toLowerCase() + '(' + this.toLocaleString().length + '): ' + this.toLocaleString());
     };
 }
@@ -477,7 +477,7 @@ if (!Array.prototype.unique) {
      *
      * @return {array}
      */
-    Array.prototype.unique = function () {
+    Array.prototype.unique = function() {
         const unique = [];
         for (let i = 0; i < this.length; i++) if (!unique.includes(this[i])) unique.push(this[i]);
         return unique;
@@ -497,7 +497,7 @@ if (!Array.prototype.searchObject) {
      *
      * @return {Array} matching search results
      */
-    Array.prototype.searchObject = function (nameKey, keyValue, fuzzy = false) {
+    Array.prototype.searchObject = function(nameKey, keyValue, fuzzy = false) {
         return this.filter(item => {
             if (item.hasOwnProperty(nameKey) && keyValue !== undefined) {
                 if (fuzzy && typeof item[nameKey] == 'string') return item[nameKey].toLowerCase().includes(keyValue.toLowerCase());
@@ -516,7 +516,7 @@ if (!Array.prototype.groupBy) {
      *
      * @return Object
      */
-    Array.prototype.groupBy = function (key) {
+    Array.prototype.groupBy = function(key) {
         return this.reduce((rv, x) => {
             (rv[x[key]] = rv[x[key]] || []).push(x);
             return rv;
@@ -537,13 +537,13 @@ if (!Array.prototype.sortByProperty) {
      * @param propName property to sort by
      * @param sortNumerically sort number values
      */
-    Array.prototype.sortByProperty = function (propName, sortNumerically = false) {
+    Array.prototype.sortByProperty = function(propName, sortNumerically = false) {
         if (sortNumerically == true) {
-            this.sort(function (a, b) {
+            this.sort(function(a, b) {
                 return a[propName] - b[propName];
             });
         } else {
-            this.sort(function (a, b) {
+            this.sort(function(a, b) {
                 // Watchout for numbers, they don't support toUpperCase, so we wrap it in text
                 var nameA = `${(a[propName] ?? '')}`.toUpperCase(); // ignore upper and lowercase
                 var nameB = `${(b[propName] ?? '')}`.toUpperCase(); // ignore upper and lowercase
@@ -565,7 +565,7 @@ if (!Array.prototype.log) {
     /**
      * Logs Debug output
      */
-    Array.prototype.log = function () {
+    Array.prototype.log = function() {
         console.log(JSON.stringify(this));
     };
 }
@@ -580,7 +580,7 @@ if (!Number.getRandom) {
     /**
      * Random number between to values
      */
-    Number.getRandom = function (min, max) {
+    Number.getRandom = function(min, max) {
         min = Math.ceil(min || 0);
         max = Math.floor(max || min * min);
         return Math.floor(Math.random() * (max - min + 1)) + min; //The maximum is inclusive and the minimum is inclusive
@@ -591,7 +591,7 @@ if (!Number.prototype.log) {
     /**
      * Logs Debug output
      */
-    Number.prototype.log = function () {
+    Number.prototype.log = function() {
         console.log(this.constructor.toString().split(' ')[1].replace('()', '').toLowerCase() + '(' + this.toString().length + '): ' + this.toString());
     };
 }
@@ -632,13 +632,13 @@ if (!String.prototype.toTitleCase) {
      *
      * @return string
      */
-    String.prototype.toTitleCase = function (lowerAsWell = false, isName = false) {
+    String.prototype.toTitleCase = function(lowerAsWell = false, isName = false) {
         let string = lowerAsWell === true ? this.toLowerCase() : this;
 
         if (isName) return string.replace(/\b[a-z]/g, txt => {
             return txt.charAt(0).toUpperCase() + txt.substring(1).toLowerCase();
         });
-        else return string.replace(/(?:^|\s)\w/g, function (match) {
+        else return string.replace(/(?:^|\s)\w/g, function(match) {
             return match.toUpperCase();
         });
     };
@@ -650,7 +650,7 @@ if (!String.prototype.replaceAll) {
      *
      * @return string
      */
-    String.prototype.replaceAll = function (find, replace) {
+    String.prototype.replaceAll = function(find, replace) {
         return this.split(find).join(replace);
     };
 }
@@ -667,7 +667,7 @@ if (!String.prototype.trimChars) {
      *
      * @return string
      */
-    String.prototype.trimChars = function (chars) {
+    String.prototype.trimChars = function(chars) {
         return this.replace(new RegExp('^(' + chars + ')+|(' + chars + ')+$', 'gm'), '');
     };
 }
@@ -680,7 +680,7 @@ if (!String.prototype.trimCharsLeft) {
      *
      * @return string
      */
-    String.prototype.trimCharsLeft = function (chars) {
+    String.prototype.trimCharsLeft = function(chars) {
         return this.replace(new RegExp('^(' + chars + ')+', 'gm'), '');
     };
 }
@@ -693,7 +693,7 @@ if (!String.prototype.trimCharsRight) {
      *
      * @return string
      */
-    String.prototype.trimCharsRight = function (chars) {
+    String.prototype.trimCharsRight = function(chars) {
         return this.replace(new RegExp('(' + chars + ')+$', 'gm'), '');
     };
 }
@@ -705,10 +705,10 @@ if (!String.prototype.camelCaseToHyphen) {
      * @param  {String} str
      * @return {String}
      */
-    String.prototype.camelCaseToHyphen = function () {
+    String.prototype.camelCaseToHyphen = function() {
         let str = this;
         str = str.replace(/[^\w\s\-]/gi, '');
-        str = str.replace(/([A-Z])/g, function ($1) {
+        str = str.replace(/([A-Z])/g, function($1) {
             return '-' + $1.toLowerCase();
         });
 
@@ -723,7 +723,7 @@ if (!String.prototype.hyphenToCamelCase) {
      * @param  {String} str
      * @return {String}
      */
-    String.prototype.hyphenToCamelCase = function () {
+    String.prototype.hyphenToCamelCase = function() {
         return this.replace(/-([a-z])/g, (m, w) => w.toUpperCase());
     }
 }
@@ -741,7 +741,7 @@ if (!String.prototype.splice) {
      * @param {string} newSubStr The String that is spliced in.
      * @return {string} A new string with the spliced substring.
      */
-    String.prototype.splice = function (start, delCount, newSubStr) {
+    String.prototype.splice = function(start, delCount, newSubStr) {
         return this.slice(0, start) + newSubStr + this.slice(start + Math.abs(delCount));
     };
 }
@@ -752,7 +752,7 @@ if (!String.prototype.parseJSON) {
      *
      * @return Object
      */
-    String.prototype.parseJSON = function () {
+    String.prototype.parseJSON = function() {
         try {
             return JSON.parse(this);
         } catch (error) {
@@ -764,14 +764,14 @@ if (!String.prototype.parseJSON) {
 /***************************************************
  * LOG/DEBUG
  ***************************************************/
- if (!String.prototype.log) {
+if (!String.prototype.log) {
     /**
      * Logs the string to console but still returns unchanged string
      *
      * @param label false: no label, true: default label, string: custom label
      * @returns {String}
      */
-    String.prototype.log = function (label = false) {
+    String.prototype.log = function(label = false) {
         if (label?.constructor?.name == `String`) console.log(`${label}: ` + this.toString());
         else if (label === true) console.log(`${this.constructor.name} (${this.length}): ` + this.toString());
         else console.log(this.toString());

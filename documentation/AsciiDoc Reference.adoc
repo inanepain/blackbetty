@@ -1,0 +1,266 @@
+= Template
+:doctype: book
+:firstname: Philip
+:middlename: Michael
+:lastname: Raab
+:author: Philip Michael Raab
+:authorinitials: PMR
+:email: <philip@cathedral.co.za>
+:homepage: https://localhost
+:version-label: Release
+:revnumber: 0.1.0
+:revdate: 2025-12-31
+:revremark: -initial
+:description: Template document
+:keywords: AsciiDoc, template
+:copyright: Unlicense
+:experimental:
+:hide-uri-scheme:
+:table-stripes: even
+:icons: font
+:source-highlighter: highlight.js
+:sectnums: |,all|
+:partnums:
+:toclevels: 5
+// :sectnumlevels: 2
+:sectanchors:
+// :sectlinks:
+:idprefix: topic-
+:idseparator: -
+:toc: auto
+:toc-title: Document Sections
+// :table-frame: none
+// :table-grid: all
+// :table-stripes: all
+:part-signifier: Section
+:chapter-signifier: Chapter
+// :appendix-caption: Appendix
+// :hardbreaks-option:
+
+version: $Id$ ($Date$)
+
+= Our Preface
+
+Documentation is a distillation of many long adventures.
+
+== One
+
+[dedication]
+= Dedication
+
+
+
+Ascidoc template document.
+
+For S.S.T.--
+
+thank you for the plague of archetypes.
+
+[colophon]
+= Colophon
+
+The Asciidoctor Press, Ceres and Denver.
+
+(C) 2020 by The Asciidoctor Press
+
+Published in the Milky Way Galaxy.
+
+This book is designed by Dagger Flush, Denver, Colorado.
+The types are handset Volcano Dust and Papaya, designed by Leeloo.
+Leeloo created the typefaces to soften the bluntness of documentation.
+
+Built with Asciidoctor on Fedora 33.
+
+Printing and binding by Ceres Lithographing, Inc., Ceres, Milky Way.
+
+[preface]
+= Our Preface
+
+I awoke one morning and was confronted by the dark and stormy eyes of the chinchilla.
+She had conquered the mountain of government reports that had eroded into several minor foothills and a creeping alluvial plain of loose papers.
+
+My *AsciiDoc* template document. +
+There are penty of document attributes that should probably be removed when implementing this template.
+
+[#formatting-text]
+= Formatting
+
+Some formating like +
+line breaks.
+
+[#formatting-admonition,reftext=FormattingAdmonition]
+== Admonition
+
+NOTE: This is a note.
+
+TIP: This is a tip.
+
+IMPORTANT: This is important.
+
+CAUTION: This is a caution.
+
+WARNING: This is a warning.
+
+== Formatted Text
+
+*bold phrase* & **char**acter**s**
+
+_italic phrase_ & __char__acter__s__
+
+*_bold italic phrase_* & **__char__**acter**__s__**
+
+`monospace phrase` & ``char``acter``s``
+
+`*monospace bold phrase*` & ``**char**``acter``**s**``
+
+`_monospace italic phrase_` & ``__char__``acter``__s__``
+
+`*_monospace bold italic phrase_*` & ``**__char__**``acter``**__s__**``
+
+=== Marks and Custom Styling
+
+Werewolves are allergic to #cassia cinnamon#.
+
+Did the werewolves read the [.small]#small print#?
+
+Where did all the [.underline]#cores# run off to?
+
+We need [.line-through]#ten# make that twenty VMs.
+
+[.big]##O##nce upon an infinite loop.
+
+==== Superscript and Subscript
+
+^super^script phrase
+
+~sub~script phrase
+
+==== Curved Quotation Marks and Apostrophes (Smart Quotes)
+
+.Curved Quotation Marks and Apostrophes (Smart Quotes)
+"`double curved quotes`"
+
+'`single curved quotes`'
+
+Olaf's desk was a mess.
+
+All of the werewolves`' desks were a mess.
+
+Olaf had been with the company since the `'60s.
+
+<<<
+
+= Examples
+
+== Examples
+
+.examples
+[%collapsible]
+====
+e.g.: *A*pple => **A**pple. +
+e.g.: **C**reate, **R**ead, **U**pdate, and **D**elete (CRUD)
+====
+
+<<<
+
+= Links
+
+. https://localhost
+** https://localhost[local]
+** link:template.pdf[Template as PDF]
+. Link to <<Part 1>> anchor.
+* [ ] Go to <<Table Templates>>
+
+<<<
+
+= Tables
+
+== Table Templates
+
+Quickly knockout a table or more.
+
+=== Table 1
+
+.All columns auto width
+["%autowidth"opts="header",stripes=even]
+|===
+| One | Two | Three | Four
+
+| 1   | 2   | 3     | 4
+| A   | B   | C     | D
+|===
+
+=== Table 2
+
+.All columns auto width
+[.stripes-even,"%autowidth"opts="header"]
+|===
+| One | Two | Three | Four
+
+| 1   | 2   | 3     | 4
+| A   | B   | C     | D
+|===
+
+<<<
+
+= Lists & Stuff
+
+.Labeled, single-line
+first term:: definition of first term
+second term:: definition of second term
+
+.Q&A
+[qanda]
+What is Asciidoctor?::
+  An implementation of the AsciiDoc processor in Ruby.
+What is the answer to the Ultimate Question?:: 42
+
+.Mixed
+Operating Systems::
+  Linux:::
+    . Fedora
+      * Desktop
+    . Ubuntu
+      * Desktop
+      * Server
+  BSD:::
+    . FreeBSD
+    . NetBSD
+
+Cloud Providers::
+  PaaS:::
+    . OpenShift
+    . CloudBees
+  IaaS:::
+    . Amazon EC2
+
+== Reference links
+
+.Internal cross references
+See <<formatting-text>> to learn how to write paragraphs.
+
+Learn how to organize the document into <<_part_2,sections>>.
+
+_The Pragmatic Programmer_ <<pp>> should be required reading for all developers.
+To learn all about design patterns, refer to the book by the "`Gang of Four`" <<gof>>.
+
+<<<
+
+[glossary]
+= Termanology
+
+[glossary]
+mud:: wet, cold dirt
+rain::
+	water falling from the sky
+
+[bibliography]
+= References
+
+* [[[pp,programmer]]] Andy Hunt & Dave Thomas. The Pragmatic Programmer: From Journeyman to Master. Addison-Wesley. 1999.
+* [[[gof,gang]]] Erich Gamma, Richard Helm, Ralph Johnson & John Vlissides. Design Patterns: Elements of Reusable Object-Oriented Software. Addison-Wesley. 1994.
+
+[appendix]
+= Last Word
+
+Blah...

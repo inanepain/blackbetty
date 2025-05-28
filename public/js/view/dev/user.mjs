@@ -1,7 +1,7 @@
 /**
  * Users Classes
  */
-import { Dumper } from '/js/inane/dumper.js';
+import { Dumper } from '/js/inane/dumper.mjs';
 
 const dumper = Dumper.get('API');
 

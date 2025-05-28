@@ -1,4 +1,6 @@
+@use 'vendor/normalize';
 @use 'base';
+@use 'form';
 
 .inverse {
   background-color: base.$primary-color;

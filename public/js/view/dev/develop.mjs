@@ -35,7 +35,8 @@ const Basics = Marionette.Behavior.extend({
 
 const PageDevelop = Marionette.View.extend({
     // id: 'page',
-    el: '#page',
+    // el: '#page',
+    el: document.querySelector('#page'),
     // channelName: 'develop', njuhnm,
 
     behaviors: [Basics],

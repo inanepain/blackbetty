@@ -1,0 +1,69 @@
+= Javascript: Changelog
+:homepage: https://www.w3schools.com/js/js_versions.asp
+
+== 2024
+:homepage: https://www.w3schools.com/js/js_2024.asp
+
+* Object.groupBy
+* Map.groupBy()
+* Temporal.PlainDate()
+* Temporal.PlainTime()
+* Temporal.PlainMonthDay()
+* Temporal.PlainYearMonth()
+
+== 2023
+:homepage: https://www.w3schools.com/js/js_2023.asp
+
+* Array findLast()
+* Array findLastIndex()
+* Array toReversed()
+* Array toSorted()
+* Array toSpliced()
+* Array with()
+* #! (Shebang)
+
+== 2022
+:homepage: https://www.w3schools.com/js/js_2022.asp
+
+* Array at()
+* String at()
+* RegExp /d
+* Object.hasOwn()
+* error.cause
+* await import
+* Class field declarations
+* Private methods and fields
+
+== 2021
+:homepage: https://www.w3schools.com/js/js_2021.asp
+
+* Promise.any()
+* String replaceAll()
+* Numeric Separators (_)
+
+== 2020
+:homepage: https://www.w3schools.com/js/js_2020.asp
+
+* BigInt
+* String matchAll()
+* The Nullish Coalescing Operator (??): The ?? operator returns the first argument if it is not nullish (`null` or `undefined`). Otherwise it returns the second.
+* The Optional Chaining Operator (?.): The Optional Chaining Operator returns `undefined` if an object is `undefined` or `null` (instead of throwing an error).
+* Logical AND Assignment Operator (&&=)
+* Logical OR Assignment (||=)
+* Nullish Coalescing Assignment (??=)
+* Promise.allSettled()
+* Dynamic Import
+
+== 2019
+:homepage: https://www.w3schools.com/js/js_2019.asp
+
+* String.trimStart()
+* String.trimEnd()
+* Object.fromEntries
+* Optional catch binding
+* Array.flat()
+* Array.flatMap()
+* Revised Array.Sort()
+* Revised JSON.stringify()
+* Separator symbols allowed in string litterals
+* Revised Function.toString()

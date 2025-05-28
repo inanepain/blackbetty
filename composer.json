@@ -44,7 +44,8 @@
         "psr/http-message": "*",
         "psr/http-client": "*",
         "psr/event-dispatcher": "^1.0",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "matthiasmullie/minify": "dev-master"
     },
     "scripts": {
         "makecss": "sass --no-source-map -s compressed .\\src-style\\styles.scss .\\public\\css\\style.css"

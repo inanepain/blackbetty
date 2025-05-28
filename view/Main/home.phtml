@@ -2,31 +2,32 @@
 
 use Dev\App\Application;
 
-    $this->appendScript('/js/view/main/home.mjs', true);
-    $router = Application::getInstance()->router;
+$this->appendScript('/js/view/main/home.mjs', true);
+$router = Application::getInstance()->router;
 ?>
 
-<h1>Home <small style="font-size: small"><?=$developer?></small></h1>
+<h1>Home <small style="font-size: small"><?= $developer ?></small></h1>
 
 <p>
-    <input name='basic' value='tag1, tag2' autofocus><br/>
+    <input name='basic' value='tag1, tag2' autofocus><br />
 </p>
 
-<hr/>
+<hr />
 <p>
-<textarea name='mix'>[[{"id":101, "value":"cartman", "title":"Eric Cartman"}]] and [[kyle]] do not know [[{"value":"homer simpson", "readonly":true}]] because he's a relic.</textarea>
+    <textarea name='mix'>[[{"id":101, "value":"cartman", "title":"Eric Cartman"}]] and [[kyle]] do not know [[{"value":"homer simpson", "readonly":true}]] because he's a relic.</textarea>
 </p>
 
-<hr/>
-
-<a href="<?=$router->url('item', ['item' => 'panther'])?>">Item: Panther</a><br/>
-
-<a href="<?=$router->url('item', ['item' => 'tiger'])?>">Item: Tiger</a><br/>
-
-<a href="<?=$router->url('parse')?>">Parse</a><br/>
-
-<a href="<?=$router->url('develop')?>">Develop</a><br/>
-
-<a href="<?=$router->url('user-list')?>">REST User</a><br/>
-
-<a href="<?=$router->url('user-get', ['id' => 1])?>">REST User: 1</a><br/>
+<hr />
+<div class="links">
+    <div class="items">
+        <a class="link item" href="<?= $router->url('item', ['item' => 'panther']) ?>">Item: Panther</a><br />
+        <a class="link item" href="<?= $router->url('item', ['item' => 'tiger']) ?>">Item: Tiger</a><br />
+    </div>
+    <div>
+        <a class="link" href="<?= $router->url('parse') ?>">Parse</a><br />
+        <a class="link" href="<?= $router->url('develop') ?>">Develop</a><br />
+        <a class="link" href="<?= $router->url('temperature') ?>">Temperature</a><br />
+        <a class="link" href="<?= $router->url('user-list') ?>">REST User</a><br />
+        <a class="link" href="<?= $router->url('user-get', ['id' => 1]) ?>">REST User: 1</a><br />
+    </div>
+</div>

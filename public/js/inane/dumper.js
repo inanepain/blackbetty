@@ -1,3 +1,4 @@
+((globalThis) => {
 /**
  * Dumper
  *
@@ -1060,4 +1061,4 @@ if (!globalThis.Dumper) {
     Dumper = globalThis.Dumper;
 }
 
-export {Dumper, LogLevel};
+})(window);

@@ -30,6 +30,7 @@ use Inane\Cli\{
 	Pencil
 };
 use Inane\Dumper\Type;
+use Inane\Http\Request;
 
 chdir(dirname(__DIR__));
 
@@ -46,6 +47,7 @@ $exitAfterIncludes = false;
 
 if (true) require 'wip/dumper-hide-runkit7.php';
 if (!true) require 'wip/dumper-buffer-off.php';
+if (!true) require 'wip/minify.php';
 if (!true) require 'wip/cli-playground.php';
 if (!true) require 'wip/datatime-test.php';
 if (!true) require 'wip/rand.php';
@@ -59,14 +61,23 @@ if ($exitAfterIncludes) {
 
 #endregion console-testing-includes
 
-// TODO: PhpRenderer example
 // BUG: bug
-// HACK: hack
+// DEBUG: example debug
+// FIX: boo
 // FIXME: boo
+// HACK: hack
+// NOTE: boo
+// TODO: PhpRenderer example
+// [ ]: boo
+// [x]: boo
 
 Dumper::setExceptionHandler();
 
 Dumper::$additionalTypes[] = Type::Todo;
+
+// $r = new Request();
+// dd($r->getUri());
+// dd($r->getUri()->getPath());
 
 if (Cli::isCli()) {
 	// Load & lock configuration data

@@ -25,7 +25,8 @@ return [
 	],
 	'view'   => [
 		'path'   => 'View',
-		'layout' => 'layout/layout',
+		// 'layout' => 'layout/layout',
+		'layout' => 'layout/lo2',
 	],
 	'router' => [
 		'controllers' => [

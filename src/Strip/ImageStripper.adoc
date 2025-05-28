@@ -1,0 +1,78 @@
+= ImageStripper
+:firstname: Philip
+:middlename: Michael
+:lastname: Raab
+:author: Philip Michael Raab
+:authorinitials: PMR
+:email: <philip@cathedral.co.za>
+:homepage: https://localhost
+:version-label: dev
+:revnumber: 0.1.0
+:revdate: 2025-12-31
+:revremark: -dev
+:description: Strips images from a given URL and downloads them to a specified directory.
+:keywords: image, stripper, download, URL, directory, fuskator
+:copyright: Unlicense
+:experimental:
+:doctype: book
+:hide-uri-scheme:
+:table-stripes: even
+:icons: font
+:source-highlighter: highlight.js
+:sectnums: |,all|
+:partnums!:
+:toclevels: 5
+:sectanchors:
+:idprefix: topic-
+:idseparator: -
+:toc: auto
+:part-signifier:
+:chapter-signifier: Step
+
+version: $Id$ ($Date$)
+
+Strips images from a given ((URL)) <<url>> and downloads them to a specified directory.
+
+= Usage
+
+This is a two-step process: parsing the image urls from the given page and then downloading the images to a specified directory.
+
+== Parse Image URLs
+
+This step parses the HTML of the given ((URL)) and extracts all image URLs.
+
+Navigate to the gallery page to strip.
+
+.paste and run the javascript into the browser console
+[source,javascript]
+include::./ImageStripper.js[]
+
+Copy the php array output of the javascript to the clipboard.
+
+== Download Images
+
+This step downloads the images from the parsed URLs to a specified directory.
+
+.add the url list to config
+[source,shell]
+cb > config/autoload/image-stripper-data.local.php
+
+.run the stripper to download the images
+[source,shell]
+php public/index.php -m 5
+
+<<<
+
+[glossary]
+= Termanology
+
+[glossary]
+gallery:: a fuskator gallery of images.
+
+[bibliography]
+= References
+
+* [[[url,fuskator]]] Fuskator gallery url.
+
+[index]
+== Index
