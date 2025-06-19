@@ -55,6 +55,7 @@ return [
             'minimum-stability' => 'dev',
             'autoload' => [],
             'require' => [],
+            'scripts' => [],
         ],
     ],
 ];

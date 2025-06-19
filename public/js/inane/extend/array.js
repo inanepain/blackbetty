@@ -11,7 +11,7 @@
  */
 
 /**
- * Removes all duplicates from an array
+ * Removes all duplicates from an array.
  */
 if (!Array.prototype.unique) {
     /**
@@ -27,7 +27,7 @@ if (!Array.prototype.unique) {
 }
 
 /**
- * Search items for key ?and value and returns matches
+ * Search items for key ?and value and returns matches.
  */
 if (!Array.prototype.searchObject) {
     /**
@@ -50,7 +50,7 @@ if (!Array.prototype.searchObject) {
 }
 
 /**
- * Returns object grouped by property
+ * Returns object grouped by property.
  */
 if (!Array.prototype.groupByProperty) {
     /**
@@ -67,7 +67,7 @@ if (!Array.prototype.groupByProperty) {
 }
 
 /**
- * Sort array of objects by a property of theirs
+ * Sort array of objects by a property of theirs.
  */
 if (!Array.prototype.sortByProperty) {
     /**

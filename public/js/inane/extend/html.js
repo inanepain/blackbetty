@@ -33,7 +33,7 @@ for (let element of [HTMLCollection, NodeList]) {
     // test for toArray
     if (!element.prototype.toArray) {
         /**
-         * toArray
+         * Converts the collection to an array.
          *
          * @since 1.0.0
          *
@@ -98,8 +98,8 @@ for (let element of [Document, HTMLElement, ShadowRoot, HTMLDocument]) {
          *  will restrict the query to it's children.
          *
          * Prefixing the selectors string with:
-         *  `@` sign denotes the use of `querySelector` (return first element if multipule matches)
-         *  `@@` sign denotes the use of `querySelectorAll` (return element if only a single match)
+         *  `@` uses `querySelector` (return first element if multipule matches).
+         *  `@@` uses `querySelectorAll` but if only one match a single item is returned.
          *
          * @since 1.1.1
          *

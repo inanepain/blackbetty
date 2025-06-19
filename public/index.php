@@ -38,25 +38,65 @@ require 'vendor/autoload.php';
 
 #region console-testing-includes
 
-$pen = new Options([
-	'default' => new Pencil(),
-	'red' => new Pencil(Colour::Red),
-]);
+if (Cli::isCli()) {
 
-$exitAfterIncludes = false;
+	class ConsoleScriptManager {
+		/**
+		 * Indicates whether the script should exit when an included file ends.
+		 *
+		 * The default value is null, meaning the script has no preference for exiting automatically
+		 * This property can only be set once, and subsequent attempts to change it will have no effect.
+		 *
+		 * @var bool $nullSetOnce
+		 */
+		public ?bool $nullSetOnce = null {
+			get => $this->nullSetOnce;
+			set => $this->nullSetOnce = $this->nullSetOnce === null ? $value : $this->nullSetOnce;
+		}
 
-if (true) require 'wip/dumper-hide-runkit7.php';
-if (!true) require 'wip/dumper-buffer-off.php';
-if (!true) require 'wip/minify.php';
-if (!true) require 'wip/cli-playground.php';
-if (!true) require 'wip/datatime-test.php';
-if (!true) require 'wip/rand.php';
-if (!true) require 'wip/letter-usage.php';
-if (!true) require 'wip/UUIDTool.php';
+		/**
+		 * Indicates whether the script should exit when an included file ends.
+		 *
+		 * The default value is false, meaning the script will not exit automatically
+		 * This property can only be set once, and subsequent attempts to change it will have no effect.
+		 *
+		 * @var bool $exitWhenIncludeEnds
+		 */
+		public bool $exitWhenIncludeEnds {
+			get => isset($this->exitWhenIncludeEnds) ? $this->exitWhenIncludeEnds : false;
+			set => $this->exitWhenIncludeEnds = isset($this->exitWhenIncludeEnds) ? $this->exitWhenIncludeEnds : $value;
+		}
+	}
 
-if ($exitAfterIncludes) {
-	$pen->red->line('Exiting after includes.');
-	exit;
+	// $divider = str_repeat('=', \Inane\Cli\Shell::columns());
+
+	$pen = new Options([
+		'default' => new Pencil(),
+		'green' => new Pencil(Colour::Green),
+		'blue' => new Pencil(Colour::Blue),
+		'purple' => new Pencil(Colour::Purple),
+		'red' => new Pencil(Colour::Red),
+
+		'divider' => fn($divider = '=') => \Inane\Cli\Cli::line(str_repeat($divider, \Inane\Cli\Shell::columns())),
+	]);
+
+	$exitAfterIncludes = false;
+
+	if (true) require_once 'wip/dumper-hide-runkit7.php';
+	if (true) require_once 'wip/dumper-buffer-off.php';
+
+	if (true) require_once 'wip/run-package-library.php';
+	if (true) require_once 'wip/minify.php';
+	if (true) require_once 'wip/cli-playground.php';
+	if (true) require_once 'wip/datatime-test.php';
+	if (true) require_once 'wip/rand.php';
+	if (true) require_once 'wip/letter-usage.php';
+	if (true) require_once 'wip/UUIDTool.php';
+
+	if ($exitAfterIncludes) {
+		$pen->red->line('Exiting after includes.');
+		exit;
+	}
 }
 
 #endregion console-testing-includes
@@ -80,6 +120,9 @@ Dumper::$additionalTypes[] = Type::Todo;
 // dd($r->getUri()->getPath());
 
 if (Cli::isCli()) {
+	require_once 'wip/dumper-hide-runkit7.php';
+	require_once 'wip/dumper-buffer-off.php';
+
 	// Load & lock configuration data
 	$config = new Options(include 'config/app.config.php');
 	// $files = glob('config/autoload/{{,*.}global,{,*.}local}.php', GLOB_BRACE | GLOB_NOSORT);
@@ -145,6 +188,7 @@ if (Cli::isCli()) {
 				'3', 'package' => 'PackageLibrary',
 				'4', 'db' => 'TestDBLayer',
 				'5', 'strip' => 'Stripper',
+				'6', '1hr' => 'Time1Hour',
 				default => 'Exit',
 			};
 		} else {
@@ -155,6 +199,7 @@ if (Cli::isCli()) {
 				'PackageLibrary' => 'PackageLibrary Manager',
 				'TestDBLayer' => 'Test Database Layer',
 				'Stripper' => 'URL Stripper',
+				'Time1Hour' => 'Timestamp 1 hour from now',
 				'' => 'Exit',
 			];
 
@@ -167,10 +212,13 @@ if (Cli::isCli()) {
 			'PackageLibrary' => \Dev\Package\PackageLibrary::getInstance()->run(),
 			'TestDBLayer' => $testDBLayer($config),
 			'Stripper' => new Dev\Strip\ImageStripper($config->imagestripper)->strip('https://fuskator.com/expanded/e8OzkzxDDbj/Teen-Lolita-Lolita-Wearing-Striped-Socks.html'),
+			'Time1Hour' => (string) time() + 1 * 60 * 60,
 			default => '',
 		};
 
-		if ($result != '' && $result != null && !empty($result) && $result != false) {
+		if ($choice === 'Time1Hour') {
+			$pen->red->line("Timestamp 1 hour from now: $result");
+		} elseif ($result != '' && $result != null && !empty($result) && $result != false) {
 			// dd($result, 'Console Module Result');
 		}
 	}

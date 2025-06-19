@@ -1,7 +1,7 @@
 /**
  * Extend Object
  *
- * @version 1.8.0
+ * @version 1.9.0
  * @author Philip Michael Raab<philip@cathedral.co.za>
  *
  * Public Domain.
@@ -9,6 +9,10 @@
  */
 
 /**
+ * 1.9.0 (2025 Jun 08)
+ *  * propertyRename: Update - now allows replacing existing property if `force` is true
+ *  * renameProperty: Update - now allows replacing existing property if `force` is true
+ * 
  * 1.8.0 (2025 May 22)
  *  +/- groupByProperty/groupBy : `groupBy` renamed to `groupByProperty` no to clash with official `Object.groupBy`
  *  + keys                      : `Object.keys` alias
@@ -221,9 +225,11 @@ if (!Object.prototype.propertyRename) {
      * - if new_key exists nothing is done
      *
      * @since 1.6.0
+     * @since 1.9.0 updated to allow replacing existing property if `force` is true
      *
      * @param {string} old_key - property to rename
      * @param {string} new_key - new name for property
+     * @param {boolean} [force=false] - if true, will force new_key if it exists
      *
      * @return {Object} this object
      */
@@ -231,11 +237,37 @@ if (!Object.prototype.propertyRename) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function(old_key, new_key) {
-            if ((old_key !== new_key) && (this.hasOwnProperty(old_key) && !this.hasOwnProperty(new_key))) {
-                Object.defineProperty(this, new_key, Object.getOwnPropertyDescriptor(this, old_key));
-                delete this[old_key];
+        value: function(old_key, new_key, force = false) {
+            // Validate inputs
+            if (!old_key || !new_key) {
+                console.error('Object.propertyRename: old_key and new_key are required.');
+                return this;
             }
+            if (typeof old_key !== 'string' || typeof new_key !== 'string') {
+                console.error('Object.propertyRename: old_key and new_key must be strings.');
+                return this;
+            }
+            if (old_key === new_key) {
+                console.warn('Object.propertyRename: old_key and new_key are the same, no action taken.');
+                return this;
+            }
+            if (!this.hasOwnProperty(old_key)) {
+                console.warn(`Object.propertyRename: old_key "${old_key}" does not exist on this object.`);
+                return this;
+            }
+            if (this.hasOwnProperty(new_key) && !force) {
+                // If new_key already exists and force is false, do nothing
+                console.warn(`Object.propertyRename: new_key "${new_key}" already exists on this object, no action taken.`);
+                return this;
+            }
+            // If old_key exists and new_key does not (or force), rename the property
+            if (this.hasOwnProperty(new_key) && force) {
+                // If force is true, delete the new_key if it exists
+                delete this[new_key];
+            }
+            // Define the new property with the same descriptor as the old one
+            Object.defineProperty(this, new_key, Object.getOwnPropertyDescriptor(this, old_key));
+            delete this[old_key];
 
             return this;
         }
@@ -254,9 +286,11 @@ if (!Object.prototype.renameProperty) {
      * @see Object.propertyRename
      *
      * @since 1.8.0 alias of propertyRename
+     * @since 1.9.0 updated to allow replacing existing property if `force` is true
      *
      * @param {string} old_key - property to rename
      * @param {string} new_key - new name for property
+     * @param {boolean} [force=false] - if true, will force new_key if it exists
      *
      * @return {Object} this object
      */
@@ -264,14 +298,15 @@ if (!Object.prototype.renameProperty) {
         enumerable: false,
         configurable: false,
         writable: true,
-        value: function(old_key, new_key) {
-            return this.propertyRename(old_key, new_key);
+        value: function(old_key, new_key, force = false) {
+            // Call the propertyRename method with the same parameters
+            return this.propertyRename(old_key, new_key, force);
         }
     });
 }
 
 /**
- * Returns object grouped by property
+ * Returns object grouped by property.
  */
 if (!Object.prototype.groupByProperty) {
     /**

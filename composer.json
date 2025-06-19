@@ -42,7 +42,9 @@
         "psr/simple-cache": ">= 3",
         "psr/container": "*",
         "psr/http-message": "*",
+        "psr/http-server-handler": "*",
         "psr/http-client": "*",
+        "psr/http-factory": "*",
         "psr/event-dispatcher": "^1.0",
         "ext-simplexml": "*",
         "matthiasmullie/minify": "dev-master"

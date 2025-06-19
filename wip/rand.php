@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+return;
 $exitAfterIncludes = true;
 $pen->red->line(__FILE__);
 

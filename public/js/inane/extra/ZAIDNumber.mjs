@@ -160,11 +160,11 @@ class ZAIDNumber {
      *
      * @private
      * @type {Object}
-     * @property {string} Birthday - A randomly generated birthday.
-     * @property {string} Gender - A randomly generated gender.
-     * @property {string} Citizenship - A randomly generated citizenship.
-     * @property {string} Race - A randomly generated race.
-     * @property {Function} getIDNumber - Method to get the ID number composed of Birthday, Gender, Citizenship, and Race.
+     * @property {string} Birthday - A randomly generated birthday (digit: 1 - 6).
+     * @property {string} Gender - A randomly generated gender (digit: 7 - 10).
+     * @property {string} Citizenship - A randomly generated citizenship (digit: 11).
+     * @property {string} Race - A randomly generated race (digit: 12).
+     * @property {Function} getIDNumber - Method to get the ID number composed of Birthday, Gender, Citizenship, and Race (digit: 13).
      */
     #componets = {
         Birthday: this.constructor.Birthday.Random(),
@@ -365,8 +365,8 @@ Object.freeze(ZAIDNumber.Race);
 // console.log(num.citizenship);
 // console.log(num.race);
 
-// const id = new ZAIDNumber('8001015009087');
-// id.setBirthday('900101').setGender('Male').setCitizenship('SouthAfricanCitizen').setRace('White');
-// console.log(id.IDNumber);
+const id = new ZAIDNumber('8001015009087');
+id.setBirthday(ZAIDNumber.Birthday.Random()).setGender('Male').setCitizenship('SouthAfricanCitizen').setRace('White');
+console.log(id.IDNumber);
 
 export {ZAIDNumber};

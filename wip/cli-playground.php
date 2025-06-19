@@ -7,6 +7,7 @@ use Inane\Cli\Shell;
 use Inane\Cli\Streams;
 use Inane\Stdlib\Options;
 
+return;
 $exitAfterIncludes = true;
 $pen->red->line(__FILE__);
 
@@ -23,13 +24,15 @@ $optCli = new Options(
 );
 
 if ($optCli->columns) {
-    $divider = str_repeat('=', Shell::columns());
-    Cli::line($divider);
+    // $divider = str_repeat('=', Shell::columns());
+    // Cli::line($divider);
+    ($pen->divider)();
     dd('bob');
     dd('hey');
 }
 
 if ($optCli->confirm) {
+    ($pen->divider)();
     $result = Cli::confirm('Do you want to continue (true)', true);
     dd($result);
 
@@ -38,6 +41,7 @@ if ($optCli->confirm) {
 }
 
 if ($optCli->prompt) {
+    ($pen->divider)();
     $result = Streams::prompt('What\'s your name?', 'Philip Raab', ': ', false);
     Cli::line($result);
 

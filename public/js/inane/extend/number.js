@@ -7,7 +7,7 @@
 
 if (!Number.getRandom) {
     /**
-     * Random number between to values
+     * Random number between to values.
      */
     Number.getRandom = function(min, max) {
         min = Math.ceil(min || 0);

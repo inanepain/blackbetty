@@ -123,7 +123,7 @@ class GiteaPackageUploader {
      * @return void
      */
     protected function showError(string $message, int $exit = 0): void {
-        Cli::err("{$this->pen->red}Error:{$this->config->format->reset} $message");
+        Cli::err("{$this->pen->red}Error:{$this->pen->reset} $message");
         if ($exit > 0) exit($exit);
     }
 
@@ -134,7 +134,7 @@ class GiteaPackageUploader {
      * @return void
      */
     protected function showInfo(string $message): void {
-        $this->pen->blue->line("Info:{$this->config->format->reset} $message");
+        $this->pen->blue->line("Info:{$this->pen->reset} $message");
     }
 
     /**
@@ -144,19 +144,19 @@ class GiteaPackageUploader {
      * @return void
      */
     protected function showSuccess(string $message): void {
-        $this->pen->green->line("Success:{$this->config->format->reset} $message");
+        $this->pen->green->line("Success:{$this->pen->reset} $message");
     }
 
     protected function showWarning(string $message): void {
-        $this->pen->yellow->line("Warning:{$this->config->format->reset} $message");
+        $this->pen->yellow->line("Warning:{$this->pen->reset} $message");
     }
 
     protected function showDebug(string $message): void {
-        $this->pen->purple->line("Debug:{$this->config->format->reset} $message");
+        $this->pen->purple->line("Debug:{$this->pen->reset} $message");
     }
 
     protected function showNotice(string $message): void {
-        $this->pen->white->line("Notice:{$this->config->format->reset} $message");
+        $this->pen->white->line("Notice:{$this->pen->reset} $message");
     }
 
     #endregion console output
@@ -187,7 +187,7 @@ class GiteaPackageUploader {
      */
     protected function getPackage(): string {
         $items = $this->getPackageFiles($this->config->archive->pattern);
-        return Cli::menu($items, $items[0], 'Please pick a file to upload', 1);
+        return Cli::menu($items, array_values($items)[0], 'Please pick a file to upload', 1);
     }
 
     /**
@@ -212,7 +212,7 @@ class GiteaPackageUploader {
         $vendors = array_merge($this->config->customise->vendors->toArray(), ['other']);
         $vendors = array_combine($vendors, $vendors);
 
-        $vendor = Cli::menu($vendors, $vendors[0], 'Please pick vendor', 1);
+        $vendor = Cli::menu($vendors, array_values($vendors)[0], 'Please pick vendor', 1);
         if ($vendor === 'other') $vendor = Cli::prompt('Please enter vendor name', $vendors[0]);
 
         return $vendor;
@@ -307,7 +307,7 @@ $config = new Options([
         'autoDelete' => true,
     ],
     'develop' => [
-        'dryRun' => true,
+        'dryRun' => !true,
         'verbose' => true,
     ],
 ]);

@@ -110,7 +110,8 @@ class VSCodiumPatcher {
 		$this->config = new Options([
 			'file'    => [
 				'vscode'   => 'C:\Users\Philip\AppData\Local\Programs\Microsoft VS Code\resources\app\product.json',
-				'vscodium' => 'C:\Program Files\VSCodium\resources\app\product.json',
+//				'vscodium' => 'C:\Program Files\VSCodium\resources\app\product.json',
+				'vscodium' => 'C:\Users\Philip\AppData\Local\Programs\VSCodium\resources\app\product.json',
 			],
 			'gallery' => [
 				'keyName' => 'extensionsGallery',

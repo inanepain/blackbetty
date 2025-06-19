@@ -2,8 +2,27 @@
 
 declare(strict_types=1);
 
+// ==================================================================
+// EXPIRY CHECK
+// ========================= EXPIRY CHECK ===========================
+$expires = 1750321619; // 2025-06-19 10:26:59
+$expiryDate = new \Inane\Datetime\Timestamp($expires);
+if (0 > new \Inane\Datetime\Timestamp()->diff($expiryDate)->seconds) return;
+
+// ======================= OPTIONS =================================
 $exitAfterIncludes = true;
+// =================================================================
+
 $pen->red->line(__FILE__);
+($pen->divider)();
+$pen->purple->line('Expiry date  : ' . new \Inane\Datetime\Timestamp($expires)->format('Y-m-d H:i:s'));
+$pen->purple->line('Duration left: ' . new \Inane\Datetime\Timestamp()->diff($expires)->getDuration());
+($pen->divider)('-');
+
+// ==================================================================
+// Test Letter Usage
+// Start code here
+// ==================================================================
 
 // $wf = file_get_contents('/usr/share/dict/british-english-insane');
 $wf = file_get_contents(__DIR__ .  '/../data/british-english-insane');
