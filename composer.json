@@ -50,6 +50,6 @@
         "matthiasmullie/minify": "dev-master"
     },
     "scripts": {
-        "makecss": "sass --no-source-map -s compressed .\\src-style\\styles.scss .\\public\\css\\style.css"
+        "makecss": "sass --no-source-map -s compressed ./src-style/styles.scss ./public/css/style.css"
     }
 }

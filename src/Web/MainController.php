@@ -30,7 +30,7 @@ use Inane\Routing\Route;
 use function file_exists;
 
 class MainController extends AbstractController {
-	#[Route(path: '/', name: 'home')]
+	#[Route(path: '/', name: 'home', extra: ['label' => 'Welcome', 'title' => 'Home Page', 'class' => 'text-red'])]
 	public function home(): array|ModelInterface {
 		$philip = new Person('Philip', 'Raab');
 
@@ -39,7 +39,7 @@ class MainController extends AbstractController {
 		]);
 	}
 
-	#[Route(path: '/view/{item}', name: 'item',)]
+	#[Route(path: '/view/{item}', name: 'item', extra: ['label' => 'Item: {item}', 'class' => 'text-purple'])]
 	public function viewTask(array $params): array|ModelInterface {
 		if (file_exists('public/img/' . $params["item"] . '.png')) {
 			$img = '<img width="300" src="/img/' . $params["item"] . '.png" alt="' . $params["item"] . '"/>';
