@@ -20,6 +20,12 @@
 declare(strict_types=1);
 
 return [
+	'site' => [
+		'title' => 'Develop',
+	],
+	'dumper' => [
+		'enabled' => false,
+	],
 	'developer'   => [
 		'name'   => 'Philip Michael Raab',
 		'email' => 'peep@cathedral.co.za',

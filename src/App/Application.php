@@ -121,6 +121,8 @@ final class Application {
 	protected function bootstrap(): void {
 		$this->configure();
 
+		\Inane\Dumper\Dumper::$enabled = $this->config->dumper->enabled;
+
 		$this->router = new Router(splitQuerystring: true);
 		$this->router->addRoutes($this->config->router->controllers);
 
@@ -183,6 +185,8 @@ final class Application {
 		$controller = new $this->routeMatch->class();
 		$modelOrArray = $controller->{$this->routeMatch->method}($this->routeMatch->params);
 		$model = is_array($modelOrArray) ? new ViewModel($modelOrArray) : $modelOrArray;
+
+		$model->setProperties($this->config->site);
 
 		if (!$model->terminate) $model->setOptions([
 			'template' => $this->routeMatch->template,

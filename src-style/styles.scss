@@ -2,6 +2,8 @@
 @use 'base';
 @use 'text';
 @use 'form';
+@use 'ui';
+@use 'placement';
 
 .inverse {
   background-color: base.$primary-color;

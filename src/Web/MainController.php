@@ -30,7 +30,7 @@ use Inane\Routing\Route;
 use function file_exists;
 
 class MainController extends AbstractController {
-	#[Route(path: '/', name: 'home', extra: ['label' => 'Welcome', 'title' => 'Home Page', 'class' => 'text-red'])]
+	#[Route(path: '/', name: 'home', extra: ['label' => 'Welcome', 'title' => 'Home Page', 'class' => 'text-red button button-grey'])]
 	public function home(): array|ModelInterface {
 		$philip = new Person('Philip', 'Raab');
 

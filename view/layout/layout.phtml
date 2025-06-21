@@ -1,10 +1,13 @@
+<?php
+dd($this, 'layout');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Develop</title>
+    <title><?=$this->getProperty('title')?></title>
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/js/lib/tagify/4.33.2/tagify.css">
@@ -32,7 +35,7 @@
 </head>
 
 <body>
-    <quick-header underline linecolour="blue" colour="purple">Develop</quick-header>
+    <quick-header underline linecolour="blue" colour="purple"><?=$this->getProperty('title')?></quick-header>
     <toggle-switch>Active</toggle-switch>
     <div id="content"><?= $content ?></div>
 </body>

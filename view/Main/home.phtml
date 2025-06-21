@@ -5,21 +5,7 @@ use Dev\App\Application;
 $this->appendScript('/js/view/main/home.mjs', true);
 $router = Application::getInstance()->router;
 
-dd($this);
-
-$makeLink = function ($router, $routeName, $params = []) {
-    $data = [
-        '{url}' => $router->url($routeName, $params),
-        '{label}' => $router->routeProperty($routeName, 'label', $params),
-        '{title}' => $router->routeProperty($routeName, 'title', $params),
-        '{class}' => $router->routeProperty($routeName, 'class', $params),
-        '{target}' => $router->routeProperty($routeName, 'target', $params),
-    ];
-
-    $template = '<a class="link item {class}" title="{title}" href="{url}">{label}</a><br />';
-    $link = strtr($template, $data);
-    return $link;
-}
+dd($this, 'view');
 ?>
 
 <h1>Home <small style="font-size: small"><?= $developer ?></small></h1>
@@ -36,8 +22,8 @@ $makeLink = function ($router, $routeName, $params = []) {
 <hr />
 <div class="links">
     <div class="items">
-        <?=$makeLink($router, 'item', ['item' => 'panther'])?>
-        <?=$makeLink($router, 'item', ['item' => 'tiger'])?>
+        <?=$this->getLink('item', ['item' => 'panther'])?>
+        <?=$this->getLink('item', ['item' => 'tiger'])?>
     </div>
     <div>
         <a class="link" href="<?= $router->url('parse') ?>">Parse</a><br />
@@ -45,8 +31,5 @@ $makeLink = function ($router, $routeName, $params = []) {
         <a class="link" href="<?= $router->url('temperature') ?>">Temperature</a><br />
         <a class="link" href="<?= $router->url('user-list') ?>">REST User</a><br />
         <a class="link" href="<?= $router->url('user-get', ['id' => 1]) ?>">REST User: 1</a><br />
-    </div>
-    <div class="items">
-        <?=$makeLink($router, 'home')?>
     </div>
 </div>

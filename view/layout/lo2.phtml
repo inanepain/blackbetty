@@ -1,41 +1,46 @@
+<?php
+dd($this, 'layout');
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Develop</title>
+    <title><?= $this->getProperty('title') ?></title>
 
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/js/lib/tagify/4.33.2/tagify.css">
 
     <?=
     $this
-    ->appendScript('/js/main.mjs', true)
-    ->appendScript('/js/inane/config.js', true)
-    // ->appendScript('/js/userscripts/iTemplate.js')
-    ->appendScript('/js/lib/tagify/4.33.2/tagify.js')
-    ->appendScript('/js/inane/icroot/iHelper.js')
-    ->appendScript('/js/inane/dumper.mjs', true)
-    ->appendScript('/js/lib/marionette/5.0.0-alpha.2/marionette.umd.js')
-    // ->appendScript('/js/lib/marionette/4.1.2/backbone.marionette.min.js')
-    ->appendScript('/js/lib/backbone/radio/2.0.0/backbone.radio.min.js')
-    ->appendScript('/js/lib/backbone/1.6.0/backbone-min.js')
-    ->appendScript('/js/lib/jquery/3.7.1/jquery-3.7.1.min.js')
-    ->appendScript('/js/lib/underscore/1.3.7/underscore-umd-min.js')
-    ->appendScript('/js/inane/control/toggleswitch/toggleswitch.js', true)
-    ->appendScript('/js/inane/control/quickheader/quickheader.js', true)
-    ->appendScript('/js/inane/extend/object.js')
-    ->appendScript('/js/inane/extend/html.js')
-    ->getScripts()
-    ;
+        ->appendScript('/js/main.mjs', true)
+        ->appendScript('/js/inane/config.js', true)
+        // ->appendScript('/js/userscripts/iTemplate.js')
+        ->appendScript('/js/lib/tagify/4.33.2/tagify.js')
+        ->appendScript('/js/inane/icroot/iHelper.js')
+        ->appendScript('/js/inane/dumper.mjs', true)
+        ->appendScript('/js/lib/marionette/5.0.0-alpha.2/marionette.umd.js')
+        // ->appendScript('/js/lib/marionette/4.1.2/backbone.marionette.min.js')
+        ->appendScript('/js/lib/backbone/radio/2.0.0/backbone.radio.min.js')
+        ->appendScript('/js/lib/backbone/1.6.0/backbone-min.js')
+        ->appendScript('/js/lib/jquery/3.7.1/jquery-3.7.1.min.js')
+        ->appendScript('/js/lib/underscore/1.3.7/underscore-umd-min.js')
+        ->appendScript('/js/inane/control/toggleswitch/toggleswitch.js', true)
+        ->appendScript('/js/inane/control/quickheader/quickheader.js', true)
+        ->appendScript('/js/inane/extend/object.js')
+        ->appendScript('/js/inane/extend/html.js')
+        ->getScripts();
     ?>
 </head>
 
 <body>
-    <quick-header underline linecolour="blue" colour="purple">Develop</quick-header>
+    <quick-header underline linecolour="blue" colour="purple"><?= $this->getProperty('title') ?></quick-header>
     <toggle-switch>Active</toggle-switch>
     <div id="content"><?= $content ?></div>
+    <div class="items place place-bottom place-left">
+        <?= $this->getLink('home') ?>
+    </div>
 </body>
 
 </html>

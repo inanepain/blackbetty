@@ -61,6 +61,10 @@ class ViewManager {
 	 * @return string rendered content
 	 */
 	public function render(ModelInterface $model): string {
+		/**
+		 * @var ViewModel $model
+		 * @var \Inane\View\Renderer\PhpRenderer $renderer
+		 */
 		$renderer = new $model->renderer($this->viewBasePath);
 		$rendered = $renderer->render(property_exists($model, 'template') ? $model->template : '', $model->variables, $model);
 

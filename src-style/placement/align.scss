@@ -1,0 +1,11 @@
+.place {
+    position: absolute;
+
+    &-bottom {
+        bottom: 50px;
+    }
+
+    &-left {
+        left: 50px;
+    }
+}

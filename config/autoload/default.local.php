@@ -20,6 +20,12 @@
 declare(strict_types=1);
 
 return [
+	'site' => [
+		'title' => 'BlackBetty',
+	],
+	'dumper' => [
+		'enabled' => true,
+	],
 	'developer'   => [
 		'name'   => 'Philip Michael Raab',
 		'email' => 'philip@cathedral.co.za',
